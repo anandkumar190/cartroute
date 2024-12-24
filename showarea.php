@@ -1,5 +1,5 @@
 <?php require("connect.php");?>
-<?php $title="Show Application Area"?>
+<?php $title="Show Application Route "?>
 <?php require("header.php");?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -20,8 +20,8 @@
           <div class="nav-tabs-custom">
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs pull-left">
-              <li class="active"><a href="#today-activity" data-toggle="tab">Application Area</a></li>
-              <li><a href="#tear-tree-view" data-toggle="tab">Add Area</a></li>
+              <li class="active"><a href="#today-activity" data-toggle="tab">Application Route </a></li>
+              <li><a href="#tear-tree-view" data-toggle="tab">Add Route </a></li>
               
             </ul>
             
@@ -66,7 +66,7 @@
                                                <div class="form-group-lg">
                                                  <div class="form-inline">
        
-  <button type="button" id="deletearea" class="btn btn-danger"><span class="fa fa-remove"></span> Delete Selected Areas</button>
+  <button type="button" id="deletearea" class="btn btn-danger"><span class="fa fa-remove"></span> Delete Selected Route </button>
                                                  </div>
                                                  <div class="progress progress-striped active" id="progress" style="display:none;">
                                                   <div class="progress-bar progress-bar-success" style="width: 100%">
@@ -115,7 +115,7 @@
 												<tr>
                               <th>Select</th>
                               <th>Id</th>
-                              <th>AreaName</th>
+                              <th>Route Name</th>
                               <th>Region</th>
                               <th>State</th>
                               <th>Country</th>
@@ -160,7 +160,7 @@
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Add Area</h3>
+              <h3 class="box-title">Add Route </h3>
             </div>
             
             <!-- /.box-header -->
@@ -204,8 +204,8 @@
                       
                 <div class="form-group controls">
                 
-                  <label for="area">Area Name : </label>
-                  <input type="text" class="form-control" name="area" id="area" placeholder="Enter Area Name" required="required"/>
+                  <label for="area">Route Name : </label>
+                  <input type="text" class="form-control" name="area" id="area" placeholder="Enter Route Name" required="required"/>
                 </div>
                 
       
@@ -238,7 +238,7 @@
                    </div>
                 </div>
                 <a href="showarea" class="btn btn-danger"><span class="fa fa-backward"></span> Back</a>
-                <button type="submit"  id="btnaddproduct" class="btn btn-primary pull-right "><span class="fa fa-edit"></span> Add Area</button>
+                <button type="submit"  id="btnaddproduct" class="btn btn-primary pull-right "><span class="fa fa-edit"></span> Add Route</button>
               </div>
             
           </div>
@@ -340,7 +340,7 @@ $(document).ready(function(){
    loaddata();	  
    
     $('#deletearea').click(function(){
-	     if(confirm('Do You want to delete Selected Area'))
+	     if(confirm('Do You want to delete Selected Route'))
 		 {
 			 var ids=Array();
 			 var table=$("#userstable").DataTable();
@@ -465,7 +465,7 @@ function sendData(){
 			    }
 				
                 if(response =="success"){
-                    alert("Area Add Successfully...");
+                    alert("Route Add Successfully...");
 					progress.fadeOut("slow");
 					
 					
@@ -582,7 +582,7 @@ function sendData(){
 			    }
 								
                 if(response =="success"){
-                    alert("Areas Import Successfully...");
+                    alert("Route Import Successfully...");
 					progress.fadeOut("slow");
 					$('#file1')[0].files[0];
 		            

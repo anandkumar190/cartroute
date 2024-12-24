@@ -180,8 +180,8 @@
             <li><a href="state"><i class="fa fa-circle-o"></i> State</a></li>
             <li><a href="city"><i class="fa fa-circle-o"></i> City</a></li>
             <li><a href="region"><i class="fa fa-circle-o"></i> Region</a></li>
-            <li><a href="showarea"><i class="fa fa-circle-o"></i> Area Mgmt</a></li>
-            <li><a href="showroute"><i class="fa fa-circle-o"></i> Route Mgmt</a></li>
+            <li><a href="showarea"><i class="fa fa-circle-o"></i> Route Mgmt</a></li>
+            <li><a href="showroute"><i class="fa fa-circle-o"></i> old Route Mgmt</a></li>
           </ul>
         </li>
 
