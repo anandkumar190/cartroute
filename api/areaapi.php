@@ -49,26 +49,45 @@ require("../connect.php");
   $userid=@$_SESSION['id'];
   if(isset($_GET['show']))
   { 
-	 /* $res=mysqli_query($con,"select a.id,a.country,a.state,a.region,a.area,a.latitude,a.longitude,a.km,a.registrationdate from area a"); */
-
-    $res=mysqli_query($con,"SELECT a.id,a.country,a.area,a.latitude,a.longitude,a.km,a.registrationdate,s.name AS sname,reg.name AS rname  FROM area a LEFT JOIN regions reg ON reg.id=a.region LEFT JOIN states s ON s.id=a.state"); 
-
+    $res=mysqli_query($con,"SELECT a.id,a.country,a.area,a.latitude,a.longitude,a.km,a.registrationdate,s.name AS sname,reg.name AS rname ,c.city AS cityname ,emp.name As distributor  FROM area a LEFT JOIN regions reg ON reg.id=a.region LEFT JOIN states s ON s.id=a.state LEFT JOIN cities c ON c.id=a.city LEFT JOIN employees emp on emp.id=a.distributor_id "); 
 		    $response=array();
+      
+      
+
+        $result=mysqli_query($con,"select routeid , COUNT(id) AS total_count ,MAX(lastvisit) AS max_lastvisit from outlets GROUP BY routeid");
+        $outlets=mysqli_fetch_array($result);
+
+       $arraylastvist= $arrayoutlate = array();
+        while($outlets=mysqli_fetch_array($result))
+        {
+          $arrayoutlate[$outlets['routeid']]=$outlets['total_count'];
+          $arraylastvist[$outlets['routeid']]=$outlets['max_lastvisit'];
+        }
+
+
         while($row=mysqli_fetch_array($res))
         {
-	      $rr=array();
-	      $rr['id']=$row['id'];
-	      $rr['area']=$row['area'];
-	      $rr['region']=$row['rname'];
-	      $rr['state']=$row['sname'];
-	      $rr['country']=$row['country'];    
-  	    $rr['km']=$row['km'];
-  		  $rr['registrationdate']=$row['registrationdate'];
-  		  $rr['latitude']=$row['latitude'];
-  		  $rr['longitude']=$row['longitude'];
-	      array_push($response,$rr);
+          
+        //   $id=$row['id'];
+        // $result=mysqli_query($con,"select COUNT(id) AS total_count from outlets where routeid =$id");
+        // $outlets=mysqli_fetch_array($result);
+        
+
+
+
+          $rr=array();
+          $rr['id']=$row['id'];
+          $rr['area']=$row['area'];
+          $rr['region']=$row['rname'];
+          $rr['state']=$row['sname'];
+          $rr['cityname']=$row['cityname'];    
+          $rr['distributor']=$row['distributor'];
+  		    $rr['last_visit']=@$arraylastvist[$row['id']]??0;
+  		    $rr['no_of_outlats']=@$arrayoutlate[$row['id']]??0;
+
+	       array_push($response,$rr);
         }
-   echo json_encode($response); 
+    echo json_encode($response); 
 
   }
 
@@ -76,14 +95,14 @@ require("../connect.php");
   {
  
      extract($_POST);
-     mysqli_query($con,"update area set country='$country',state='$state',city='$city',region='$region',area='$area',latitude='$lat',longitude='$lng',Km='$km', registrationdate='$datetime' where id='$id'") or die(mysqli_error($con));
+     mysqli_query($con,"update area set country='$country',state='$state',city='$city',region='$region',area='$area',latitude='$lat',longitude='$lng',Km='$km', registrationdate='$datetime',distributor_id='$distributor' where id='$id'") or die(mysqli_error($con));
       if(mysqli_affected_rows($con)>0)
       {
 	     echo "success";
       }
       else
       {
-	    echo "error".$id;
+	     echo "error".$id;
       }
   }  
   
@@ -92,7 +111,7 @@ require("../connect.php");
      extract($_POST);
 
 
-     mysqli_query($con,"insert into area(country,state,city,region,area,latitude,longitude,km,registrationdate) values ( '$country','$state','$city','$region','$area','$lat','$lng','0','$datetime')") or die(mysqli_error($con));
+     mysqli_query($con,"insert into area(country,state,city,region,area,latitude,longitude,km,registrationdate,distributor_id) values ( '$country','$state','$city','$region','$area','$lat','$lng','0','$datetime','$distributor')") or die(mysqli_error($con));
       if(mysqli_affected_rows($con)>0)
       {
 	     echo "success";

@@ -1,5 +1,5 @@
 <?php require("connect.php");?>
-<?php $title="Edit Area"?>
+<?php $title="Edit Route"?>
 <?php require("header.php");?>
 
 <?php 
@@ -10,6 +10,7 @@
 		$state='';
     $city='';
 		$country='';
+		$distributor='';
 		$km='';
 		$lat='';
 		$lng='';	
@@ -26,6 +27,7 @@
 		$state=$row['state'];
     $city=$row['city'];
 		$country=$row['country'];
+		$distributor=$row['distributor_id'];
 		$km=$row['km'];
 		$lat=$row['latitude'];
 		$lng=$row['longitude'];
@@ -51,7 +53,7 @@
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs pull-left">
               
-              <li class="active"><a href="#tear-tree-view" data-toggle="tab">Edit Area <?php echo $area;?></a></li>
+              <li class="active"><a href="#tear-tree-view" data-toggle="tab">Edit Route <?php echo $area;?></a></li>
               
             </ul>
             
@@ -72,69 +74,96 @@
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Edit Area</h3>
+              <h3 class="box-title">Edit Route</h3>
             </div>
             <!-- /.box-header -->
           <div class="box-body">
            <div class="row">
 
-            <div class="col-md-4">               
-               <div class="form-group">
-                     <input type="hidden" name="id" id="id" value="<?php echo $id;?>" />
-                 <label for="state">State</label>
-            
-                 <select  class="form-control"  name="state" id="state" required>
-                  <option value="">Select State</option>
-                   <?php $res=mysqli_query($con,"select id,name from states"); while($row=mysqli_fetch_array($res)){$sselect=$row['id']==$state ? 'selected' :'';?>
-                   <option value="<?php echo $row['id'];?>" <?php echo $sselect;?> ><?php echo $row['name'];?> </option>
-                   <?php }?>
-                 </select>
-                  
-               </div> 
-              
-               <div class="form-group">
-                 <label for="region">Region </label>
-            
-            
-             <select class="form-control" name="region" id="region"   required>
-               <option value="">Select Region </option>
-
-            <?php $res=mysqli_query($con,"select id,name from regions where city_id='$city'"); while($row=mysqli_fetch_array($res)){$rselect=$row['id']==$region ? 'selected':'';?>
-            <option value="<?php echo $row['id'];?>" <?php echo $rselect; ?>><?php echo $row['name'];?></option>
-            <?php }?>
-
-              </select>
-               </div>
-               <div class="form-group">
-                 <label for="km">KM </label>
-                 <input type="" class="form-control"  data-dv-message="Enter KM" name="km" id="km" value="<?php echo $km;?>"  placeholder="Enter KM" required/>
-               </div>
-               
-               
-            </div> <!-- col 4 close--> 
-               <div class="col-md-4"> 
-                   <div class="form-group">
-                  <label for="city">City</label>
-                  
-                <select class="form-control"name="city" id="city"  required>
-                <option value="">Select city </option>
-                <?php $res=mysqli_query($con,"select id,city from cities where state_id='$state'"); while($row=mysqli_fetch_array($res)){ $cselect=$row['id']==$city ? 'selected' :'';?>
-                <option value="<?php echo $row['id'];?>" <?php echo $cselect;?> ><?php echo $row['city'];?></option>
-                <?php }?>
-            
-               </select>
+                  <div class="col-md-4">               
+                    <div class="form-group">
+                      <input type="hidden" name="id" id="id" value="<?php echo $id;?>" />
+                      <label for="state">State</label>
+                      <select  class="form-control"  name="state" id="state"   disabled >
+                        <option value="">Select State</option>
+                        <?php $res=mysqli_query($con,"select id,name from states"); while($row=mysqli_fetch_array($res)){$sselect=$row['id']==$state ? 'selected' :'';?>
+                        <option value="<?php echo $row['id'];?>" <?php echo $sselect;?> ><?php echo $row['name'];?> </option>
+                        <?php }?>
+                      </select>     
+                    </div> 
                   </div>
-                      
-                <div class="form-group controls">
-                
-                  <label for="area">Area Name : </label>
-                  <input type="text" class="form-control" name="area" id="area" value="<?php echo $area;?>" placeholder="Enter Area Name" required="required"/>
+                  <div class="col-md-4"> 
+                      <div class="form-group">
+                                <label for="city">City</label>  
+                              <select class="form-control"name="city" id="city"    disabled>
+                              <option value="">Select city </option>
+                              <?php $res=mysqli_query($con,"select id,city from cities where state_id='$state'"); while($row=mysqli_fetch_array($res)){ $cselect=$row['id']==$city ? 'selected' :'';?>
+                              <option value="<?php echo $row['id'];?>" <?php echo $cselect;?> ><?php echo $row['city'];?></option>
+                              <?php }?>
+                          
+                            </select>
+                          </div>
+                  </div>
+
+                    <div class="col-md-4"> 
+                          <div class="form-group">
+                            <label for="region">Region </label>
+                                <select class="form-control" name="region" id="region"  disabled >
+                                  <option value="">Select Region </option>
+                                  <?php $res=mysqli_query($con,"select id,name from regions where city_id='$city'"); while($row=mysqli_fetch_array($res)){$rselect=$row['id']==$region ? 'selected':'';?>
+                                  <option value="<?php echo $row['id'];?>" <?php echo $rselect; ?>><?php echo $row['name'];?></option>
+                                  <?php }?>
+                                </select>
+                          </div>
+                    </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-4"> 
+                    <div class="form-group controls">
+                      <label for="area">Route Name : </label>
+                      <input type="text" class="form-control" name="area" id="area" value="<?php echo $area;?>" placeholder="Enter Route Name" required="required"/>
+                    </div>
+                 </div>
+                 <div class="col-md-4"> 
+                  <div class="form-group">
+                  <label for="area">Distributor : </label>
+                  <select  class="form-control"  name="distributor" id="distributor" required>
+                      <option value="">Select distributor</option>
+                        <?php $res=mysqli_query($con,"select e.id, e.name from  employees e join employees emp on emp.id=e.stockistid where e.usertype=3 AND e.name IS NOT NULL "); while($row=mysqli_fetch_array($res)){  $sdistributor=$row['id']==$distributor ? 'selected' :''; ?>
+                        <option value="<?php echo $row['id'];?>"  <?php echo $sdistributor; ?> ><?php echo $row['name'];?></option>
+                        <?php } ?>
+                    </select>
+
+
+                    <!-- <label for="km">KM </label>
+                    <input type="" class="form-control"  data-dv-message="Enter KM" name="km" id="km" value="<?php echo $km;?>"  placeholder="Enter KM" required/> -->
+                  </div>
+               </div>
+
+                <div class="col-md-4">    
                 </div>
-                
+
+              </div>
+
+              <div class="row">
+              <div style="align:center">  <center><a href="#locationmodel" data-target="#locationmodel" data-toggle="modal" style="font-size: x-large;" >Set Location</a>   </center> </div> 
+              <div class="col-md-6">
+                  
+                    <div class="form-group">
+                          <label for="lat">Latitude:</label>
+                          <input type="text" class="form-control pull-right" name="emplat" id="emplat" value="<?php echo $lat;?>"  >
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                          <label for="lng" >Longitude:</label>
+                          <input type="text" class="form-control pull-right" name="emplng" id="emplng" value="<?php echo $lng;?>"  >
+                          <!-- <a href="#locationmodel" data-target="#locationmodel" data-toggle="modal">Set Location</a> -->
+                      </div>        
+                </div>
             
-                      
-            
-            </div>
+            <!-- col 4 close--> 
+      
             <!-- col 4 Mid -->
 
 <!-- 
@@ -175,19 +204,7 @@
             </div> -->
             <!-- col 4 Mid -->
             
-            <div class="col-md-4">
-                  
-             <div class="form-group">
-                  <label for="lat">Latitude:</label>
-                  <input type="text" class="form-control pull-right" name="emplat" id="emplat" value="<?php echo $lat;?>"  >
-             </div>
-             
-            <div class="form-group">
-                  <label for="lng" >Longitude:</label>
-                  <input type="text" class="form-control pull-right" name="emplng" id="emplng" value="<?php echo $lng;?>"  >
-                  <a href="#locationmodel" data-target="#locationmodel" data-toggle="modal">Set Location</a>
-            </div>        
-            </div>
+      
           </div>
          </div>
               <!-- /.box-body -->
@@ -246,6 +263,7 @@ function sendData(){
 		var region = $('#region').val();
 		var state = $('#state').val();
     var city = $('#city').val();
+    var distributor = $('#distributor').val();
 		var country = "INDIA";
 		var km = $('#km').val();
 		var lat = $('#emplat').val();
@@ -255,10 +273,13 @@ function sendData(){
 		fd.append('region',region);
 		fd.append('state',state);
     fd.append('city',city);
+    fd.append('distributor',distributor);
 		fd.append('country',country);
 		fd.append('km',km);
 		fd.append('lat',lat);
 		fd.append('lng',lng);
+
+    
 		//fd.append('empdol',empdol);
            progress.fadeIn("slow");
         $.ajax({
@@ -284,7 +305,7 @@ function sendData(){
 			    }
 				
                 if(response =="success"){
-                    alert("Area Details Update Successfully...");
+                    alert("Route Details Update Successfully...");
 					progress.fadeOut("slow");
 					
 					

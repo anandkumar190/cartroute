@@ -107,7 +107,6 @@
 									<div class="clearfix"></div>
 								</div>
 								<div class="panel-wrapper collapse in">
-              
 									<div class="panel-body">
 										<div class="table-wrap">
 											<table id="userstable" class="table" data-paging="true" data-filtering="true" data-processing="true" data-sorting="true">
@@ -116,14 +115,12 @@
                               <th>Select</th>
                               <th>Id</th>
                               <th>Route Name</th>
-                              <th>Region</th>
                               <th>State</th>
-                              <th>Country</th>
-
-                              <th>KM</th>
-                              <th>RegisterDate</th>
-                              <th>Latitude</th>
-                              <th>Longitude</th>
+                              <th>City</th>
+                              <th>Region</th>
+                              <th>Distributor</th>
+                              <th>No Of Outlats</th>
+                              <th>Last Vist</th>
                                                     
 												</tr>
 												</thead>
@@ -167,66 +164,75 @@
           <div class="box-body">
            <div class="row">     
             <!-- form start -->                        
-             <div class="col-md-4">               
-                <div class="form-group">
-                  <label for="state">State</label>
-  
-                  <select  class="form-control"  name="state" id="state" required>
-                   <option value="">Select State</option>
-                    <?php $res=mysqli_query($con,"select id,name from states"); while($row=mysqli_fetch_array($res)){?>
-                    <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
-                    <?php }?>
-                  </select>
-                   
-                </div> 
-               
+              <div class="col-md-4">               
+                    <div class="form-group">
+                      <label for="state">State</label>
+                      <select  class="form-control"  name="state" id="state" required>
+                      <option value="">Select State</option>
+                        <?php $res=mysqli_query($con,"select id,name from states"); while($row=mysqli_fetch_array($res)){?>
+                        <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
+                        <?php }?>
+                      </select> 
+                    </div> 
+                </div>
+
+                <div class="col-md-4"> 
+                  <div class="form-group">
+                    <label for="city">City</label>
+                      <select class="form-control"name="city" id="city"  required>
+                      <option value="">Select city </option>
+                      </select>
+                  </div>
+                </div>
+
+              <div class="col-md-4"> 
                 <div class="form-group">
                   <label for="region">Region </label>
-          
-            
-              <select class="form-control" name="region" id="region"   required>
-                <option value="">Select Region </option>
-    
-               </select>
+                    <select class="form-control" name="region" id="region"   required>
+                      <option value="">Select Region </option>
+                    </select>
                 </div>
-                
-                
              </div> <!-- col 4 close--> 
-               <div class="col-md-4"> 
-                   <div class="form-group">
-                  <label for="city">City</label>
-                  
-                <select class="form-control"name="city" id="city"  required>
-                <option value="">Select city </option>
-        
-               </select>
+           </div>
+           <div class="row">  
+                <div class="col-md-4">    
+                    <div class="form-group controls">
+                      <label for="area">Route Name : </label>
+                      <input type="text" class="form-control" name="area" id="area" placeholder="Enter Route Name" required="required"/>
+                    </div>         
+              </div>
+
+              <div class="col-md-4"> 
+                  <div class="form-group">
+                    <label for="distributors">Distributor </label>
+                    
+                    <select  class="form-control"  name="distributor" id="distributor" required>
+                      <option value="">Select distributor</option>
+                        <?php $res=mysqli_query($con,"select e.id, e.name from  employees e join employees emp on emp.id=e.stockistid where e.usertype=3 AND e.name IS NOT NULL "); while($row=mysqli_fetch_array($res)){?>
+                        <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
+                        <?php } ?>
+                    </select>
+
                   </div>
-                      
-                <div class="form-group controls">
-                
-                  <label for="area">Route Name : </label>
-                  <input type="text" class="form-control" name="area" id="area" placeholder="Enter Route Name" required="required"/>
+              </div> <!-- col 4 close--> 
+              <!-- col 4 Mid -->
+            </div>
+            <div class="row"> 
+              <div style="align:center">  <center><a href="#locationmodel" data-target="#locationmodel" data-toggle="modal" style="font-size: x-large;" >Set Location</a>   </center> </div> 
+              <div class="col-md-6">     
+                <div class="form-group">
+                      <label for="lat">Latitude:</label>
+                      <input type="text" class="form-control pull-right" name="emplat" id="emplat" value="0.0000000000"/>
                 </div>
-                
-      
-               				
-			  
-            </div>
-            <!-- col 4 Mid -->
-            
-            <div class="col-md-4">
-                  
-             <div class="form-group">
-                  <label for="lat">Latitude:</label>
-                  <input type="text" class="form-control pull-right" name="emplat" id="emplat" value="0.0000000000"/>
-             </div>
-             
-            <div class="form-group">
-                  <label for="lng" >Longitude:</label>
-                  <input type="text" class="form-control pull-right" name="emplng" id="emplng" value="0.0000000000" />
-                  <a href="#locationmodel" data-target="#locationmodel" data-toggle="modal">Set Location</a>
-            </div>        
-            </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                      <label for="lng" >Longitude:</label>
+                      <input type="text" class="form-control pull-right" name="emplng" id="emplng" value="0.0000000000" />
+                      <!-- <a href="#locationmodel" data-target="#locationmodel" data-toggle="modal">Set Location</a> -->
+                </div>        
+              </div>
+          </div>
             
           </div>
          </div>
@@ -327,7 +333,14 @@
 					   data:'id',render:function(value){
 						   
 						  return "<a href='editarea?id="+value+"'><i class='fa fa-edit'></i></a>";
-						  }},{data:'area'},{data:'region'},{data:'state'},{data:'country'},{data:'km'},{data:'registrationdate'},{data:'latitude'},{data:'longitude'}]
+						  }},
+              {data:'area'},
+              {data:'state'},
+              {data:'cityname'},
+              {data:'region'},
+              {data:'distributor'},
+              {data:'no_of_outlats'},
+              {data:'last_visit'}]
 		});		   
 			  },
 		  error:function(e){
@@ -422,13 +435,13 @@ $(document).ready(function() {
 function sendData(){
         var fd = new FormData();
 		var progress=$("#progress1");
-		
-		
 		var area = $('#area').val();
-		
 		var region = $('#region').val();
 		var state = $('#state').val();
-		var country = $('#country').val();
+		var country = 'INDIA';
+		var city = $('#city').val();
+		var distributor = $('#distributor').val();
+    
 		
 		var lat = $('#emplat').val();
 		var lng = $('#emplng').val();
@@ -436,6 +449,8 @@ function sendData(){
 		fd.append('area',area);
 		fd.append('region',region);
 		fd.append('state',state);
+		fd.append('distributor',distributor);
+		fd.append('city',city);
 		fd.append('country',country);
 		
 		fd.append('lat',lat);
@@ -466,14 +481,14 @@ function sendData(){
 				
                 if(response =="success"){
                     alert("Route Add Successfully...");
-					progress.fadeOut("slow");
+				      	progress.fadeOut("slow");
 					
 					
 		            $('#area').val('');
-		            
 		            $('#region').val('');
 		            $('#state').val('');
 		            $('#country').val('');
+		            $('#city').val('');
 		            $('#emplat').val('');
 		            $('#emplng').val('');
 		            
@@ -552,7 +567,7 @@ function sendData(){
         }) .on('success.form.bv', function(e) {
             // Prevent form submission
             e.preventDefault();
-			  sendData();
+			      sendData();
 	        
         });
 		
