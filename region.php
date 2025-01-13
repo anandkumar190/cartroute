@@ -1,5 +1,5 @@
 <?php require("connect.php");?>
-<?php $title="Users";?>
+<?php $title="Region";?>
 <?php require("header.php");?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -9,6 +9,7 @@
    <link href="assets/node_modules/datatables/jquery.dataTables.min.css" rel="stylesheet"/>
    <link rel="stylesheet" href="assets/bootstrap-toggle.min.css"/> 
    <link rel="stylesheet" href="dist/dist/css/bootstrapValidator.min.css"/>
+   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.7/css/select.dataTables.min.css">
    
     <!-- Main content -->
     <section class="content">
@@ -58,22 +59,42 @@
 						<div class="col-sm-12">
 							<div class="panel panel-default card-view">
 								<div class="panel-heading">
+
 									<div class="pull-left">
 										<h6 class="panel-title txt-dark">Products</h6>
 									</div>
+                  
 									<div class="clearfix"></div>
 								</div>
+
+                <div class="pull-left">                     
+                    <form>
+                     <div class="form-group-lg">
+                       <div class="form-inline">
+                        <button type="button" id="deletearea" class="btn btn-danger" disabled><span class="fa fa-remove"></span> Delete Selected Route </button>
+                       </div>
+                       <div class="progress progress-striped active" id="progress" style="display:none;">
+                        <div class="progress-bar progress-bar-success" style="width: 100%">
+                        </div>
+                       </div>
+                     </div>
+                   </form>           
+                </div>
+                <div class="clearfix"></div>
+
 								<div class="panel-wrapper collapse in">
 									<div class="panel-body">
 										<div class="table-wrap">
 											<table id="userstable" class="table" data-paging="false" data-filtering="true" data-sorting="true">
 												<thead>
 												<tr>
-                                            
+                          <th>Select</th>                
 													<th>Action</th>
 													<th>Region Name</th>
-													<th>City</th>
 													<th>State</th>
+                          <th>City</th>
+                          <th>No. Of Routes </th>
+                          <th>No. Of Outlets</th>
 												</tr>
 												</thead>
 												<tbody>
@@ -210,6 +231,7 @@
     <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
     <!-- end - This is for export functionality only -->
     <script src="assets/bootstrap-toggle.min.js"></script>
 
@@ -226,6 +248,17 @@
 			    data=JSON.parse(data);
 	            $("#userstable").dataTable(
 				{
+          columnDefs: [ {
+                    orderable: false,
+                    className: 'select-checkbox',
+                    targets:   0
+                    } ],
+                    select: {
+                    style:    'os',
+                    selector: 'td:first-child'
+                    },
+                   order: [[ 1, 'asc' ]],
+
 				  dom: 'Bfrtip',	
 				  sort:false,
 				  data:data,
@@ -238,20 +271,30 @@
 				  buttons: [
                 'copy', { extend: 'csv', title: function () { var printTitle = 'All Visitis'; return printTitle; } }, 'excel', 'pdf', { extend: 'print', title: function () { var printTitle = ''; return printTitle; } }
                    ],
-				  columns:[
+				  columns:[{
+					   data:'id',render:function(value){
+						   
+						  return "<input type='hidden' id='select' value='"+value+"' />";
+						  }},
 				
 					      {
 							 data:'id',render:function(value){
-						     return "<a href='edit_region?editid="+value+"'><span class='fa fa-edit'></span></a><a href='api/regionapi?deleteregon&id="+value+"'><span class='fa fa-trash'></span></a> ";
+						     return "<a href='edit_region?editid="+value+"'><span class='fa fa-edit'></span></a>  <a href='api/regionapi?deleteregon&id="+value+"'><span class='fa fa-trash'></span></a> ";
 						  }},
 						  {
 							data:'name'
 						},
+            {
+              data:'staename'
+            },
               {
               data:'city'
             },
-              {
-              data:'staename'
+            {
+              data:'no_routes'
+            },
+            {
+              data:'no_outlet'
             },
 					
 					  ]
@@ -270,6 +313,65 @@
 
 $(document).ready(function(){
    loaddata();
+
+   $("#userstable").on('click', 'tr', function () {
+    
+    var row = $(this); // Get the clicked row
+    var cellValue = row.find('td:nth-child(6)').text().trim(); // Get the 8th column value (adjust index if needed)
+
+    console.log("Value from the <td>: ", cellValue);
+    if (cellValue<1) {
+      $('#deletearea').prop('disabled', false);
+    }else{
+      $('#deletearea').prop('disabled', true);
+    }
+});
+
+
+$('#deletearea').click(function(){
+        if(confirm('Do You want to delete Selected Route'))
+  
+    
+      {
+        var ids=Array();
+        var table=$("#userstable").DataTable();
+          var data = table.rows('.selected').data();      
+
+      
+        for(var i=0;i<data.length;i++)
+        {
+          if (data[i].no_of_outlats<1) {
+            ids.push(data[i].id);
+          }
+        }
+
+        if(ids<=0)
+          {
+            alert("Selected Route have Routes");
+            return;
+          }
+        var progress=$("#progressdel");
+          progress.fadeIn("slow");
+          $.ajax({
+          url:'api/areaapi?delete',
+          type:'post',
+          data:{'ids':ids},
+          success: function(data){
+              progress.fadeOut("slow");
+            alert(data);
+            
+            loaddata();
+            
+            },
+          error:function(e){}
+        });
+      
+      }
+ 
+ });
+ 
+
+
    $("#empdoj").datepicker({format:'yyyy-m-dd',autoclose:true});
 
    $('#userstable tbody').on( 'click','tr td', function (){

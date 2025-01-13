@@ -73,12 +73,12 @@
         <div class="col-md-12">
           <!-- general form elements -->
           <div class="box box-primary">
-            <div class="box-header with-border">
-              <h3 class="box-title">Edit Route</h3>
-            </div>
+                <div class="box-header with-border">
+                  <h3 class="box-title">Edit Route</h3>
+                </div>
             <!-- /.box-header -->
           <div class="box-body">
-           <div class="row">
+              <div class="row">
 
                   <div class="col-md-4">               
                     <div class="form-group">
@@ -124,6 +124,7 @@
                       <input type="text" class="form-control" name="area" id="area" value="<?php echo $area;?>" placeholder="Enter Route Name" required="required"/>
                     </div>
                  </div>
+
                  <div class="col-md-4"> 
                   <div class="form-group">
                   <label for="area">Distributor : </label>
@@ -146,66 +147,24 @@
               </div>
 
               <div class="row">
-              <div style="align:center">  <center><a href="#locationmodel" data-target="#locationmodel" data-toggle="modal" style="font-size: x-large;" >Set Location</a>   </center> </div> 
-              <div class="col-md-6">
-                  
+                <div style="align:center">  <center><a href="#locationmodel" data-target="#locationmodel" data-toggle="modal" style="font-size: x-large;" >Set Location</a>   </center> </div> 
+                  <div class="col-md-6">
                     <div class="form-group">
                           <label for="lat">Latitude:</label>
                           <input type="text" class="form-control pull-right" name="emplat" id="emplat" value="<?php echo $lat;?>"  >
                     </div>
                   </div>
+
                   <div class="col-md-6">
                     <div class="form-group">
                           <label for="lng" >Longitude:</label>
                           <input type="text" class="form-control pull-right" name="emplng" id="emplng" value="<?php echo $lng;?>"  >
                           <!-- <a href="#locationmodel" data-target="#locationmodel" data-toggle="modal">Set Location</a> -->
                       </div>        
-                </div>
-            
-            <!-- col 4 close--> 
-      
-            <!-- col 4 Mid -->
+                  </div>
 
-<!-- 
-            <div class="col-md-4">
-                form start
-                
-                <div class="form-group controls">
-                <input type="hidden" name="id" id="id" value="<?php //echo $id;?>" />
-                  <label for="area">Area Name : </label>
-                  <input type="text" class="form-control" name="area" id="area" placeholder="Enter Area Name" value="<?php //echo $area;?>"  required="required"/>
-                </div>
-                
-                <div class="form-group">
-                  <label for="region">Region </label>
-                  <input type="region" class="form-control" name="region" id="region" value="<?php //echo $region;?>" placeholder="Enter Region" required/>
-                </div>
-                <div class="form-group">
-                  <label for="km">KM </label>
-                  <input type="" class="form-control"  data-dv-message="Enter KM" name="km" id="km" value="<?php //echo $km;?>"  placeholder="Enter KM" required/>
-                </div>
-                
-             </div> --> <!-- col 4 close--> 
-             
-<!--              <div class="col-md-4">               
-                <div class="form-group">
-                  <label for="state">State</label>
-                  <input type="text"  class="form-control" name="state" id="state"  value="<?php //echo $state;?>" required="required" />
-                   
-                </div>
-                
-                <div class="form-group">
-                  <label for="country">Country</label>
-                  <input type="text"  class="form-control" name="country" id="country"  value="<?php// echo $country;?>"  required="required"/>
-                   
-                </div>
-               				
-			  
-            </div> -->
-            <!-- col 4 Mid -->
-            
-      
-          </div>
+             </div>
+
          </div>
               <!-- /.box-body -->
                
@@ -438,7 +397,6 @@ $(document).ready(function() {
 			
             // Get the form instance
           /*  var $form = $(e.target);
-
             // Get the BootstrapValidator instance
             var bv = $form.data('bootstrapValidator');
 

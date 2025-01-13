@@ -383,12 +383,12 @@ if(isset($_GET['routevistsummary'])){
 
     $res3=mysqli_query($con,"select  COUNT(id) AS total_count from outlets where routeid = $area_id and creationdate >= '$start'");
     $row3=mysqli_fetch_array($res3);
-    $totalNewOutlet= @$row3[0];  
+    $totalNewOutlet= @$row3[0]??0;  
 
 
     $bookingSum=mysqli_query($con,"SELECT SUM(bk.total_amount) totalSum FROM booking bk join outlets outlet on bk.outlet_id=outlet.id ".$sqlqry);
     $bookingSumArr=mysqli_fetch_array($bookingSum);
-    $totalSumAmount= @$bookingSumArr[0];  
+    $totalSumAmount= @$bookingSumArr[0]??0;  
 
 
 
@@ -407,23 +407,24 @@ if(isset($_GET['routevistsummary'])){
         $query=mysqli_query($con,"SELECT psc.id,psc.name as sub_cat_name ,su.name as unit_name FROM parduct_sub_cat psc  join sku_unit su on  psc.punit = su.id");
    	 	 while($row=mysqli_fetch_array($query))
    	     {
-            $subCategory[]=array($row["id"]=>$row["sub_cat_name"]);
-            $unitName[]=array($row["id"]=>$row["unit_name"]);
+            $subCategory[$row["id"]]=$row["sub_cat_name"];
+            $unitName[$row["id"]]=$row["unit_name"];
            
         }	
 
-
+ 
 
         while($row2=mysqli_fetch_array($booking)){ 
             $tt=array();
       
-            $tt['subcategory'] = $subCategory[$row2['subcategory_id']];
-            $tt['unit']= $unitName[$row2['subcategory_id']];
-            $tt['total_qty']=$row2['total_qty'];
+            $tt['subcategory'] = @$subCategory[$row2['subcategory_id']]??0;
+            $tt['unit']= @$unitName[$row2['subcategory_id']]??0;
+            $tt['total_qty']=@$row2['total_qty']??0;
+            $tt['subcategory_id']=$row2['subcategory_id']??0;
             array_push($bookinglist,$tt);
         }
-        
-        
+           
+      $prodectiveCell=($totalProdectiveOutlet>0 and $totalOutlet >0)? (($totalProdectiveOutlet/$totalOutlet)*100) :0;
         $data=json_encode([
             'bookinglist'=>$bookinglist,
             'total_outlet'=>($totalOutlet-$totalNewOutlet),
@@ -431,9 +432,9 @@ if(isset($_GET['routevistsummary'])){
             'total_new_outlet'=>$totalNewOutlet,
             'total_sum_amount'=>$totalSumAmount,
             'total_prodective_outlet'=>$totalProdectiveOutlet,
+            'prodective_cell'=>$prodectiveCell."%",
             'no_outlet_after_new_'=>($totalOutlet),
             'outlet_not_visted'=>$totalOutlet-$totalVistedOutlet
-           
 
           ]);
 
@@ -464,7 +465,7 @@ if(isset($_GET['outletwisesummary'])){
 
     $bookingSum=mysqli_query($con,"SELECT SUM(bk.total_amount) totalSum FROM booking bk join outlets outlet on bk.outlet_id=outlet.id ".$sqlqry);
     $bookingSumArr=mysqli_fetch_array($bookingSum);
-    $totalSumAmount= @$bookingSumArr[0];  
+    $totalSumAmount= @$bookingSumArr[0]??0;  
 
 
 
@@ -475,7 +476,7 @@ if(isset($_GET['outletwisesummary'])){
       
             $tt['name'] = $row2['name'];
             $tt['address']= $row2['address'];
-            $tt['total_sum']=$row2['total_sum'];
+            $tt['total_sum']=$row2['total_sum']??0;
             array_push($bookinglist,$tt);
         }
         

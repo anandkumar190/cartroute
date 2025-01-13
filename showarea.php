@@ -65,8 +65,7 @@
                                               <form>
                                                <div class="form-group-lg">
                                                  <div class="form-inline">
-       
-  <button type="button" id="deletearea" class="btn btn-danger"><span class="fa fa-remove"></span> Delete Selected Route </button>
+                                                  <button type="button" id="deletearea" class="btn btn-danger" disabled><span class="fa fa-remove"></span> Delete Selected Route </button>
                                                  </div>
                                                  <div class="progress progress-striped active" id="progress" style="display:none;">
                                                   <div class="progress-bar progress-bar-success" style="width: 100%">
@@ -79,7 +78,7 @@
 									</div>
                                     <div class="pull-left">
                                         <div class="form-inline">
-       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                   <a href="templates/ImportArea.csv"  class="btn btn-info"><span class="fa fa-download"></span> Download CSV File</a>
                                         </div>
                                     </div>
@@ -350,41 +349,61 @@
 	}
 
 $(document).ready(function(){
-   loaddata();	  
-   
+   loaddata();
+
+   $("#userstable").on('click', 'tr', function () {
+    
+        var row = $(this); // Get the clicked row
+        var cellValue = row.find('td:nth-child(8)').text().trim(); // Get the 8th column value (adjust index if needed)
+
+        console.log("Value from the <td>: ", cellValue);
+        if (cellValue<1) {
+          $('#deletearea').prop('disabled', false);
+        }else{
+          $('#deletearea').prop('disabled', true);
+        }
+    });
+
+
     $('#deletearea').click(function(){
-	     if(confirm('Do You want to delete Selected Route'))
-		 {
-			 var ids=Array();
-			 var table=$("#userstable").DataTable();
-		     var data = table.rows('.selected').data();      
-         
-		     if(data.length<=0)
-		     {
-			    alert("Please Select any Row in table");
-			    return;
-		     }
-			 for(var i=0;i<data.length;i++)
-			 {
-				 ids.push(data[i].id);
-			 }
-			 var progress=$("#progressdel");
-		     progress.fadeIn("slow");
-		     $.ajax({
-			   url:'api/areaapi?delete',
-			   type:'post',
-			   data:{'ids':ids},
-			   success: function(data){
-				     progress.fadeOut("slow");
-					 alert(data);
-					 
-					 loaddata();
-					 
-				   },
-			   error:function(e){}
-			 });
-		 
-		 }
+            if(confirm('Do You want to delete Selected Route'))
+      
+        
+          {
+            var ids=Array();
+            var table=$("#userstable").DataTable();
+              var data = table.rows('.selected').data();      
+
+          
+            for(var i=0;i<data.length;i++)
+            {
+              if (data[i].no_of_outlats<1) {
+                ids.push(data[i].id);
+              }
+            }
+
+            if(ids<=0)
+              {
+                alert("Selected Route have Routes");
+                return;
+              }
+            var progress=$("#progressdel");
+              progress.fadeIn("slow");
+              $.ajax({
+              url:'api/areaapi?delete',
+              type:'post',
+              data:{'ids':ids},
+              success: function(data){
+                  progress.fadeOut("slow");
+                alert(data);
+                
+                loaddata();
+                
+                },
+              error:function(e){}
+            });
+          
+          }
 	   
 	   });
 	   

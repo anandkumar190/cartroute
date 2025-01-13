@@ -47,6 +47,27 @@ require("../connect.php");
   $datetime = date("Y-m-d H:i:s");
   $date=date("Y-m-d");
   $userid=@$_SESSION['id'];
+
+  if(isset($_GET['routes']))
+  {	
+     extract($_REQUEST);
+
+	   $res=mysqli_query($con,"select a.id,a.area, round( ( 6371 * acos( least(1.0,  cos( radians($lat) ) * cos( radians(a.latitude) ) * cos( radians(a.longitude) - radians($lng) ) + sin( radians($lat) ) * sin( radians(a.latitude) ) ) ) ), 3) as distance from area a  order by distance asc limit 6");
+	   $response=array();
+	  
+    while($row=mysqli_fetch_array($res))
+    {
+        $rr=array();
+        $rr['id']=$row['id'];
+        $rr['area']=$row['area'];
+        array_push($response,$rr);
+    }
+	   $data=array();
+	   $data["data"]=$response;	 
+	   echo json_encode($data); 
+  }
+
+
   if(isset($_GET['show']))
   { 
     $res=mysqli_query($con,"SELECT a.id,a.country,a.area,a.latitude,a.longitude,a.km,a.registrationdate,s.name AS sname,reg.name AS rname ,c.city AS cityname ,emp.name As distributor  FROM area a LEFT JOIN regions reg ON reg.id=a.region LEFT JOIN states s ON s.id=a.state LEFT JOIN cities c ON c.id=a.city LEFT JOIN employees emp on emp.id=a.distributor_id "); 
@@ -67,12 +88,6 @@ require("../connect.php");
 
         while($row=mysqli_fetch_array($res))
         {
-          
-        //   $id=$row['id'];
-        // $result=mysqli_query($con,"select COUNT(id) AS total_count from outlets where routeid =$id");
-        // $outlets=mysqli_fetch_array($result);
-        
-
 
 
           $rr=array();
@@ -95,7 +110,7 @@ require("../connect.php");
   {
  
      extract($_POST);
-     mysqli_query($con,"update area set country='$country',state='$state',city='$city',region='$region',area='$area',latitude='$lat',longitude='$lng',Km='$km', registrationdate='$datetime',distributor_id='$distributor' where id='$id'") or die(mysqli_error($con));
+     mysqli_query($con,"update area set latitude='$lat',longitude='$lng', registrationdate='$datetime',distributor_id='$distributor' where id='$id'") or die(mysqli_error($con));
       if(mysqli_affected_rows($con)>0)
       {
 	     echo "success";
@@ -158,7 +173,9 @@ require("../connect.php");
         $regionsname[strtolower($row["name"])]=$row["id"];
     }
       
-           
+    
+    
+
       
 	 $filetype=$_FILES["file1"]["type"];
 	 /*if($filetype!="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
