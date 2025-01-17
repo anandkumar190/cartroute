@@ -67,7 +67,7 @@
                                              <div class="form-group-lg">
                                                 <div class="form-inline">
        
-                                                 <button type="button" id="deleteroute" class="btn btn-danger"><span class="fa fa-remove"></span> Delete Selected Distributor</button>
+                                                 <button type="button" id="deleteroute" class="btn btn-danger" disabled><span class="fa fa-remove"></span> Delete Selected Distributor</button>
                                                 </div>
                                                 <div class="progress progress-striped active" id="progressdel" style="display:none;">
                                                    <div class="progress-bar progress-bar-success" style="width: 100%">
@@ -114,19 +114,16 @@
 											<table id="userstable" class="table" data-paging="true" data-filtering="true" data-processing="true" data-sorting="true">
 												<thead>
 												<tr>
-                          <th>Select</th>
-													<th>Action</th>
-													<th>Name</th>
-													<!-- <th>DID Id</th> -->
-													<th>Email</th>
-													<th>Contact</th>
-													<th>Address</th>
-                          <th>Pan No</th>
-                          <th>GST No</th>
-                          <!-- <th>SS Name</th> -->
-                          <th>Latitude</th>
-                          <th>Longitude</th>
-                          <th>Image</th>
+                        <th>Select</th>
+													<th>Edit</th>
+													<th>Distributor <br> Name</th>
+													<th>Contact <br> Persion</th>
+													<th>Phone <br> No.</th>
+													<th>State</th>
+                          <th>City</th>
+                          <th>No Of Routes </th>
+                          <th>No Of Outlets </th>
+                          <th>Distributor <br> Address </th>
 												</tr>
 												</thead>
 												<tbody>
@@ -380,9 +377,12 @@
 						  {
 							data:'name'
 						},
-						{data:'email'},{data:'contact'},{data:'address'},{data:'panno'},{data:'gstno'},{data:'latitude'},{data:'longitude'},{data:'image',render:function(value){
-							return "<img src='imgusers/"+value+"' class='img img-thumbnail' style='width:100px; height:100px;'/>";
-							}}
+						{data:'email'},{data:'contact'},{data:'address'},{data:'panno'},{data:'gstno'},{data:'latitude'},{data:'longitude'}
+            
+            // {data:'image',render:function(value){
+						// 	return "<img src='imgusers/"+value+"' class='img img-thumbnail' style='width:100px; height:100px;'/>";
+						// 	}
+            // }
               //{data:'ssname'},{data:'empid'}
 					  ]
 				

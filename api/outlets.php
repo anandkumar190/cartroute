@@ -66,7 +66,7 @@
 	  $lat=truncate_number($latitude,3);
 	  $lng=truncate_number($longitude,3);
 
-	  mysqli_query($con,"insert into outlets(name,address,lastvisitpic,contactperson,contact,pincode,gstnumber,outlettype,outletsubtype,routeid,competitor_presense,street,locality,city,state,latitude,longitude,areaid,lastvisit,creationdate,createdby) values('$name','$address','$filename','$contactperson','$contact','$pincode','$gstnumber','$outlettype','$outletsubtype','$areaid','0','$street','$locality','$city','$state','$latitude','$longitude','$areaid','$datetime','$datetime','$createdby')");
+	  mysqli_query($con,"insert into outlets(name,address,lastvisitpic,contactperson,contact,pincode,gstnumber,outlettype,outletsubtype,routeid,competitor_presense,street,locality,city,state,latitude,longitude,areaid,lastvisit,creationdate,createdby) values('$name','$address','$filename','$contactperson','$contact','$pincode','$gstnumber','$outlettype','$outletsubtype','$areaId','0','$street','$locality','$city','$state','$latitude','$longitude','$areaId','$datetime','$datetime','$createdby')");
 	  
 	  if(mysqli_affected_rows($con)>0)
 	  {

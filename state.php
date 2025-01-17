@@ -8,7 +8,8 @@
 
    <link href="assets/node_modules/datatables/jquery.dataTables.min.css" rel="stylesheet"/>
    <link rel="stylesheet" href="assets/bootstrap-toggle.min.css"/> 
-   <link rel="stylesheet" href="dist/dist/css/bootstrapValidator.min.css"/>
+   <link rel="stylesheet" href="dist/dist/css/bootstrapValidator.min.css"/>   
+
    
     <!-- Main content -->
     <section class="content">
@@ -70,8 +71,13 @@
 												<thead>
 												<tr>
 											
-												    <th>Action</th>
+									
+												    <th>Edit</th>
 													<th>State Name</th>
+													<th>No Of City </th>
+													<th>No Of Regions</th>
+													<th>No Of Route</th>
+													<th>No Of Outlet</th>
 											
 												</tr>
 												</thead>
@@ -134,6 +140,7 @@
     <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+
     <!-- end - This is for export functionality only -->
     <script src="assets/bootstrap-toggle.min.js"></script>
 
@@ -142,7 +149,7 @@
 	function loaddata()
 	{
      $.ajax({
-		  url:"api/state.php",
+		  url:"api/state.php/?show",
 		  type:"POST",
 		  contentType:"application/json; charset=utf-8",
 		  success:function(data){
@@ -150,6 +157,7 @@
 			    data=JSON.parse(data);
 	            $("#userstable").dataTable(
 				{
+
 				  dom: 'Bfrtip',	
 				  sort:false,
 				  data:data,
@@ -162,14 +170,27 @@
 				  buttons: [
                 'copy', { extend: 'csv', title: function () { var printTitle = 'All Visitis'; return printTitle; } }, 'excel', 'pdf', { extend: 'print', title: function () { var printTitle = ''; return printTitle; } }
                    ],
-				  columns:[{
+				  columns:[
+						{
 					   data:'id',render:function(value){
-						  return "<a href='api/state?deletestate&id="+value+" '><span class='fa fa-trash'></span></a>";
+						   return "<a href='edit-state?editid="+value+"'><span class='fa fa-edit'></span></a>";
 						  }},
-								 
+			
 						  {
-							data:'name'
-						}
+							data:'name'	
+						  },
+						  {
+							data:'total_city_count'	
+						  },
+						  {
+							data:'total_region_count'	
+						  },
+						  {
+							data:'total_route_count'	
+						  },
+						  {
+							data:'total_outlet_count'	
+						  },
 				
 					  ]
 				});	
