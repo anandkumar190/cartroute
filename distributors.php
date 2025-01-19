@@ -67,7 +67,7 @@
                                              <div class="form-group-lg">
                                                 <div class="form-inline">
        
-                                                 <button type="button" id="deleteroute" class="btn btn-danger" disabled><span class="fa fa-remove"></span> Delete Selected Distributor</button>
+                                                 <button type="button" id="deletearea" class="btn btn-danger" disabled><span class="fa fa-remove"></span> Delete Selected Distributor</button>
                                                 </div>
                                                 <div class="progress progress-striped active" id="progressdel" style="display:none;">
                                                    <div class="progress-bar progress-bar-success" style="width: 100%">
@@ -161,7 +161,7 @@
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Add User</h3>
+              <h3 class="box-title">Add distributor</h3>
             </div>
             <!-- /.box-header -->
           <div class="box-body">
@@ -172,21 +172,34 @@
               
                 <div class="form-group controls">
                 <input type="hidden" name="id" id="id" value="<?php echo $id;?>" />
-                  <label for="empname">Name : </label>
-                  <input type="text" class="form-control" name="empname" id="empname" placeholder="Enter Name" value=""  required="required"/>
+                  <label for="empname">Distributor Name : </label>
+                  <input type="text" class="form-control" name="empname" id="empname" placeholder="Enter Distributor Name" value=""  required="required"/>
+                </div>
+
+                <div class="form-group controls">
+                <input type="hidden" name="id" id="id" value="<?php echo $id;?>" />
+                  <label for="empname">Distributor Short Name: </label>
+                  <input type="text" class="form-control" name="empsname" id="empsname" placeholder="Enter Distributor Short Name" value=""  required="required"/>
                 </div>
                 
                 <div class="form-group">
                   <label for="empemail">Email </label>
                   <input type="email" class="form-control" name="empemail" id="empemail" value="" placeholder="Email Address" required/>
                 </div>
+
+                <div class="form-group controls">
+                <input type="hidden" name="id" id="id" value="<?php echo $id;?>" />
+                  <label for="empname">Contact Person: </label>
+                  <input type="text" class="form-control" name="empcname" id="empcname" placeholder="Enter Contact Person" value=""  required="required"/>
+                </div>
+
                 <div class="form-group">
                   <label for="empcontact">Contact </label>
                   <input type="" class="form-control" pattern="^\d{10}?$" data-dv-message="Enter Contact No in 10 digits" name="empcontact" id="empcontact" value="" minlength="10" maxlength="10" placeholder="Contact No" required/>
                 </div>
                 <div class="form-group">
-                  <label for="empaddress">Address </label>
-				  <textarea class="form-control" name="empaddress" id="empaddress" placeholder="Address"></textarea>
+                  <label for="empaddress">Distributor Address </label>
+				     <textarea class="form-control" name="empaddress" id="empaddress" placeholder="Distributor Address"></textarea>
                 </div>
              </div> <!-- col 4 close--> 
              
@@ -202,69 +215,17 @@
                 </select>
               </div>
 
-        <div class="form-group">
-          <label for="empmanager">Select City</label>
-          <select class="form-control" name="empcity" id="empcity" required>
-           <option value="">Select city </option>
-        
-          </select>
-        </div>
-               
-                <div class="form-group">
-                  <label for="emparea">Select Area</label>
-                  <br/>
-                  <select  class="form-control select2" style="width:100%;" name="emparea" id="emparea" required>
-                   
-                   <option value="">Select Area</option>
-                    <?php $res=mysqli_query($con,"SELECT area.id,area.area,res.name As name FROM `area` LEFT JOIN regions res ON res.id=area.region"); while($row=mysqli_fetch_array($res)){?>
-                    <option value="<?php echo $row['id'];?>"><?php echo "Region : ".$row['name']." Area (".$row['area'].")";?></option>
-                    <?php }?>
-                  </select>
-                  
-                </div>
-                
-
-               	
-       <!--           <div class="form-group">
-                  <label for="emppanno">Pan Number:</label>
-                  <input type="text" class="form-control pull-right" name="emppanno" id="emppanno" value="" pattern-bv-message="Enter Correct Pan No" required="required"/>
-                </div>
-            
-                 
-               <div class="form-group">
-                  <label for="empgstno">GST Number:</label>
-                  <input type="text" class="form-control pull-right" name="empgstno" id="empgstno" pattern="\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d{1}[A-Z]{1}\d{1}" pattern-bv-message="Enter Correct value for Salary" value="" />
-                </div> -->
-                			
-			  
-            </div>
-            <!-- col 4 Mid -->
-            
-            <div class="col-md-4">
-               
-               <div class="form-group">
-                  <label for="stockistid">Select Stockist</label>
-                  <br/>
-                  <select  class="form-control select2" style="width:100%;" name="stockistid" id="stockistid" required>
-                                  
-                   <option value="">Select Stockist</option>
-                    <?php $res=mysqli_query($con,"select * from employees where usertype='2'"); while($row=mysqli_fetch_array($res)){?>
-                    <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
-                    <?php }?>
-                  </select>
-                  
-                </div>   	
-   <!--             
-               <div class="form-group">
-                  <label for="emppass">Password</label>
-                  <input type="password" class="form-control" name="emppass" id="emppass"  placeholder="Password" required/>
-                </div>
-                <div class="form-group">
-                  <label for="empcpass">Confirm Password</label>
-                  <input type="password" class="form-control" name="empcpass" id="empcpass"  placeholder="Confirm Password" required/>
-                </div>   -->
-               
-             <div class="form-group">
+              <div class="form-group">
+                <label for="empmanager">Select City</label>
+                <select class="form-control" name="empcity" id="empcity" required>
+                <option value="">Select city </option>
+                </select>
+              </div>
+               	<br>
+               	<br>
+               	<br>
+                 <div style="align:center">  <center><a href="#locationmodel" data-target="#locationmodel" data-toggle="modal" style="font-size: x-large;" >Set Location</a>   </center> </div> 
+              <div class="form-group">
                   <label for="emplat">Latitude:</label>
                   <input type="text" class="form-control pull-right" name="emplat" id="emplat" value=""/>
               </div>
@@ -272,8 +233,20 @@
             <div class="form-group">
                   <label for="emplng" >Longitude:</label>
                   <input type="text" class="form-control pull-right" name="emplng" id="emplng" value="" />
-                  <a href="#" data-target="#locationmodel" data-toggle="model">Set Location</a>
+            </div>			
+			  
+            <br>
+            <br>
+            <br>
+            <br>
+            <button type="submit"  id="btnaddproduct" class="btn btn-primary pull-right "><span class="fa fa-plus-circle"></span> Add New User</button>
             </div>
+            <!-- col 4 Mid -->
+            
+            <div class="col-md-4">
+               
+    
+
              
             
       <!--           
@@ -292,7 +265,7 @@
                    <div class="progress-bar progress-bar-success" style="width: 100%">
                    </div>
                 </div>
-                <button type="submit"  id="btnaddproduct" class="btn btn-primary pull-right "><span class="fa fa-plus-circle"></span> Add New User</button>
+          
               </div>
             
           </div>
@@ -375,9 +348,14 @@
 						  return "<a href='editdd?editid="+value+"'><span class='fa fa-edit'></span></a>";
 						  }},
 						  {
-							data:'name'
-						},
-						{data:'email'},{data:'contact'},{data:'address'},{data:'panno'},{data:'gstno'},{data:'latitude'},{data:'longitude'}
+							data:'name'},
+						{data:'contactperson'},
+            {data:'contact'},
+            {data:'state'},
+            {data:'city'},
+            {data:'no_of_routes'},
+            {data:'no_of_outlets'},
+            {data:'address'}
             
             // {data:'image',render:function(value){
 						// 	return "<img src='imgusers/"+value+"' class='img img-thumbnail' style='width:100px; height:100px;'/>";
@@ -399,7 +377,20 @@ $(document).ready(function(){
    loaddata();
    $("#empdoj").datepicker({format:'yyyy-m-dd'});
    
-      $('#deleteroute').click(function(){
+   $("#userstable").on('click', 'tr', function () {
+    
+      var row = $(this); // Get the clicked row
+      var cellValue = row.find('td:nth-child(9)').text().trim(); // Get the 8th column value (adjust index if needed)
+
+      console.log("Value from the <td>: ", cellValue);
+      if (cellValue<1) {
+        $('#deletearea').prop('disabled', false);
+      }else{
+        $('#deletearea').prop('disabled', true);
+      }
+  });
+
+      $('#deletearea').click(function(){
 	     if(confirm('Do You want to delete Selected Stockist'))
 		 {
 			 var ids=Array();
@@ -454,28 +445,30 @@ function sendData(){
 		var empemail = $('#empemail').val();
 		var empcontact = $('#empcontact').val();
 		var empaddress = $('#empaddress').val();
-		var emparea = $('#emparea').val();
+		
 		var empcity = $('#empcity').val();
 		var empstate = $('#empstate').val();
 
 		var emplat = $('#emplat').val();
 		var emplng = $('#emplng').val();
 
-        var stockistid=$('#stockistid').val();
+    var empsortname=$('#empsname').val();
+    var empcontactname=$('#empcname').val();
 	
 		fd.append('empname',empname);
 		
 		fd.append('empemail',empemail);
 		fd.append('empcontact',empcontact);
 		fd.append('empaddress',empaddress);
-		fd.append('emparea',emparea);
+	
 		fd.append('empcity',empcity);
 		fd.append('empstate',empstate);
 
 		fd.append('emplat',emplat);
     fd.append('emplng',emplng);
 
-		fd.append('stockistid',stockistid);
+		fd.append('empsortname',empsortname);
+		fd.append('empcontactname',empcontactname);
 		
            progress.fadeIn("slow");
         $.ajax({
@@ -503,22 +496,17 @@ function sendData(){
                 if(response =="success"){
                     alert("Distributor Create Successfully...");
 					progress.fadeOut("slow");
-					$('#empimage')[0].files[0];
+				
 		            $('#empname').val('');
-		            
 		            $('#empemail').val('');
 		            $('#empcontact').val('');
-		            $('#empaddress').val('');
-		            $('#emparea').val('');
+		            $('#empaddress').val(''); 
 		            $('#empcity').val('');
 		            $('#empstate').val('');
-		            $('#emppanno').val('');
-		            $('#empgstno').val('');
 		            $('#emplat').val('0.0');
 		            $('#emplng').val('0.0');
-		            $('#emppass').val('');
-					$('#empcpass').val('');
-					$('#stockistid').val('');
+                $('#empcname').val('');
+                $('#empsname').val('');
 					
 					
                 }else{

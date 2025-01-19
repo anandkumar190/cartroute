@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 if(!isset($_SESSION['tittu']))
 {
@@ -73,23 +74,10 @@ $time=date("H:i:s");
 			echo "empcontact";
 			return;
 	  }
-// 	$filename=$_FILES['empimage']['name'];
-// 	$tmpname=$_FILES['empimage']['tmp_name'];
-// 	$filesize=$_FILES['empimage']['size'];
-// 	$filetype=$_FILES['empimage']['type'];
-// 	if($filetype!="image/jpg" && $filetype!="image/png" && $filetype!="image/jpeg")
-// 	{
-// 	  echo"Please Upload Images(PNG,JPG & JPEG) Files Only...";
-// 	  return;
-// 	}
-// 	if($filesize>800000)
-// 	{
-// 	  echo"Image can't be Greater than 800KB .";
-// 	  return;
-// 	}
+
 	
 	$filename="image";
-	mysqli_query($con,"insert into employees(image,name,empid,email,contact,address,designationid,roleid,managerid,usertype,salary,commission,city,state,reportsto,latitude,longitude,battery,region,doj,creationdate,createdby,stockistid,areaid,lastlogin) values('$filename','$empname','$empcode','$empemail','$empcontact','$empaddress','0','0','0','3','0','0','$empcity','$empstate','0','$emplat','$emplng','','','$datetime','$datetime','$userid','$stockistid','$emparea','$datetime')") or die(mysqli_error($con));
+	mysqli_query($con,"insert into employees(image,name,contactperson,sortname,empid,email,contact,address,designationid,roleid,managerid,usertype,salary,commission,city,state,reportsto,latitude,longitude,battery,region,doj,creationdate,createdby,lastlogin) values('$filename','$empname','$empcontactname','$empsortname','$empcode','$empemail','$empcontact','$empaddress','0','0','0','3','0','0','$empcity','$empstate','0','$emplat','$emplng','','','$datetime','$datetime','$userid','$datetime')") or die(mysqli_error($con));
 	
 	if(mysqli_affected_rows($con)>0)
 	{
@@ -104,12 +92,57 @@ $time=date("H:i:s");
 
   else if(isset($_GET['show']))
   {
-     $res=mysqli_query($con,"select e.id, e.image, e.name, e.empid, e.email, e.contact, e.address, e.usertype, e.password, e.salary, e.commission, e.city, e.state, e.latitude, e.longitude, e.region, e.doj, e.dol, e.reportsto, e.creationdate ,e.stockistid,e.battery as 'panno',e.region as'gstno', emp.name as 'ssname' from  employees e join employees emp on emp.id=e.stockistid where e.usertype='3'");
-	 $response=array();
-	 
+	$query = "SELECT 
+            e.id, 
+            e.name, 
+            e.email, 
+            e.contactperson, 
+            e.contact, 
+            e.usertype,
+			e.address, 
+            c.city, 
+            s.name AS state 
+          FROM employees e 
+          LEFT JOIN states s ON e.state = s.id 
+          LEFT JOIN cities c ON e.city = c.id 
+          WHERE e.usertype = '3'";
+	$res=mysqli_query($con,$query);
+
+	if (!$res) {
+		die("Query failed: " . mysqli_error($con));
+	}
+
+		$response=array();   
+		$result=mysqli_query($con,"select a.distributor_id,
+					COUNT( DISTINCT o.id) AS total_outlet_count ,
+					COUNT( DISTINCT a.id) AS total_route_count 
+					from outlets o 
+					left JOIN area a ON o.routeid=a.id
+					GROUP BY a.distributor_id");
+
+		$arrayRoute= $arrayOutlet = array();
+
+		while($outlets=mysqli_fetch_array($result))
+		{
+		$arrayOutlet[$outlets['distributor_id']]=$outlets['total_outlet_count'];
+		$arrayRoute[$outlets['distributor_id']]=$outlets['total_route_count'];
+		}
+
 	 while($row=mysqli_fetch_array($res))
 	 {
-		 		 $rr=array("id"=>$row["id"],"name"=>$row["name"],"empid"=>$row["empid"],"email"=>$row["email"],"contact"=>$row["contact"],"address"=>$row["address"],"salary"=>$row["salary"],"commission"=>$row["commission"],"city"=>$row["city"],"latitude"=>$row["latitude"],"longitude"=>$row["longitude"],"panno"=>$row["panno"],"gstno"=>$row["gstno"],"image"=>$row["image"],"ssname"=>$row["ssname"]);
+		 		 $rr=array(
+					"id"=>$row["id"],
+					"name"=>$row["name"],
+					"email"=>$row["email"],
+					"contact"=>$row["contact"],
+					"address"=>$row["address"],	
+					"city"=>$row["city"],
+					"state"=>$row["state"],
+					"contactperson"=>$row["contactperson"],
+					"no_of_outlets"=>@$arrayOutlet[$row["id"]]??0,
+					"no_of_routes"=>@$arrayRoute[$row["id"]]??0,
+				
+				);
 		 $response[]=$rr;
      }	 
 	 $data=json_encode($response);
@@ -168,7 +201,17 @@ $time=date("H:i:s");
 			  unlink("../imgusers".$filename);
 		  }
 		  
-	      	      mysqli_query($con,"update  employees set name='$empname',email='$empemail',contact='$empcontact',address='$empaddress',areaid='$emparea',image='$filename',latitude='$emplat',longitude='$emplng',city='$empcity',state='$empstate',battery='$emppanno',region='$empgstno',lastlogin='$datetime',stockistid='$stockistid' where id='$id'") or die(mysqli_error($con));
+	      	      mysqli_query($con,"update  employees set name='$empname',
+				  email='$empemail',
+				  contact='$empcontact',
+				  address='$empaddress',
+				  latitude='$emplat',
+				  longitude='$emplng',
+				  city='$empcity',
+				  state='$empstate',
+				  lastlogin='$datetime',
+				  contactperson='$empcontactname',
+				  sortname='$empsortname' where id='$id'") or die(mysqli_error($con));
 
 	      if(mysqli_affected_rows($con)>0)
        	  {
@@ -195,9 +238,31 @@ $time=date("H:i:s");
 	   }
 	   else
 	   {
-		   	      //$filename=$pname.$pshort.".jpg";
-		  
-	      	      mysqli_query($con,"update  employees set name='$empname',email='$empemail',contact='$empcontact',address='$empaddress',areaid='$emparea',city='$empcity',state='$empstate',battery='$emppanno',region='$empgstno',stockistid='$stockistid',latitude='$emplat',longitude='$emplng',lastlogin='$datetime' where id='$id'") or die(mysqli_error($con));
+		// print_r(['query'=>"update  employees set name='$empname',
+		// 	email='$empemail',
+		// 	contact='$empcontact',
+		// 	address='$empaddress',
+		// 	city='$empcity',
+		// 	state='$empstate',
+		// 	latitude='$emplat',
+		// 	longitude='$emplng',
+		// 	lastlogin='$datetime'
+		// 	contact_person='$empcontactname',
+		// 	sort_name='$empsortname'
+		// 	where id='$id'"]);
+
+	      	mysqli_query($con,"update  employees set name='$empname',
+			email='$empemail',
+			contact='$empcontact',
+			address='$empaddress',
+			city='$empcity',
+			state='$empstate',
+			latitude='$emplat',
+			longitude='$emplng',
+			lastlogin='$datetime',
+			contactperson='$empcontactname',
+			sortname='$empsortname'
+			where id='$id'") or die(mysqli_error($con));
 
 	      if(mysqli_affected_rows($con)>0)
        	  {

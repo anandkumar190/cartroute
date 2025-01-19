@@ -8,6 +8,7 @@
 		$empid='';
 		$email='';
 		$contact='';
+		$sortName=$contactParson='';
 		$address='';
 		$emparea='';
 		$empcity='';
@@ -31,6 +32,8 @@
 		$empid=$row['empid'];
 		$email=$row['email'];
 		$contact=$row['contact'];
+		$contactParson=$row['contactperson'];
+		$sortName=$row['sortname'];
 		$address=$row['address'];
 		$emparea=$row['areaid'];
 		$empcity=$row['city'];
@@ -42,6 +45,7 @@
 		$lng=$row['longitude'];
 		$password=$row['password'];
 		$stockistid=$row['stockistid'];
+    
 	}
   }
 ?>
@@ -94,8 +98,15 @@
               
                 <div class="form-group controls">
                 <input type="hidden" name="id" id="id" value="<?php echo $id;?>" />
-                  <label for="empname">Name : </label>
-                  <input type="text" class="form-control" name="empname" id="empname" placeholder="Enter Name" value="<?php echo $name;?>"  required="required"/>
+                  <label for="empname">Distributor Name : </label>
+                  <input type="text" class="form-control" name="empname" id="empname" placeholder="Enter Distributor Name" value="<?php echo $name;?>"  required="required"/>
+                </div>
+
+                  
+                <div class="form-group controls">
+                <input type="hidden" name="id" id="id" value="<?php echo $id;?>" />
+                  <label for="empname">Distributor Sort Name : </label>
+                  <input type="text" class="form-control" name="empsname" id="empsname" placeholder="Enter Distributor Sort Name" value="<?php echo $sortName;?>"  required="required"/>
                 </div>
                 
                 <div class="form-group">
@@ -106,74 +117,49 @@
                   <label for="empcontact">Contact </label>
                   <input type="" class="form-control" pattern="^\d{10}?$" data-dv-message="Enter Contact No in 10 digits" name="empcontact" id="empcontact" value="<?php echo $contact;?>" minlength="10" maxlength="10" placeholder="Contact No" required/>
                 </div>
+
+                <div class="form-group controls">
+                <input type="hidden" name="id" id="id" value="<?php echo $id;?>" />
+                  <label for="empname">Contact Person: </label>
+                  <input type="text" class="form-control" name="empcname" id="empcname" placeholder="Enter Contact Person" value="<?php echo $contactParson; ?>"  required="required"/>
+                </div>
                 <div class="form-group">
-                  <label for="empaddress">Address </label>
-				  <textarea class="form-control" name="empaddress" id="empaddress" placeholder="Address"><?php echo $address;?></textarea>
+                  <label for="empaddress">Distributor Address </label>
+				  <textarea class="form-control" name="empaddress" id="empaddress" placeholder=" Distributor Address"><?php echo $address;?></textarea>
                 </div>
              </div> <!-- col 4 close--> 
              
              <div class="col-md-4">
                
                 <div class="form-group">
-                  <label for="emparea">Select Area</label>
-                  <select  class="form-control select2" name="emparea" id="emparea" required>
+                  <label for="empstate">State</label>
+                  <select  class="form-control" name="empstate" id="empstate" required>
+                        <option value="">Select State</option>
+                        <?php $res=mysqli_query($con,"select id,name from states"); while($row=mysqli_fetch_array($res)){$sselect=$row['id']==$empstate ? 'selected' :'';?>
+                        <option value="<?php echo $row['id'];?>" <?php echo $sselect;?> ><?php echo $row['name'];?> </option>
+                        <?php }?>
+                      </select> 
                    
-                   <option value="">Select Area</option>
-                    <?php $res=mysqli_query($con,"select * from area order by region"); while($row=mysqli_fetch_array($res)){?>
-                    <option value="<?php echo $row['id'];?>"><?php echo $row['region']." Area (".$row['area'].")";?></option>
-                    <?php }?>
-                  </select>
-                  <script>
-                    var emparea=document.getElementById("emparea");
-					emparea.value="<?php echo $emparea;?>";
-					
-                  </script>
                 </div>
-                
+
                 <div class="form-group">
                   <label for="empcity">City</label>
-                  <input type="text"  class="form-control" name="empcity" id="empcity"  value="<?php echo $empcity;?>" required="required" />
+                  <select class="form-control" name="empcity" id="empcity" required>
+                              <option value="">Select city </option>
+                              <?php $res=mysqli_query($con,"select id,city from cities where state_id='$empstate'"); while($row=mysqli_fetch_array($res)){ $cselect=$row['id']==$empcity ? 'selected' :'';?>
+                              <option value="<?php echo $row['id'];?>" <?php echo $cselect;?> ><?php echo $row['city'];?></option>
+                              <?php }?>
+                          
+                            </select>
                    
                 </div>
+
+                <br>
+                <br>
+                <br>
                 
+                 <div style="align:center">  <center><a href="#locationmodel" data-target="#locationmodel" data-toggle="modal" style="font-size: x-large;" >Set Location</a>   </center> </div> 
                 <div class="form-group">
-                  <label for="empstate">State</label>
-                  <input type="text"  class="form-control" name="empstate" id="empstate"  value="<?php echo $empstate;?>"  required="required"/>
-                   
-                </div>
-            
-                <div class="form-group">
-                  <label for="stockistid">Select Stockist</label>
-                  <select  class="form-control select2" name="stockistid" id="stockistid" required>
-                   
-                   <option value="">Select Stockist</option>
-                    <?php $res=mysqli_query($con,"select * from employees where usertype='2'"); while($row=mysqli_fetch_array($res)){?>
-                    <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
-                    <?php }?>
-                  </select>
-                  <script>
-                    var stockistid=document.getElementById("stockistid");
-					stockistid.value="<?php echo $stockistid;?>";
-					
-                  </script>
-                </div>   				
-			  
-            </div>
-            <!-- col 4 Mid -->
-            
-            <div class="col-md-4">
-                 
-                <div class="form-group">
-                  <label for="emppanno">Pan Number:</label>
-                  <input type="text" class="form-control pull-right" name="emppanno" id="emppanno" value="<?php echo $panno;?>" pattern="^[A-Z]{5}\d{4}[A-Z]{1}" pattern-bv-message="Enter Correct Pan No" />
-                </div>
-            
-                 
-               <div class="form-group">
-                  <label for="empgstno">GST Number:</label>
-                  <input type="text" class="form-control pull-right" name="empgstno" id="empgstno" pattern="\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d{1}[A-Z]{1}\d{1}" pattern-bv-message="Enter Correct value for Salary" value="<?php echo $gstno;?>" />
-                </div>
-             <div class="form-group">
                   <label for="emplat">Latitude:</label>
                   <input type="text" class="form-control pull-right" name="emplat" id="emplat" value="<?php echo $lat;?>"  readonly="readonly"/>
               </div>
@@ -181,15 +167,24 @@
             <div class="form-group">
                   <label for="emplng" >Longitude:</label>
                   <input type="text" class="form-control pull-right" name="emplng" id="emplng" value="<?php echo $lng;?>"  readonly="readonly"/>
-                  <a href="#locationmodel" data-target="#locationmodel" data-toggle="modal">Set Location</a>
+
             </div>
+            <br>
+            <br>
+            <br>
+            <br>
              
+            <button type="submit"  id="btnaddproduct" class="btn btn-primary pull-right "><span class="fa fa-edit"></span> Update Details</button>
+
+            </div>
+            <!-- col 4 Mid -->
             
-                
-                <div class="form-group">
-                  <label for="pimage">Select Image</label>
-                  <input type="file" id="empimage" name="empimage"/><img src="imgusers/<?php echo $image;?>" style="height:200px; width:180px;" class="img img-thumbnail" />
-                </div>
+            <div class="col-md-4">
+                 
+
+      
+            
+       
                     
             </div>
           </div>
@@ -202,7 +197,7 @@
                    </div>
                 </div>
                 <a href="distributors" class="btn btn-danger"><span class="fa fa-remove"></span> Cancel</a>
-                <button type="submit"  id="btnaddproduct" class="btn btn-primary pull-right "><span class="fa fa-edit"></span> Update Details</button>
+
               </div>
             
           </div>
@@ -271,37 +266,31 @@ function sendData(){
      //       fd.append(key, value);
       //  });
 		
-        var files = $('#empimage')[0].files[0];
 		var id = $('#id').val();
 		var empname = $('#empname').val();
-		
 		var empemail = $('#empemail').val();
 		var empcontact = $('#empcontact').val();
 		var empaddress = $('#empaddress').val();
-		var emparea = $('#emparea').val();
 		var empcity = $('#empcity').val();
 		var empstate = $('#empstate').val();
-		var emppanno = $('#emppanno').val();
-		var empgstno = $('#empgstno').val();
 		var emplat = $('#emplat').val();
 		var emplng = $('#emplng').val();
-		var stockistid = $('#stockistid').val();
+    var empsortname=$('#empsname').val();
+    var empcontactname=$('#empcname').val();
 		
-        fd.append('empimage',files);
+       
 		fd.append('id',id);
 		fd.append('empname',empname);
-		
 		fd.append('empemail',empemail);
 		fd.append('empcontact',empcontact);
 		fd.append('empaddress',empaddress);
-		fd.append('emparea',emparea);
 		fd.append('empcity',empcity);
 		fd.append('empstate',empstate);
 		fd.append('emplat',emplat);
 		fd.append('emplng',emplng);
-		fd.append('emppanno',emppanno);
-		fd.append('empgstno',empgstno);
-		fd.append('stockistid',stockistid);
+		fd.append('empsortname',empsortname);
+		fd.append('empcontactname',empcontactname);
+
            progress.fadeIn("slow");
         $.ajax({
             url: 'api/distributor-api.php?edit',
@@ -343,6 +332,8 @@ function sendData(){
 		            $('#emplat').val('0.0');
 		            $('#emplng').val('0.0');
 		            $('#stockistid').val('');
+		            $('#empsname').val('');
+		            $('#empcname').val('');
 					
 					window.location="distributors";
                 }else{
@@ -421,8 +412,7 @@ $(document).ready(function() {
             // Prevent form submission
             e.preventDefault();
 			  sendData();
-	          		
-			
+
             // Get the form instance
           /*  var $form = $(e.target);
 
@@ -434,6 +424,23 @@ $(document).ready(function() {
                 console.log(result);
             }, 'json');*/
         });
+
+
+        	          		
+        $("#empstate").change(function(){
+            var stateid= $(this).val();
+          $.get("api/regionapi.php?cities",{s_id:stateid},function(data, status){
+        var selectbox = $('#empcity');
+           selectbox.empty();
+             var list = '<option value="">Select city </option>';
+            $.each(JSON.parse(data), function(key,value) { 
+             list += "<option value='" +value.id+ "'>" +value.city+ "</option>";
+             });
+             
+           selectbox.html(list);
+        
+         });
+      });
 });
 
 </script>
