@@ -12,6 +12,8 @@
 	//define('DB_PASS','cartroute#123456'); //cartroute#123456
 /*>>>>>>> 33844e7bad3ffdc0811aed4112ae5646b033ba4f*/
 	//define('DB_NAME','vivanwmp_cartroute');
-	define('DB_NAME','cartroute');
+	define('DB_NAME','vivanwmp_cartroute');
 	$con=mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME) or die('Unable to connect');
+
+
  ?>

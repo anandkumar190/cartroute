@@ -25,29 +25,58 @@
 	  extract($_GET);
 	$res=mysqli_query($con,"select * from employees where id='$editid'");
 	if($row=mysqli_fetch_array($res))
-	{
-	
-		$id=$row['id'];
-		$name=$row['name'];
-		$empid=$row['empid'];
-		$email=$row['email'];
-		$contact=$row['contact'];
-		$contactParson=$row['contactperson'];
-		$sortName=$row['sortname'];
-		$address=$row['address'];
-		$emparea=$row['areaid'];
-		$empcity=$row['city'];
-		$empstate=$row['state'];
-		$panno=$row['battery'];
-		$gstno=$row['region'];
-		$image=$row['image'];
-		$lat=$row['latitude'];
-		$lng=$row['longitude'];
-		$password=$row['password'];
-		$stockistid=$row['stockistid'];
-    
-	}
+      {
+      
+        $id=$row['id'];
+        $name=$row['name'];
+        $empid=$row['empid'];
+        $email=$row['email'];
+        $contact=$row['contact'];
+        $contactParson=$row['contactperson'];
+        $sortName=$row['sortname'];
+        $address=$row['address'];
+        $emparea=$row['areaid'];
+        $empcity=$row['city'];
+        $empstate=$row['state'];
+        $panno=$row['battery'];
+        $gstno=$row['region'];
+        $image=$row['image'];
+        $lat=$row['latitude'];
+        $lng=$row['longitude'];
+        $password=$row['password'];
+        $stockistid=$row['stockistid'];
+        
+      }
   }
+
+
+  $result=mysqli_query($con,"SELECT a.area AS areaName, COUNT(DISTINCT o.id) AS total_outlet_count 
+                              FROM 
+                                  outlets o 
+                              LEFT JOIN 
+                                  area a 
+                              ON 
+                                  o.routeid = a.id 
+                              WHERE 
+                                  a.distributor_id = $editid 
+                              GROUP BY 
+                                  a.id;");
+   
+
+
+  
+    $arrayRoute= array();
+      $totalOutlets=$i=0;
+    while($outlets=mysqli_fetch_array($result))
+    {
+    $arrayRoute[$i]['name']=$outlets['areaName'];
+    $arrayRoute[$i]['total_outlet_count']=$outlets['total_outlet_count'];
+
+    $totalOutlets+=$outlets['total_outlet_count'];
+    $i++;
+    }
+
+
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -181,8 +210,45 @@
             
             <div class="col-md-4">
                  
+            <table class="col-md-12 " >
+												<thead>
+												<tr>
+                        <th> <h4><b>Route </b></h4></th>
+													<th> <h4><b>No. of 
+                        <br> Outlets </b></h4></th>
+												</tr>
+												</thead>
+												<tbody>
+                        
+                           <?php 
 
-      
+                        foreach ($arrayRoute as $arrayRouteValue) {
+                            
+                            echo "<tr> <td> - ".$arrayRouteValue['name'] ."</td>";
+                            echo  "<td>" .$arrayRouteValue['total_outlet_count'] ."</td> </tr>";
+                        }
+                        ?>
+
+
+												</tbody>
+
+
+                        <tbody>
+												<tr> <td> <br></td> <td></td> <tr>
+												<tr> <td> <br> </td> <td></td> <tr>
+												<tr> <td> <br> </td> <td></td> <tr>
+												<tr> <td> <br> </td> <td></td> <tr>
+                        <th> <h4><b> Total No. of Routes </b></h4></th>
+													<th> <h4><b> <?php echo $i ;?> </b></h4></th>
+												</tr>
+                        <tr>
+                        <th> <h4><b> Total No. of Routes </b></h4></th>
+													<th> <h4><b> <?php echo $totalOutlets ;?> </b></h4></th>
+												</tr>
+												</tbody>
+
+											</table>
+
             
        
                     
