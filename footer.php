@@ -207,7 +207,9 @@ function curPageName() {
 $page_name=curPageName();
 
 
-if($page_name=="editdd.php" || $page_name=="showarea.php" || $page_name=="editss.php" || $page_name=="editarea.php"||  $page_name=="editoutlet.php") {
+
+
+if($page_name=="editdd.php" || $page_name=="distributors.php" || $page_name=="showarea.php" || $page_name=="editss.php" || $page_name=="editarea.php"||  $page_name=="editoutlet.php") {
 	?>
 <div id="locationmodel" class="modal fade" role="alertdialog">
    <div class="modal-dialog">

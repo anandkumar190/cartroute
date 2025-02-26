@@ -121,102 +121,36 @@
               <h3 class="box-title">Add User</h3>
             </div>
             <!-- /.box-header -->
-          <div class="box-body">
-           <div class="row">
-            <div class="col-md-4">
-                <!-- form start -->
-            
-              
-                <div class="form-group controls">
-                  <label for="empname">Name : </label>
-                  <input type="text" class="form-control" name="empname" id="empname" placeholder="Enter Name"  required="required"/>
-                </div>
-                <div class="form-group">
-                  <label for="empcode">Employee Code (EMP0001)</label>
-                  <input type="text" class="form-control" name="empcode" id="empcode"  placeholder="Employee Code" required/>
-                </div>
-                <div class="form-group">
-                  <label for="empemail">Email </label>
-                  <input type="email" class="form-control" name="empemail" id="empemail"  placeholder="Email Address" required/>
-                </div>
-                <div class="form-group">
-                  <label for="empcontact">Contact </label>
-                  <input type="" class="form-control" pattern="^\d{10}?$" data-dv-message="Enter Contact No in 10 digits" name="empcontact" id="empcontact" minlength="10" maxlength="10" placeholder="Contact No" required/>
-                </div>
-                <div class="form-group">
-                  <label for="empaddress">Address </label>
-				  <textarea class="form-control" name="empaddress" id="empaddress" placeholder="Address"></textarea>
-                </div>
-             </div> <!-- col 4 close--> 
-             
-             <div class="col-md-4">
-               
-                <div class="form-group">
-                  <label for="empdesignation">Select Designation</label>
-                  <select  class="form-control" name="empdesignation" id="empdesignation" required>
-                   <option value="">Select Designation</option>
-                    <?php $res=mysqli_query($con,"select * from designation"); while($row=mysqli_fetch_array($res)){?>
-                    <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
-                    <?php }?>
-                  </select>
-                </div>
-                
-                <div class="form-group">
-                  <label for="empdesignation">Select Role</label>
-                  <select  class="form-control" name="emprole" id="emprole" required>
-                   <option value="">Select Role</option>
-                    <?php $res=mysqli_query($con,"select * from roles"); while($row=mysqli_fetch_array($res)){?>
-                    <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
-                    <?php }?>
-                  </select>
-                </div>
-                
-                <div class="form-group">
-                  <label for="empmanager">Select Manager</label>
-                  <select class="form-control" name="empmanager" id="empmanager" required>
-                   <option value="">Select Manager</option>
-                    <?php $res=mysqli_query($con,"select id,empid,name from employees where usertype='1'"); while($row=mysqli_fetch_array($res)){?>
-                    <option value="<?php echo $row['id'];?>"><?php echo $row['name']."(".$row['empid'].")";?></option>
-                    <?php }?>
-                  </select>
-                </div>
-                
-                <div class="form-group">
-                  <label for="empmanager">Reports To: </label>
-                  <select class="form-control" name="empreportto" id="empreportto" required>
-                   <option value="">Select</option>
-                    <?php $res=mysqli_query($con,"select id,empid,name from employees where designationid=(select id from designation where name='Manager')"); while($row=mysqli_fetch_array($res)){?>
-                    <option value="<?php echo $row['id'];?>"><?php echo $row['name']."(".$row['empid'].")";?></option>
-                    <?php }?>
-                  </select>
-                </div>
-				
-				<div class="form-group">
-                <label>Date of Joining:</label>
-
-                <div class="input-group date">
-                  <div class="input-group-addon">
-                    <i class="fa fa-calendar"></i>
+            <div class="box-body">
+            <div class="row">
+              <div class="col-md-4">
+                  <!-- form start -->
+                  <div class="form-group controls">
+                    <label for="empname">Name : </label>
+                    <input type="text" class="form-control" name="empname" id="empname" placeholder="Enter Name"  required="required"/>
                   </div>
-                  <input type="text" class="form-control pull-right" name="empdoj" id="empdoj" autocomplete="off" required>
-                </div>
-                <!-- /.input group -->
+                  <div class="form-group">
+                    <label for="empcode">Employee Code (EMP0001)</label>
+                    <input type="text" class="form-control" name="empcode" id="empcode"  placeholder="Employee Code" required/>
+                  </div>
+                  <div class="form-group">
+                    <label for="empemail">Email </label>
+                    <input type="email" class="form-control" name="empemail" id="empemail"  placeholder="Email Address" required/>
+                  </div>
+                  <div class="form-group">
+                    <label for="empcontact">Contact </label>
+                    <input type="" class="form-control" pattern="^\d{10}?$" data-dv-message="Enter Contact No in 10 digits" name="empcontact" id="empcontact" minlength="10" maxlength="10" placeholder="Contact No" required/>
+                  </div>
+                  <div class="form-group">
+                    <label for="empaddress">Address </label>
+                      <textarea class="form-control" name="empaddress" id="empaddress" placeholder="Address"></textarea>
+                  </div>
               </div>
-              
-            </div>
-            <!-- col 4 Mid -->
+              <!-- col 4 close--> 
+        
             
             <div class="col-md-4">
              
-              <div class="form-group">
-                  <label for="empsalary">Employee Salary : </label>
-                  <input type="text" class="form-control" id="empsalary" placeholder="Employee Salary" value="0.0" pattern="^\d{0,8}(\.\d{0,2})?$" pattern-bv-message="Enter Correct value for Salary" name="empsalary" required/>
-                </div>
-                
-                <div class="form-group">
-                  <label for="prate">Comm Percent : </label>
-                  <input type="text" class="form-control" id="empcomm" placeholder="EMP Comm" value="0.0" name="empcomm" pattern="^\d{0,8}(\.\d{0,2})?$" data-bv-message="Enter Correct value for Price" required />
-                </div>
                 
                 <div class="form-group">
                   <label for="emppass">Password</label>
@@ -329,7 +263,7 @@
 						 <?php } ?>
 					      {
 							 data:'id',render:function(value){
-						     return "<a href='edituser?editid="+value+"'><span class='fa fa-edit'></span></a> | <a href='newmap?userid="+value+"' target='_blank'><span class='fa fa-map-marker'></span></a>";
+						     return "<a href='api/adduser?delete_user&id="+value+"'><span class='fa fa-trash'></span></a> | <a href='edituser?editid="+value+"'><span class='fa fa-edit'></span></a> | <a href='newmap?userid="+value+"' target='_blank'><span class='fa fa-map-marker'></span></a>";
 						  }},
 						  {
 							data:'name'
@@ -356,10 +290,8 @@ $(document).ready(function(){
    $("#empdoj").datepicker({format:'yyyy-m-dd',autoclose:true});
 
    $('#userstable tbody').on( 'click','tr td', function (){
-     
-	 var ischecked=$(this).children('.toggle').children('.status').prop("checked"); 
-	var id=$(this).children('input:hidden').val();
-	 
+    var ischecked=$(this).children('.toggle').children('.').prop("checked"); 
+    var id=$(this).children('input:hidden').val();
 		if(ischecked)
 		{	
 		  	  	//alert(id);
@@ -367,16 +299,16 @@ $(document).ready(function(){
 		         url:"api/login.php?userstatus&status=0&id="+id,
 		         type:"POST",
 		         contentType:"application/json; charset=utf-8",
-			     success: function(data){
-			         		if(data=="success")
-							{
-								loaddata();
-								
-							}
-			 		 },
-				error:function(e){
-					}	 
-			 });
+            success: function(data){
+                    if(data=="success")
+                {
+                  loaddata();
+                  
+                }
+              },
+                 error:function(e){
+              }	 
+          });
 		}
 		else{
 		  $.ajax({
@@ -390,11 +322,13 @@ $(document).ready(function(){
 								
 							}
 			 		 },
-				error:function(e){
+				error:function(e){status
 					}	 
 			 });
 		}
     });
+
+
 
 
 });
@@ -402,6 +336,7 @@ $(document).ready(function(){
 </script>
 <script src="dist/dist/js/bootstrapValidator.min.js"></script>
 <script>
+
 $(document).ready(function() {
     $('#productform')
         .bootstrapValidator({
@@ -538,10 +473,10 @@ function sendData(){
 				   return;
 			    }
 				
-                if(response =="success"){
-                    alert("User Create Successfully...");
+        if(response =="success"){
+          alert("User Create Successfully...");
 					progress.fadeOut("slow");
-					$('#empimage')[0].files[0];
+					      $('#empimage')[0].files[0];
 		            $('#empname').val('');
 		            $('#empcode').val('');
 		            $('#empemail').val('');
@@ -555,10 +490,10 @@ function sendData(){
 		            $('#empsalary').val('0.0');
 		            $('#empcomm').val('0.0');
 		            $('#emppass').val('');
-					$('#empcpass').val('');
+					      $('#empcpass').val('');
 					
                 }else{
-					progress.fadeOut("slow");
+					          progress.fadeOut("slow");
                     alert(response);
                 }
             },

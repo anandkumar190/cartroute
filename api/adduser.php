@@ -1,5 +1,5 @@
 <?php
-session_start();
+ session_start();
 if(!isset($_SESSION['tittu']))
 {
 	echo"invalid";
@@ -7,9 +7,12 @@ if(!isset($_SESSION['tittu']))
 }
 
 
-  $userid=$_SESSION['id'];
-  $usertype=$_SESSION['usertype'];
-  $useremail=$_SESSION['tittu'];
+
+  $userid=@$_SESSION['id']??1;
+  $usertype=@$_SESSION['usertype']??1;
+  $useremail=@$_SESSION['tittu']??"admin@vivans.co.in";
+
+  
   require('../connect.php');
   
   $time=date("H:i:s"); 
@@ -21,8 +24,8 @@ if(!isset($_SESSION['tittu']))
 	  //$_POST=json_decode(file_get_contents("php://input"));
 	  extract($_POST);
 	
-	  //var_dump($_POST);
-	  
+// 	  var_dump($_POST);
+// die;
 	  $query = "select empid from employees where  empid = '$empcode' and usertype='1'";
 	  //echo($pshort);
 	  $res=mysqli_query($con,$query);
@@ -76,14 +79,15 @@ if(!isset($_SESSION['tittu']))
 
   else if(isset($_GET['show']))
   {
-	  $query="select e.id,e.status, e.image, e.name, e.empid, e.email, e.contact, e.address, e.designationid, e.roleid, e.managerid, e.usertype, e.password, e.salary, e.commission, e.city, e.state, e.latitude, e.longitude, e.region, e.doj, e.dol, e.reportsto, e.creationdate ,d.name as designation,r.name as role from  employees e join designation d on e.designationid=d.id join roles r on e.roleid=r.id where e.usertype='$usertype' and e.id='$userid' union select e.id, e.image, e.name, e.empid, e.email, e.contact, e.address, e.designationid, e.roleid, e.managerid, e.usertype, e.password, e.salary, e.commission, e.city, e.state, e.latitude, e.longitude, e.region, e.doj, e.dol, e.reportsto, e.creationdate ,d.name as designation,r.name as role from  employees e join designation d on e.designationid=d.id join roles r on e.roleid=r.id where e.usertype='$usertype' and (e.reportsto='$userid' || e.managerid='$userid')";
+	  $query="select e.id,e.status, e.image, e.name, e.empid, e.email, e.contact, e.address, e.designationid, e.roleid, e.managerid, e.usertype, e.password, e.salary, e.commission, e.city, e.state, e.latitude, e.longitude, e.region, e.doj, e.dol, e.reportsto, e.creationdate ,d.name as designation,r.name as role from  employees e left join designation d on e.designationid=d.id join roles r on e.roleid=r.id where e.usertype='$usertype' and e.id='$userid' union select e.id, e.image, e.name, e.empid, e.email, e.contact, e.address, e.designationid, e.roleid, e.managerid, e.usertype, e.password, e.salary, e.commission, e.city, e.state, e.latitude, e.longitude, e.region, e.doj, e.dol, e.reportsto, e.creationdate ,d.name as designation,r.name as role from  employees e left join designation d on e.designationid=d.id left join roles r on e.roleid=r.id where e.usertype='$usertype' and (e.reportsto='$userid' || e.managerid='$userid')";
 	  if($useremail=="admin@vivans.co.in"||$useremail=="rohit@fricbergen.com"||$useremail=="vivek@vivans.co.in")
 	  {
-		  $query="select e.id,e.status, e.image, e.name, e.empid, e.email, e.contact, e.address, e.designationid, e.roleid, e.managerid, e.usertype, e.password, e.salary, e.commission, e.city, e.state, e.latitude, e.longitude, e.region, e.doj, e.dol, e.reportsto, e.creationdate ,d.name as designation,r.name as role from  employees e join designation d on e.designationid=d.id join roles r on e.roleid=r.id where e.usertype='$usertype'";
+		  $query="select e.id,e.status, e.image, e.name, e.empid, e.email, e.contact, e.address, e.designationid, e.roleid, e.managerid, e.usertype, e.password, e.salary, e.commission, e.city, e.state, e.latitude, e.longitude, e.region, e.doj, e.dol, e.reportsto, e.creationdate ,d.name as designation,r.name as role from  employees e left join designation d on e.designationid=d.id left join roles r on e.roleid=r.id where e.usertype='$usertype'";
 	  }
      $res=mysqli_query($con,$query);
 	 $response=array();
 	 
+
 	 while($row=mysqli_fetch_array($res))
 	 {
 		 		 $rr=array("id"=>$row["id"],"status"=>$row["status"],"name"=>$row["name"],"empid"=>$row["empid"],"email"=>$row["email"],"contact"=>$row["contact"],"address"=>$row["address"],"designation"=>$row["designation"],"role"=>$row["role"],"managerid"=>$row["managerid"],"salary"=>$row["salary"],"commission"=>$row["commission"],"city"=>$row["city"],"latitude"=>$row["latitude"],"longitude"=>$row["longitude"],"region"=>$row["region"],"doj"=>$row["doj"],"dol"=>$row["dol"],"reportsto"=>$row["reportsto"],"image"=>$row["image"]);
@@ -93,6 +97,18 @@ if(!isset($_SESSION['tittu']))
 	 echo $data;
   }
 
+  else if (isset($_GET['delete_user']) && !empty($_GET['id'])) {
+    $id = intval($_GET['id']); // Ensures ID is an integer
+    $stmt = $con->prepare("DELETE FROM `employees` WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    
+    if ($stmt->execute()) {
+        $stmt->close();
+    }
+
+	header('Location: ' . $_SERVER['HTTP_REFERER'], true, 303);
+	exit;
+}
   else if(isset($_GET['edit']))
   {
 	  //$_POST=json_decode(file_get_contents("php://input"));

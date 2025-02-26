@@ -238,18 +238,6 @@ $time=date("H:i:s");
 	   }
 	   else
 	   {
-		// print_r(['query'=>"update  employees set name='$empname',
-		// 	email='$empemail',
-		// 	contact='$empcontact',
-		// 	address='$empaddress',
-		// 	city='$empcity',
-		// 	state='$empstate',
-		// 	latitude='$emplat',
-		// 	longitude='$emplng',
-		// 	lastlogin='$datetime'
-		// 	contact_person='$empcontactname',
-		// 	sort_name='$empsortname'
-		// 	where id='$id'"]);
 
 	      	mysqli_query($con,"update  employees set name='$empname',
 			email='$empemail',

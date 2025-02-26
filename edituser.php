@@ -114,112 +114,12 @@
                   <label for="empaddress">Address </label>
 				  <textarea class="form-control" name="empaddress" id="empaddress" placeholder="Address"><?php echo $address;?></textarea>
                 </div>
-             </div> <!-- col 4 close--> 
-             
-             <div class="col-md-4">
-               
-                <div class="form-group">
-                  <label for="empdesignation">Select Designation</label>
-                  <select  class="form-control" name="empdesignation" id="empdesignation" required>
-                   
-                   <option value="">Select Designation</option>
-                    <?php $res=mysqli_query($con,"select * from designation"); while($row=mysqli_fetch_array($res)){?>
-                    <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
-                    <?php }?>
-                  </select>
-                  <script>
-                    var desig=document.getElementById("empdesignation");
-					desig.value="<?php echo $designationid;?>";
-					
-                  </script>
-                </div>
-                
-                <div class="form-group">
-                  <label for="emprole">Select Role</label>
-                  <select  class="form-control" name="emprole" id="emprole" required>
-                   <option value="">Select Role</option>
-                    <?php $res=mysqli_query($con,"select * from roles"); while($row=mysqli_fetch_array($res)){?>
-                    <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
-                    <?php }?>
-                  </select>
-                  <script>
-                 var desig=document.getElementById("emprole");
-					desig.value="<?php echo $roleid;?>";
-					
-                  </script>
-                </div>
-                
-                <div class="form-group">
-                  <label for="empmanager">Select Team Leader</label>
-                  <select class="form-control" name="empmanager" id="empmanager" >
-                   <option value="">Select Team Leader</option>
-                    <?php $res=mysqli_query($con,"select id,empid,name from employees"); while($row=mysqli_fetch_array($res)){?>
-                    <option value="<?php echo $row['id'];?>"><?php echo $row['name']."(".$row['empid'].")";?></option>
-                    <?php }?>
-                  </select>
-                  <script>
-                    var desig=document.getElementById("empmanager");
-					desig.value="<?php echo $managerid;?>";
-					
-                  </script>
-                </div>
-                
-                <div class="form-group">
-                  <label for="empreportto">Reports To: </label>
-                  <select class="form-control" name="empreportto" id="empreportto" >
-                   <option value="">Select Manager</option>
-                    <?php $res=mysqli_query($con,"select id,empid,name from employees where designationid=(select id from designation where name='Manager')"); while($row=mysqli_fetch_array($res)){?>
-                    <option value="<?php echo $row['id'];?>"><?php echo $row['name']."(".$row['empid'].")";?></option>
-                    <?php }?>
-                  </select>
-                  
-                  <script>
-                    var desig=document.getElementById("empreportto");
-					desig.value="<?php echo $reportsto;?>";
-					
-                  </script>
-                  
-                </div>
-				
-				<div class="form-group">
-                <label>Date of Joining:</label>
-
-                <div class="input-group date">
-                  <div class="input-group-addon">
-                    <i class="fa fa-calendar"></i>
-                  </div>
-                  <input type="text" class="form-control pull-right" name="empdoj" id="empdoj" value="<?php echo $doj;?>" required>
-                </div>
-                <!-- /.input group -->
-              </div>
-              
-            </div>
+             </div> 
             <!-- col 4 Mid -->
             
             <div class="col-md-4">
              
-               <div class="form-group">
-                <label>Date Of Leaving:</label>
-
-                <div class="input-group date">
-                  <div class="input-group-addon">
-                    <i class="fa fa-calendar"></i>
-                  </div>
-                  <input type="text" class="form-control pull-right" name="empdol" id="empdol" value="<?php echo $dol;?>">
-                </div>
-                <!-- /.input group -->
-              </div>
-             
-              <div class="form-group">
-                  <label for="empsalary">Employee Salary : </label>
-                  <input type="text" class="form-control" id="empsalary" placeholder="Employee Salary" value="<?php echo $salary;?>" pattern="^\d{0,8}(\.\d{0,2})?$" pattern-bv-message="Enter Correct value for Salary" name="empsalary" required/>
-                </div>
-                
-                <div class="form-group">
-                  <label for="prate">Comm Percent : </label>
-                  <input type="text" class="form-control" id="empcomm" placeholder="EMP Comm" value="<?php echo $commission;?>" name="empcomm" pattern="^\d{0,8}(\.\d{0,2})?$" data-bv-message="Enter Correct value for Price" required />
-                </div>
-
+            
                 <div class="form-group">
                   <label for="emppass">Password</label>
                   <input type="password" class="form-control" name="emppass" id="emppass"  placeholder="Password" required/>
