@@ -587,7 +587,38 @@ if(isset($_GET['search']))
    
    if(isset($_GET['activityvisit']))
    {
-	   $res=mysqli_query($con,"select o.id,o.name,o.address,o.lastvisitpic,o.contactperson,o.contact,o.gstnumber,o.outlettype,a.activitytype,a.activitydate,a.activitytime,a.feedback,a.battery,a.rating,e.name as 'empname',e.empid from outletactivity a join outlets o on a.outletid=o.id join employees e  on e.id=a.userid order by a.id desc");   
+	   $res=mysqli_query($con,"select 
+	    o.id,
+		o.name,
+		o.address,
+		o.lastvisitpic,
+		o.contactperson,
+		o.contact,
+		o.gstnumber,
+		o.outlettype,
+		a.activitytype,
+		a.activitydate,
+		a.activitytime,
+		a.feedback,
+		a.battery,
+		a.rating,
+		area.area,
+		area.id as areaId,
+		regions.name AS regionsname,
+		cities.city,
+		states.name AS statesname,
+		e.name AS empname,
+		e.empid ,
+		emp.name AS distributorname
+	FROM outletactivity a 
+	Left JOIN outlets o ON a.outletid = o.id 
+	Left JOIN employees e ON e.id = a.userid 
+	Left JOIN area ON area.id = o.areaid 
+	Left JOIN employees emp ON emp.id=area.distributor_id
+	Left JOIN regions ON regions.id = area.region 
+	Left JOIN cities ON cities.id = regions.city_id 
+	Left JOIN states ON states.id = cities.state_id 
+	ORDER BY a.id DESC");   
 	   $response=array();
 	   $num=mysqli_field_count($con);
 	   while($row=mysqli_fetch_array($res))
@@ -609,6 +640,14 @@ if(isset($_GET['search']))
 		   $rr["rating"]=$row["rating"]; 
 		   $rr["empname"]=$row["empname"];
 		   $rr["empid"]=$row["empid"];
+		   $rr["distributorname"]=$row["distributorname"];
+		   $rr["statesname"]=$row["statesname"];
+		   $rr["city"]=$row["city"];
+		   $rr["regionsname"]=$row["regionsname"];
+		   $rr["area"]=$row["area"];
+		   $rr["areaId"]=$row["areaId"];
+
+		   
 		   array_push($response,$rr);
 	   } 
 	   //$data=array();

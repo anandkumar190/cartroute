@@ -265,5 +265,20 @@
 	    echo "error";
 	  }
    }
+
+
+
+   if (isset($_GET['delete_devices']) && !empty($_GET['id'])) {
+    $id = intval($_GET['id']); // Ensures ID is an integer
+    $stmt = $con->prepare("DELETE FROM `devices` WHERE id = ?");
+    $stmt->bind_param("i", $id);
+
+    if ($stmt->execute()) {
+        $stmt->close();
+    }
+
+	header('Location: ' . $_SERVER['HTTP_REFERER'], true, 303);
+	exit;
+}
    
 ?>

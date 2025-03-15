@@ -15,9 +15,6 @@
 		$outletsubtype='';
 		$competitor_presense='';
 		$distributorid='';
-		$routeid='';
-		$salesmanagerid='';
-		$rsmid='';
 		$street='';
 		$locality='';
 		$city='';
@@ -28,12 +25,50 @@
 		$lastvisit='';
 		$creationdate='';
 		$createdby='';
-		$distrvisitdate='';
 			
   if(isset($_GET['editid']))
   {
 	  extract($_GET);
-	$res=mysqli_query($con,"select * from outlets where id='$editid'");
+	$res=mysqli_query($con,"select 
+        o.id,
+        o.name,
+        o.address,
+        o.lastvisitpic,
+        o.contactperson,
+        o.contact,
+        o.lastvisit,
+        o.gstnumber,
+        o.createdby,
+        o.pincode,
+        o.outletsubtype,
+        o.outlettype,
+        o.creationdate,
+        o.distrvisitdate,
+        o.longitude,
+        o.latitude,
+        o.competitor_presense,
+        a.activitytype,
+        a.activitydate,
+        a.activitytime,
+        a.feedback,
+        a.battery,
+        a.rating,
+        area.area,
+        area.id as areaid,
+        regions.name AS regionsname,
+        cities.city,
+        states.name AS state,
+        e.name AS empname,
+        e.empid ,
+        emp.id AS distributorid
+      FROM outletactivity a 
+      Left JOIN outlets o ON a.outletid = o.id 
+      Left JOIN employees e ON e.id = a.userid 
+      Left JOIN area ON area.id = o.areaid 
+      Left JOIN employees emp ON emp.id=area.distributor_id
+      Left JOIN regions ON regions.id = area.region 
+      Left JOIN cities ON cities.id = regions.city_id 
+      Left JOIN states ON states.id = cities.state_id where o.id='$editid'");
 	if($row=mysqli_fetch_array($res))
 	{
 	
@@ -49,11 +84,8 @@
 		$outletsubtype=$row['outletsubtype'];
 		$competitor_presense=$row['competitor_presense'];
 		$distributorid=$row['distributorid'];
-		$routeid=$row['routeid'];
-		$salesmanagerid=$row['salesmanagerid'];
-		$rsmid=$row['rsmid'];
-		$street=$row['street'];
-		$locality=$row['locality'];
+		$street=$row['regionsname'];
+		$locality=$row['area'];
 		$city=$row['city'];
 		$state=$row['state'];
 		$latitude=$row['latitude'];
@@ -61,7 +93,7 @@
 		$areaid=$row['areaid'];
 		$lastvisit=$row['lastvisit'];
 		$creationdate=$row['creationdate'];
-		$createdby=$row['createdby'];
+		$createdby=@$row['createdby'];
 		$distrvisitdate=$row['distrvisitdate'];
 		
 	}
@@ -142,10 +174,10 @@
                   <input type="text" class="form-control" name="outlettype" id="outlettype" value="<?php echo $outlettype;?>" placeholder="OutletType" required />
                 </div>
                 
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label for="outletsubtype">OutletSub Type : </label>
-                  <input type="text" class="form-control" name="outletsubtype" id="outletsubtype" value="<?php echo $outletsubtype;?>" placeholder="OutletSub Type" required />
-                </div>      
+                  <input type="text" class="form-control" name="outletsubtype" id="outletsubtype" value="" placeholder="OutletSub Type" required />
+                </div>       -->
                 
                 <div class="form-group">
                   <label for="address">Address </label>
@@ -156,10 +188,10 @@
              <div class="col-md-4">
                 
                 
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label for="competitor_presense">Competitor Presense : </label>
-                  <input type="text" class="form-control" name="competitor_presense" id="competitor_presense" value="<?php echo $competitor_presense;?>" placeholder="Competitor Presense" required />
-                </div>
+                  <input type="text" class="form-control" name="competitor_presense" id="competitor_presense" value="" placeholder="Competitor Presense" required />
+                </div> -->
                       
                 <div class="form-group">
                   <label for="distributorid">Select Distributor</label>
@@ -231,10 +263,10 @@
                   <input type="text" class="form-control pull-right" name="creationdate" id="creationdate" value="<?php echo $creationdate;?>" readonly />
                 </div>
             
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label for="lastvisit">Last Distibutor Visit:</label>
-                  <input type="text" class="form-control pull-right" name="distrvisitdate" id="distrvisitdate" value="<?php echo $distrvisitdate;?>" readonly />
-                </div>
+                  <input type="text" class="form-control pull-right" name="distrvisitdate" id="distrvisitdate" value="" readonly />
+                </div> -->
                  
             
              <div class="form-group">
@@ -265,7 +297,7 @@
                    <div class="progress-bar progress-bar-success" style="width: 100%">
                    </div>
                 </div>
-                <a href="distributors" class="btn btn-danger"><span class="fa fa-remove"></span> Cancel</a>
+                <a href="activityvisit" class="btn btn-danger"><span class="fa fa-remove"></span> Cancel</a>
                 <button type="submit"  id="btnaddproduct" class="btn btn-primary pull-right "><span class="fa fa-edit"></span> Update Details</button>
               </div>
             

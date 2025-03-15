@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="assets/node_modules/datatables/jquery.dataTables.min.css"/>
 
 <link rel="stylesheet" href="dist/dist/css/bootstrapValidator.min.css"/>
+ <link rel="stylesheet" href="assets/bootstrap-toggle.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.7/css/select.dataTables.min.css">
     <!-- Main content -->
     <section class="content">
       <!-- Main row -->
@@ -37,20 +39,19 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
-          <!--  <div class="box-header">
+          
+          <!-- <div class="box-header">
               <h3 class="box-title">Responsive Hover Table</h3>
-
               <div class="box-tools">
                 <div class="input-group input-group-sm" style="width: 150px;">
                   <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-
                   <div class="input-group-btn">
                     <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                   </div>
                 </div>
               </div>
-            </div>
-            <!-- /.box-header -->
+            </div> -->
+           
             <div class="box-body table-responsive no-padding">
               
               <!-- Row -->
@@ -58,9 +59,27 @@
 						<div class="col-sm-12">
 							<div class="panel panel-default card-view">
 								<div class="panel-heading">
-									<div class="pull-left">
-										<h6 class="panel-title txt-dark">Activities</h6>
-									</div>
+                <!-- <div class="pull-left">
+
+
+<h6 class="panel-title txt-dark"> Activities </h6>
+</div>
+<div class="clearfix"></div>    -->
+                <div class="pull-left">
+                                             <form>
+                                               <div class="form-group-lg">
+                                                 <div class="form-inline">
+                                                  <button type="button" id="deletearea" class="btn btn-danger" disabled><span class="fa fa-remove"></span> Delete Selected Outlets </button>
+                                                 </div>
+                                                 <div class="progress progress-striped active" id="progress" style="display:none;">
+                                                  <div class="progress-bar progress-bar-success" style="width: 100%">
+                                                  </div>
+                                                 </div>
+                                               </div>
+                                             </form>
+                                          </div>   
+                                                                        
+						
 									<div class="clearfix"></div>
 								</div>
 								<div class="panel-wrapper collapse in">
@@ -83,20 +102,25 @@
 											<table id="userstable" class="table" data-paging="true" data-filtering="true" data-processing="true" data-sorting="true">
 												<thead>
 												<tr>
-													<th>Action</th>
-													<th>Outlet Name</th>
-													<th>Address</th>
-													<th>Contact Person</th>
-													<th>Phone No.</th>
-													<th>Type</th>
-                                                    <th>Activity</th>
-                                                    <th>Date</th>
-                                                    <th>Time</th>
-                                                    <th>EmpName</th>
-                                                    <th>Image</th>
-                                                    <th>Feedback</th>
-                                                    <th>Battery</th>
-                                                    <th>Rating</th>
+                        <th>Select</th>
+                        <th>Edit</th>
+                        <th>Date</th>
+                        <th>Sale Officer</th>
+                        <th>Visit Type</th>
+                        <th>Outlet Name</th>
+                        <th>Outlet Type</th>
+                        <th>Battery</th>
+                        <th>Location Edited</th>
+                        <th>Order Value</th>
+                        <th>Distributer</th>
+                        <th>Route</th>
+                        <th>Sate</th>
+                        <th>City</th>
+                        <th>Region</th>
+                        <th>Contact Person</th>
+                        <th>Contact No.</th>
+                        <th style="min-width: 400px; white-space: nowrap;"> Outlet Address </th>
+								
 												</tr>
 												</thead>
 												<tbody>
@@ -170,14 +194,14 @@
 													<th>Person</th>
 													<th>Contact</th>
 													<th>Outlet</th>
-                                                    <th>Activity</th>
-                                                    <th>Date</th>
-                                                    <th>Time</th>
-                                                    <th>EmpName</th>
-                                                    <th>Image</th>
-                                                    <th>Feedback</th>
-                                                    <th>Battery</th>
-                                                    <th>Rating</th>
+                          <th>Activity</th>
+                          <th>Date</th>
+                          <th>Time</th>
+                          <th>EmpName</th>
+                          <th>Image</th>
+                          <th>Feedback</th>
+                          <th>Battery</th>
+                          <th>Rating</th>
                                                     
                                                     
 												</tr>
@@ -233,6 +257,7 @@
     <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
     <!-- end - This is for export functionality only -->
 <script>
 
@@ -248,6 +273,16 @@
 			   data=JSON.parse(data);
 	            $("#userstable").dataTable(
 				{
+          columnDefs: [ {
+                    orderable: false,
+                    className: 'select-checkbox',
+                    targets:   0
+                    } ],
+                    select: {
+                    style:    'os',
+                    selector: 'td:first-child'
+                    },
+                   order: [[ 1, 'asc' ]],
 				   dom: 'Bfrtip',	
 				  sort:false,
 				  data:data,
@@ -260,16 +295,14 @@
 				  buttons: [
                 'copy', { extend: 'csv', title: function () { var printTitle = 'All Visitis'; return printTitle; } }, 'excel', 'pdf', { extend: 'print', title: function () { var printTitle = ''; return printTitle; } }
             ],
-				  columns:[{
+				  columns:[{data:'id',render:function(value){
+						   
+               return "<input type='hidden' id='select' value='"+value+"' />";
+               }},{
 					   data:'id',render:function(value){
 						  return "<a href='editoutlet?editid="+value+"'><span class='fa fa-edit'></span></a>";
-						  }},
-						  {
-							data:'name'
-						},
-						{data:'address'},{data:'contactperson'},{data:'contact'},{data:'outlettype'},{data:'activitytype'},{data:'activitydate'},{data:'activitytime'},{data:'empname'},{data:'lastvisitpic',render:function(value){
-							return "<a href='imgoutlets/"+value+"' target='_blank'><img src='imgoutlets/"+value+"' class='img img-thumbnail'/></a>";
-							}},{data:'feedback'},{data:'battery'},{data:'rating'}
+						  }},{data:'activitydate'},{data:'empname'},{data:'activitytype'},{data:'name'},{data:'outlettype'},{data:'battery'},
+						  {data:'area'},{data:'area'}, {data:'distributorname'},{data:'area'},{data:'statesname'}, {data:'city'}, {data:'regionsname'},{data:'contactperson'},{data:'contact'},{data:'address'}
 					  ]
 				
 				});		   
@@ -293,6 +326,7 @@ function loaddatatoday()
 			   data=JSON.parse(data);
 	            $("#todaytable").dataTable(
 				{
+    
 			      dom: 'Bfrtip',
 				  sort:false,
 				  paging:false,
@@ -328,6 +362,53 @@ function loaddatatoday()
 $(document).ready(function(){
    loaddata();
    loaddatatoday();
+
+
+   $("#userstable").on('click', 'tr', function () {
+        $('#deletearea').prop('disabled', false);
+    });
+
+
+$('#deletearea').click(function(){
+        if(confirm('Do You want to delete Selected Outlets'))
+  
+    
+      {
+        var ids=Array();
+        var table=$("#userstable").DataTable();
+          var data = table.rows('.selected').data();      
+
+      
+        for(var i=0;i<data.length;i++)
+        {
+            ids.push(data[i].id); 
+        }
+
+        if(ids<=0)
+          {
+            alert("Selected Outlets have Outlets");
+            return;
+          }
+        var progress=$("#progressdel");
+          progress.fadeIn("slow");
+          $.ajax({
+          url:'api/outlets-web.php?delete',
+          type:'post',
+          data:{'ids':ids},
+          success: function(data){
+              progress.fadeOut("slow");
+            alert(data);
+            
+            loaddata();
+            
+            },
+          error:function(e){}
+        });
+      
+      }
+ 
+ });
+
    $("#empdoj").datepicker({format:'yyyy-m-dd'});
    
    $('#daterange-btn').daterangepicker(

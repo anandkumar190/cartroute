@@ -68,6 +68,7 @@
 											<table id="userstable" class="table" data-paging="false" data-filtering="true" data-processing="true" data-sorting="true">
 												<thead>
 												<tr>
+													<th>Action</th>
 													<th>Status</th>
 												    <?php if($empemail=="vivek@vivans.co.in"||$empemail=="rohit@fricbergen.com"||$empemail=="admin@vivans.co.in"){ ?>
 												    <th>Location</th>
@@ -146,6 +147,7 @@
 											<table id="todaytable" class="table" data-paging="true" data-filtering="true" data-sorting="true">
 												<thead>
 												<tr>
+													<th>Action</th>
 													<th>Status</th>
 													<th>UserName</th>
 													<th>DeviceName</th>
@@ -234,7 +236,10 @@
                 'copy', { extend: 'csv', title: function () { var printTitle = 'All Devices'; return printTitle; } }, 'excel', 'pdf', { extend: 'print', title: function () { var printTitle = ''; return printTitle; } }
             ],
 				  columns:[{
-					   data:{id:'id',status:'status'},render:function(data,type,set){
+							 data:'id',render:function(value){
+						     return "<a href='api/login?delete_devices&id="+value+"'><span class='fa fa-trash'></span></a> ";
+						  }},{
+							   data:{id:'id',status:'status'},render:function(data,type,set){
 						   if(data.status=="1")
 						   {
 						      return "<input type='hidden'  value='"+data.id+"'/>"+"<input type='checkbox' data-toggle='toggle' class='status' data-size='mini' data-on='Active' data-off='Inactive' data-onstyle='success' data-offstyle='danger' checked='checked' value='"+data.status+"' />";
@@ -297,6 +302,9 @@ function loaddatatoday()
                 'copy', { extend: 'csv', title: function () { var printTitle = 'All Devices'; return printTitle; } }, 'excel', 'pdf', { extend: 'print', title: function () { var printTitle = ''; return printTitle; } }
             ],
 				 columns:[{
+							 data:'id',render:function(value){
+						     return "<a href='api/login?delete_devices&id="+value+"'><span class='fa fa-trash'></span></a> ";
+						  }},{
 					   data:{id:'id',status:'status'},render:function(data,type,set){
 						   if(data.status=="1")
 						   {
