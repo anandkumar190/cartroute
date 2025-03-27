@@ -545,6 +545,13 @@ function sendData(){
 		
 		            $('#name').val('');
 		            $('#cat_id').val('');
+		            $('#pmrp').val('');
+		            $('#punit').val('');
+		            $('#prate').val('');
+		            $('#cunit').val('');
+		            $('#cmrp').val('');
+		            $('#unit_no').val('');
+		            $('#discount').val('');
 		
 					
                 }else{

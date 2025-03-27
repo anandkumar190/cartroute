@@ -74,8 +74,7 @@
 													<th>Short Name</th>
 													<th>UNIT</th>
 													<th>MRP</th>
-													<th>Price</th>
-                          <td>Brand Name</td>
+								
                           <th>Image</th>
 												</tr>
 												</thead>
@@ -254,7 +253,7 @@
 						  {
 							data:'productname'
 						},
-						{data:'productid'},{data:'unit'},{data:'mrp'},{data:'rate'},{data:'brandname'},{data:'image',render:function(value){
+						{data:'productid'},{data:'unit'},{data:'mrp'},{data:'image',render:function(value){
 							return "<img src='imgproduct/"+value+"' class='img img-thumbnail' style='width:100px; height:100px;'/>";
 							}}
 					  ]

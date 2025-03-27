@@ -94,7 +94,20 @@ if(!isset($_SESSION['tittu']))
 			  echo"No changes affected...";
 		  }
 	   
-  }else{
+  }
+  else if(isset($_GET['deletesunit']))
+  {
+	$id=$_GET['id'];
+	if(!empty($id)){
+	$result=mysqli_query($con," DELETE FROM `sku_unit` WHERE id='$id'");
+	if($result) {
+	  header('Location: ' . $_SERVER['HTTP_REFERER']);
+	  exit;
+   }	
+	}
+	   
+  } 
+  else{
        $query="SELECT id,name,status FROM sku_unit ";
 	  
           $res=mysqli_query($con,$query);
