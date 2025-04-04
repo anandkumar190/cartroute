@@ -467,47 +467,58 @@ if(isset($_GET['search']))
 				  o.areaid,
 				  o.lastvisit,
 				  o.creationdate,
-				  r.routename,
+				  a.area,
 				  o.createdby,
 				  concat(d.name,' - ',d.empid) as 'distributor',
 				  concat(s.name,'-',s.empid) as 'stockist',
 				  s.id as 'stockistid',
 					concat(e.name,'-',e.empid)as 'so',
 					a.area, regions.name As region,
-					states.name As state  from outlets o join employees d on d.id=o.distributorid join employees s on s.id=d.stockistid join employees e on e.id=o.createdby join area a on a.id=o.areaid join route r on r.id=o.routeid  left join states on states.id= a.state left join cities on cities.id= a.city left join regions on regions.id= a.region ";
+					states.name As state  from outlets o 
+					join employees d on d.id=o.distributorid 
+					join employees s on s.id=d.stockistid 
+					join employees e on e.id=o.createdby 
+					join area a on a.id=o.areaid 
+					left join states on states.id= a.state 
+					left join cities on cities.id= a.city left 
+					join regions on regions.id= a.region ";
 	  	
          $isSnd=0;
 
-		 if ($state!="") {
-			$prefix=$isSnd==0?" where ":" and ";
-			$selectQry=$selectQry.$prefix." a.state like '%$state%'";
-			$isSnd=1;
-		 }
 
-		 if ($city!="") {
-			$prefix=$isSnd==0?" where ":" and ";
-			$selectQry=$selectQry.$prefix." a.region like '%$city%'";
-			$isSnd=1;
-		 }
-
-		 if ($locality!="") {
-			$prefix=$isSnd==0?" where ":" and ";
-			$selectQry=$selectQry.$prefix." a.area like '%$locality%'";
-			$isSnd=1;
-		 }
 
 
 		 if ($distributor!="") {
-			$prefix=$isSnd==0?"where ":" and ";
+			$prefix="where";
 			$selectQry=$selectQry.$prefix." d.name like '%$distributor%'";
 			$isSnd=1;
+		 }else {
+
+			if ($state!="") {
+				$prefix=$isSnd==0?" where ":" and ";
+				$selectQry=$selectQry.$prefix." a.state like '%$state%'";
+				$isSnd=1;
+			 }
+	
+			 if ($city!="") {
+				$prefix=$isSnd==0?" where ":" and ";
+				$selectQry=$selectQry.$prefix." a.region like '%$city%'";
+				$isSnd=1;
+			 }
+	
+			 if ($locality!="") {
+				$prefix=$isSnd==0?" where ":" and ";
+				$selectQry=$selectQry.$prefix." a.area like '%$locality%'";
+				$isSnd=1;
+			 }
+	
+			 if ($routeid!="") {
+				$prefix=$isSnd==0?" where ":" and ";
+				$selectQry=$selectQry.$prefix." o.routeid = '$routeid'";
+				$isSnd=1;
+			 }
 		 }
 
-		 if ($routeid!="") {
-			$prefix=$isSnd==0?" where ":" and ";
-			$selectQry=$selectQry.$prefix." o.routeid = '$routeid'";
-			$isSnd=1;
-		 }
 
 		 $query=$selectQry."order by o.id desc";
 	   
@@ -544,7 +555,7 @@ if(isset($_GET['search']))
 		   $rr["stockist"]=$row["stockist"];
 		   $rr["stockistid"]=$row["stockistid"];  
 		   $rr["so"]=$row["so"];
-		   $rr["routename"]=$row["routename"];
+		   $rr["routename"]=$row["area"];
 		   $rr["area"]=$row["area"];
 		   
 		   if($row["outlettype"]=="MTS")
@@ -744,9 +755,8 @@ if(isset($_GET['search']))
 // getdistributor
 if(isset($_GET['getdistributor']))
 {
-	$areaid=$_GET["areaid"];
 
-	$res=mysqli_query($con,"select name ,id  from employees where usertype=3 and areaid='$areaid'");
+	$res=mysqli_query($con,"select name ,id  from employees where usertype=3");
 	$regions=array();
 	while($row=mysqli_fetch_array($res))
 	{

@@ -22,7 +22,7 @@
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs pull-left">
               <li class="active"><a href="#today-activity" data-toggle="tab">Outlets</a></li>
-              <li><a href="#tear-tree-view" data-toggle="tab"> add </a></li>
+              <!-- <li><a href="#tear-tree-view" data-toggle="tab"> add </a></li> -->
               
             </ul>
             
@@ -67,13 +67,18 @@
                  </div>
 
                  <div class="input-group input-group-sm" style="width: 150px;">  
-                 <label>Select Area</label>
+                 <label>Select Route</label>
                   <select class="form-control select2" id="area">
-                    <option value="">Select Area</option>
+                    <option value="">Select Route</option>
                     
                   </select>
                  </div>
 
+                 <div class="input-group input-group-sm" style="width: 50px ">
+          
+                 </div>
+               
+ 
                  <div class="input-group input-group-sm" style="width: 150px;">
              
                       <label>Select distributor</label>
@@ -82,14 +87,14 @@
                           </select>
                  </div>
 
-                 <div class="input-group input-group-sm" style="width: 150px;">
+                 <!-- <div class="input-group input-group-sm" style="width: 150px;">
                        <label>route</label>
                    <select class="form-control select2 "   name="routeid" id="routeid" required>
                    <option value="">Select route</option>
                     
                    </select>
                  
-                 </div>
+                 </div> -->
 
 
 
@@ -172,7 +177,7 @@
                                           </div>
                                           <div class="col-lg-4">
                                           <select name="selectarea" id="selectarea" class="form-control select2">
-                                             <option value="">Select Area</option>
+                                             <option value="">Select Route</option>
                                              <?php
                                                $res=mysqli_query($con,"select id,area,region,state from area")or die(mysqli_error($con));                 
                                               while($row=mysqli_fetch_array($res))
@@ -184,11 +189,11 @@
                                            
                                           </div>
                                           <div class="col-lg-4">
-                                            <button type="button" id="areaselected" class="btn btn-info"><span class="fa fa-tasks"></span> Change Area </button>
+                                            <button type="button" id="areaselected" class="btn btn-info"><span class="fa fa-tasks"></span> Change Route </button>
                                           </div>
                                         </div>
                                       <br>     
-                                	<div class="row">
+                                	     <!-- <div class="row">
                                           <div class="col-lg-4">
                                       
                                           </div>
@@ -208,29 +213,29 @@
                                           <div class="col-lg-4">
                                             <button type="button" id="distributerselected" class="btn btn-info"><span class="fa fa-tasks"></span> Change Distributer </button>
                                           </div>
-                                        </div>  
+                                       </div>  
 
                                         <div class="row">
-                                          <div class="col-lg-4">
-                                      
-                                          </div>
-                                          <div class="col-lg-4">
-                                          <select name="select_route" id="select_route" class="form-control select2">
-                                             <option value="">Select Route</option>
-                                             <?php
-                                                $res=mysqli_query($con,"select id,routename from route")or die(mysqli_error($con));                 
-                                                while($row=mysqli_fetch_array($res))
-                                                {
-                                                echo "<option value='$row[0]'> $row[1] </option>"; 
-                                                }
-                                              ?>
-                                           </select>
-                                           
-                                          </div>
-                                          <div class="col-lg-4">
-                                            <button type="button" id="routeselected" class="btn btn-info"><span class="fa fa-tasks"></span> Change Route </button>
-                                          </div>
-                                        </div>       
+                                                <div class="col-lg-4">
+                                            
+                                                </div>
+                                                <div class="col-lg-4">
+                                                <select name="select_route" id="select_route" class="form-control select2">
+                                                  <option value="">Select Route</option>
+                                                  <?php
+                                                      $res=mysqli_query($con,"select id,routename from route")or die(mysqli_error($con));                 
+                                                      while($row=mysqli_fetch_array($res))
+                                                      {
+                                                      echo "<option value='$row[0]'> $row[1] </option>"; 
+                                                      }
+                                                    ?>
+                                                </select>
+                                                
+                                                </div>
+                                                <div class="col-lg-4">
+                                                  <button type="button" id="routeselected" class="btn btn-info"><span class="fa fa-tasks"></span> Change Route </button>
+                                                </div>
+                                        </div>        -->
                                            
                                                 
                                            <br/>
@@ -299,163 +304,163 @@
               <!--TreeView tab Start-->
               <div class="chart tab-pane" id="tear-tree-view" style="position: relative; min-height: 300px;">
                 
-      <section class="content">
-      <div class="row">
-        <form id="productform" action="api/addproduct.php?insert" role="form" method="post" enctype="multipart/form-data">
-        <!-- left column -->
-        <div class="col-md-12">
-          <!-- general form elements -->
-          <div class="box box-primary">
-            <div class="box-header with-border">
-              <h3 class="box-title">Add User</h3>
-            </div>
-            <!-- /.box-header -->
-          <div class="box-body">
-           <div class="row">
-            <div class="col-md-4">
-                <!-- form start -->
-            
-              
-                <div class="form-group controls">
-                  <label for="empname">Name : </label>
-                  <input type="text" class="form-control" name="empname" id="empname" placeholder="Enter Name"  required="required"/>
-                </div>
-                <div class="form-group">
-                  <label for="empcode">Employee Code (EMP0001)</label>
-                  <input type="text" class="form-control" name="empcode" id="empcode"  placeholder="Employee Code" required/>
-                </div>
-                <div class="form-group">
-                  <label for="empemail">Email </label>
-                  <input type="email" class="form-control" name="empemail" id="empemail"  placeholder="Email Address" required/>
-                </div>
-                <div class="form-group">
-                  <label for="empcontact">Contact </label>
-                  <input type="" class="form-control" pattern="^\d{10}?$" data-dv-message="Enter Contact No in 10 digits" name="empcontact" id="empcontact" minlength="10" maxlength="10" placeholder="Contact No" required/>
-                </div>
-                <div class="form-group">
-                  <label for="empaddress">Address </label>
-				  <textarea class="form-control" name="empaddress" id="empaddress" placeholder="Address"></textarea>
-                </div>
-             </div> <!-- col 4 close--> 
-             
-             <div class="col-md-4">
-               
-                <div class="form-group">
-                  <label for="empdesignation">Select Designation</label>
-                  <select  class="form-control select2" name="empdesignation" id="empdesignation" required>
-                   <option value="">Select Designation</option>
-                    <?php $res=mysqli_query($con,"select * from designation"); while($row=mysqli_fetch_array($res)){?>
-                    <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
-                    <?php }?>
-                  </select>
-                </div>
-                
-                <div class="form-group">
-                  <label for="empdesignation">Select Role</label>
-                  <select  class="form-control select2" name="emprole" id="emprole" required>
-                   <option value="">Select Role</option>
-                    <?php $res=mysqli_query($con,"select * from roles"); while($row=mysqli_fetch_array($res)){?>
-                    <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
-                    <?php }?>
-                  </select>
-                </div>
-                
-                <div class="form-group">
-                  <label for="empmanager">Select Manager</label>
-                  <select class="form-control select2" name="empmanager" id="empmanager" required>
-                   <option value="">Select Manager</option>
-                    <?php $res=mysqli_query($con,"select id,empid,name from employees"); while($row=mysqli_fetch_array($res)){?>
-                    <option value="<?php echo $row['id'];?>"><?php echo $row['name']."(".$row['empid'].")";?></option>
-                    <?php }?>
-                  </select>
-                </div>
-                
-                <div class="form-group">
-                  <label for="empmanager">Reports To: </label>
-                  <select class="form-control select2" name="empreportto" id="empreportto" required>
-                   <option value="">Select</option>
-                    <?php $res=mysqli_query($con,"select id,empid,name from employees where designationid=(select id from designation where name='Manager')"); while($row=mysqli_fetch_array($res)){?>
-                    <option value="<?php echo $row['id'];?>"><?php echo $row['name']."(".$row['empid'].")";?></option>
-                    <?php }?>
-                  </select>
-                </div>
-				
-				<div class="form-group">
-                <label>Date of Joining:</label>
+                  <section class="content">
+                  <div class="row">
+                    <form id="productform" action="api/addproduct.php?insert" role="form" method="post" enctype="multipart/form-data">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                      <!-- general form elements -->
+                      <div class="box box-primary">
+                        <div class="box-header with-border">
+                          <h3 class="box-title">Add User</h3>
+                        </div>
+                        <!-- /.box-header -->
+                      <div class="box-body">
+                      <div class="row">
+                        <div class="col-md-4">
+                            <!-- form start -->
+                        
+                          
+                            <div class="form-group controls">
+                              <label for="empname">Name : </label>
+                              <input type="text" class="form-control" name="empname" id="empname" placeholder="Enter Name"  required="required"/>
+                            </div>
+                            <div class="form-group">
+                              <label for="empcode">Employee Code (EMP0001)</label>
+                              <input type="text" class="form-control" name="empcode" id="empcode"  placeholder="Employee Code" required/>
+                            </div>
+                            <div class="form-group">
+                              <label for="empemail">Email </label>
+                              <input type="email" class="form-control" name="empemail" id="empemail"  placeholder="Email Address" required/>
+                            </div>
+                            <div class="form-group">
+                              <label for="empcontact">Contact </label>
+                              <input type="" class="form-control" pattern="^\d{10}?$" data-dv-message="Enter Contact No in 10 digits" name="empcontact" id="empcontact" minlength="10" maxlength="10" placeholder="Contact No" required/>
+                            </div>
+                            <div class="form-group">
+                              <label for="empaddress">Address </label>
+                      <textarea class="form-control" name="empaddress" id="empaddress" placeholder="Address"></textarea>
+                            </div>
+                        </div> <!-- col 4 close--> 
+                        
+                        <div class="col-md-4">
+                          
+                            <div class="form-group">
+                              <label for="empdesignation">Select Designation</label>
+                              <select  class="form-control select2" name="empdesignation" id="empdesignation" required>
+                              <option value="">Select Designation</option>
+                                <?php $res=mysqli_query($con,"select * from designation"); while($row=mysqli_fetch_array($res)){?>
+                                <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
+                                <?php }?>
+                              </select>
+                            </div>
+                            
+                            <div class="form-group">
+                              <label for="empdesignation">Select Role</label>
+                              <select  class="form-control select2" name="emprole" id="emprole" required>
+                              <option value="">Select Role</option>
+                                <?php $res=mysqli_query($con,"select * from roles"); while($row=mysqli_fetch_array($res)){?>
+                                <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
+                                <?php }?>
+                              </select>
+                            </div>
+                            
+                            <div class="form-group">
+                              <label for="empmanager">Select Manager</label>
+                              <select class="form-control select2" name="empmanager" id="empmanager" required>
+                              <option value="">Select Manager</option>
+                                <?php $res=mysqli_query($con,"select id,empid,name from employees"); while($row=mysqli_fetch_array($res)){?>
+                                <option value="<?php echo $row['id'];?>"><?php echo $row['name']."(".$row['empid'].")";?></option>
+                                <?php }?>
+                              </select>
+                            </div>
+                            
+                            <div class="form-group">
+                              <label for="empmanager">Reports To: </label>
+                              <select class="form-control select2" name="empreportto" id="empreportto" required>
+                              <option value="">Select</option>
+                                <?php $res=mysqli_query($con,"select id,empid,name from employees where designationid=(select id from designation where name='Manager')"); while($row=mysqli_fetch_array($res)){?>
+                                <option value="<?php echo $row['id'];?>"><?php echo $row['name']."(".$row['empid'].")";?></option>
+                                <?php }?>
+                              </select>
+                            </div>
+                    
+                    <div class="form-group">
+                            <label>Date of Joining:</label>
 
-                <div class="input-group date">
-                  <div class="input-group-addon">
-                    <i class="fa fa-calendar"></i>
+                            <div class="input-group date">
+                              <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                              </div>
+                              <input type="text" class="form-control pull-right" name="empdoj" id="empdoj" required>
+                            </div>
+                            <!-- /.input group -->
+                          </div>
+                          
+                        </div>
+                        <!-- col 4 Mid -->
+                        
+                        <div class="col-md-4">
+                        
+                          <div class="form-group">
+                              <label for="empsalary">Employee Salary : </label>
+                              <input type="text" class="form-control" id="empsalary" placeholder="Employee Salary" value="0.0" pattern="^\d{0,8}(\.\d{0,2})?$" pattern-bv-message="Enter Correct value for Salary" name="empsalary" required/>
+                            </div>
+                            
+                            <div class="form-group">
+                              <label for="prate">Comm Percent : </label>
+                              <input type="text" class="form-control" id="empcomm" placeholder="EMP Comm" value="0.0" name="empcomm" pattern="^\d{0,8}(\.\d{0,2})?$" data-bv-message="Enter Correct value for Price" required />
+                            </div>
+                            
+                            <div class="form-group">
+                              <label for="emppass">Password</label>
+                              <input type="password" class="form-control" name="emppass" id="emppass"  placeholder="Password" required/>
+                            </div>
+                            <div class="form-group">
+                              <label for="empcpass">Confirm Password</label>
+                              <input type="password" class="form-control" name="empcpass" id="empcpass"  placeholder="Confirm Password" required/>
+                            </div>
+                            
+                            <div class="form-group">
+                              <label for="pimage">Select Image</label>
+                              <input type="file" id="empimage" name="empimage" required/>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                          <!-- /.box-body -->
+                          
+                          <div class="box-footer">
+                            <div class="progress progress-striped active" id="progress" style="display:none;">
+                              <div class="progress-bar progress-bar-success" style="width: 100%">
+                              </div>
+                            </div>
+                            <button type="submit"  id="btnaddproduct" class="btn btn-primary pull-right "><span class="fa fa-plus-circle"></span> Add New User</button>
+                          </div>
+                        
+                      </div>
+                      <!-- /.box -->
+                      </form>
+                    </div>
+                        </div>
+                        </section>    
+                          <!-- Section Form close-->
+                          </div>
+                        </div>
+
+                      </div>
+                      <!-- /.nav-tabs-custom -->
+
+                    
+                    </section>
+                    <!-- /.Left col -->
+                    
                   </div>
-                  <input type="text" class="form-control pull-right" name="empdoj" id="empdoj" required>
-                </div>
-                <!-- /.input group -->
-              </div>
-              
-            </div>
-            <!-- col 4 Mid -->
-            
-            <div class="col-md-4">
-             
-              <div class="form-group">
-                  <label for="empsalary">Employee Salary : </label>
-                  <input type="text" class="form-control" id="empsalary" placeholder="Employee Salary" value="0.0" pattern="^\d{0,8}(\.\d{0,2})?$" pattern-bv-message="Enter Correct value for Salary" name="empsalary" required/>
-                </div>
-                
-                <div class="form-group">
-                  <label for="prate">Comm Percent : </label>
-                  <input type="text" class="form-control" id="empcomm" placeholder="EMP Comm" value="0.0" name="empcomm" pattern="^\d{0,8}(\.\d{0,2})?$" data-bv-message="Enter Correct value for Price" required />
-                </div>
-                
-                <div class="form-group">
-                  <label for="emppass">Password</label>
-                  <input type="password" class="form-control" name="emppass" id="emppass"  placeholder="Password" required/>
-                </div>
-                <div class="form-group">
-                  <label for="empcpass">Confirm Password</label>
-                  <input type="password" class="form-control" name="empcpass" id="empcpass"  placeholder="Confirm Password" required/>
-                </div>
-                
-                <div class="form-group">
-                  <label for="pimage">Select Image</label>
-                  <input type="file" id="empimage" name="empimage" required/>
-                </div>
-            </div>
-          </div>
-         </div>
-              <!-- /.box-body -->
-               
-              <div class="box-footer">
-                <div class="progress progress-striped active" id="progress" style="display:none;">
-                   <div class="progress-bar progress-bar-success" style="width: 100%">
-                   </div>
-                </div>
-                <button type="submit"  id="btnaddproduct" class="btn btn-primary pull-right "><span class="fa fa-plus-circle"></span> Add New User</button>
-              </div>
-            
-          </div>
-          <!-- /.box -->
-          </form>
-        </div>
-            </div>
-            </section>    
-              <!-- Section Form close-->
-              </div>
-            </div>
+                  <!-- /.row (main row) -->
 
-          </div>
-          <!-- /.nav-tabs-custom -->
-
-        
-        </section>
-        <!-- /.Left col -->
-        
-      </div>
-      <!-- /.row (main row) -->
-
-    </section>
-    <!-- /.content -->
-  </div>
+                  </section>
+                  <!-- /.content -->
+              </div>
   <!-- /.content-wrapper -->
   
   
@@ -669,7 +674,7 @@ function loaddataduplicate()
 		var area=$("#area").val();
 		// var so=$("#so").val();
 		var distributor=$("#distributor").val();
-		var routeid=$("#routeid").val();
+		var routeid='';
 		
 		$mt=$("#mt");$gt=$("#gt");$mtl=$("#mtl");
 		$milkbooth=$("#milkbooth");$total=$("#total");
@@ -848,11 +853,11 @@ function loaddataduplicate()
 	  }
 
 
-    function distributor(areaId)
+    function distributor()
 	  {
 
       $.ajax({
-			 url:"api/outlets-web.php?getdistributor&areaid="+areaId,
+			 url:"api/outlets-web.php?getdistributor",
 			 type:"GET",			 
 			 contentType:"application/json; charset=utf-8",
 			 success: function(data){
@@ -873,29 +878,29 @@ function loaddataduplicate()
 	  }
 
 
-        function router(distributorId)
-        {
+        // function router(distributorId)
+        // {
 
-          $.ajax({
-          url:"api/outlets-web.php?getrouter&distributorid="+distributorId,
-          type:"GET",			 
-          contentType:"application/json; charset=utf-8",
-          success: function(data){
-            //alert(data);
-          data=JSON.parse(data);
+        //   $.ajax({
+        //   url:"api/outlets-web.php?getrouter&distributorid="+distributorId,
+        //   type:"GET",			 
+        //   contentType:"application/json; charset=utf-8",
+        //   success: function(data){
+        //     //alert(data);
+        //   data=JSON.parse(data);
             
-            var routeid=$("#routeid");
-            routeid.empty();
-            var option=$("<option value='' />").html("Select distributor");
-            routeid.append(option);
-            $.each(data, function (i, res) {
-                            //Create new option
-                            option = $('<option value='+res.id+'>').html(res.name);
-                            //append city routeids drop down
-                            routeid.append(option);
-                        });
-          }});
-        }
+        //     var routeid=$("#routeid");
+        //     routeid.empty();
+        //     var option=$("<option value='' />").html("Select distributor");
+        //     routeid.append(option);
+        //     $.each(data, function (i, res) {
+        //                     //Create new option
+        //                     option = $('<option value='+res.id+'>').html(res.name);
+        //                     //append city routeids drop down
+        //                     routeid.append(option);
+        //                 });
+        //   }});
+        // }
 	  
 
 	  $("#state").change(function(){
@@ -911,17 +916,18 @@ function loaddataduplicate()
 		  
       $("#area").change(function(){
 		   var areaId=$("#area option:selected").val();
-		   distributor(areaId);
+		  
 		  });
 
-      $("#distributor").change(function(){
-		   var areaId=$("#distributor option:selected").val();
-		   router(areaId);
-		  });
+      // $("#distributor").change(function(){
+		  //  var areaId=$("#distributor option:selected").val();
+		  //  router(areaId);
+		  // });
 
 
 $(document).ready(function(){
    //loaddata();
+   distributor();
    $("#empdoj").datepicker({format:'yyyy-m-dd'});
    $("#btnsearch").click(function(){searchdata();});
    $("#btnduplicate").click(function(){loaddataduplicate();});
@@ -981,7 +987,7 @@ $(document).ready(function(){
 		 }
 		 if(area=="")
 		 {
-			 alert("Please Select Area");
+			 alert("Please Select Route");
 			 return;
 		 }
 		 for (var i=0; i < data.length ;i++)
@@ -990,7 +996,7 @@ $(document).ready(function(){
            ids.push(data[i].id);
          } 
 		 
-		 if(!confirm("Are you sure, You want to change area of selected Outlets."))
+		 if(!confirm("Are you sure, You want to change route of selected Outlets."))
 		   {
 			 return;
 		   }
@@ -1013,99 +1019,97 @@ $(document).ready(function(){
 	   });
 
      
-   $("#distributerselected").click(function(){
-	     
-		 
-       var ids=Array();
-       var table=$("#userstable").DataTable();
-       var data = table.rows('.selected').data();      
-           var distributeid=$("#select_distributer").val();
-       if(data.length<=0)
-       {
-         alert("Please Select any Row in table");
-         return;
-       }
-       if(area=="")
-       {
-         alert("Please Select distribute");
-         return;
-       }
-       for (var i=0; i < data.length ;i++)
-       {
-         //alert(data[i].id);
-             ids.push(data[i].id);
-           } 
-       
-       if(!confirm("Are you sure, You want to change distribute of selected Outlets."))
-         {
-         return;
-         }
-       
-       var progress=$("#progress");
-       progress.fadeIn("slow");
-       $.ajax({
-           url:'api/outlets-web.php?changedistributeid',
-           type:'post',
-           data:{'ids':ids,'distributeid':distributeid},
-           success: function(data){
-               progress.fadeOut("slow");
-             alert(data);
-             loaddata();
-             },
-           error:function(e){alert(""+e);}
-         });
-       
-       
-       });
+      // $("#distributerselected").click(function(){
+          
+        
+      //     var ids=Array();
+      //     var table=$("#userstable").DataTable();
+      //     var data = table.rows('.selected').data();      
+      //         var distributeid=$("#select_distributer").val();
+      //     if(data.length<=0)
+      //     {
+      //       alert("Please Select any Row in table");
+      //       return;
+      //     }
+      //     if(area=="")
+      //     {
+      //       alert("Please Select distribute");
+      //       return;
+      //     }
+      //     for (var i=0; i < data.length ;i++)
+      //     {
+      //       //alert(data[i].id);
+      //           ids.push(data[i].id);
+      //         } 
+          
+      //     if(!confirm("Are you sure, You want to change distribute of selected Outlets."))
+      //       {
+      //       return;
+      //       }
+          
+      //     var progress=$("#progress");
+      //     progress.fadeIn("slow");
+      //     $.ajax({
+      //         url:'api/outlets-web.php?changedistributeid',
+      //         type:'post',
+      //         data:{'ids':ids,'distributeid':distributeid},
+      //         success: function(data){
+      //             progress.fadeOut("slow");
+      //           alert(data);
+      //           loaddata();
+      //           },
+      //         error:function(e){alert(""+e);}
+      //       });
+          
+          
+      //     });
 
 
            
-   $("#routeselected").click(function(){
-	     
-		 
-       var ids=Array();
-       var table=$("#userstable").DataTable();
-       var data = table.rows('.selected').data();      
-           var routeid=$("#select_route").val();
-       if(data.length<=0)
-       {
-         alert("Please Select any Row in table");
-         return;
-       }
-       if(area=="")
-       {
-         alert("Please Select distribute");
-         return;
-       }
-       for (var i=0; i < data.length ;i++)
-       {
-         //alert(data[i].id);
-             ids.push(data[i].id);
-           } 
+  //  $("#routeselected").click(function(){	 
+  //      var ids=Array();
+  //      var table=$("#userstable").DataTable();
+  //      var data = table.rows('.selected').data();      
+  //          var routeid=$("#select_route").val();
+  //      if(data.length<=0)
+  //      {
+  //        alert("Please Select any Row in table");
+  //        return;
+  //      }
+  //      if(area=="")
+  //      {
+  //        alert("Please Select route");
+  //        return;
+  //      }
+  //      for (var i=0; i < data.length ;i++)
+  //      {
+  //        //alert(data[i].id);
+  //            ids.push(data[i].id);
+  //          } 
        
-       if(!confirm("Are you sure, You want to change distribute of selected Outlets."))
-         {
-         return;
-         }
+  //      if(!confirm("Are you sure, You want to change route of selected Outlets."))
+  //        {
+  //        return;
+  //        }
        
-       var progress=$("#progress");
-       progress.fadeIn("slow");
-       $.ajax({
-           url:'api/outlets-web.php?changerouteid',
-           type:'post',
-           data:{'ids':ids,'routeid':routeid},
-           success: function(data){
-               progress.fadeOut("slow");
-             alert(data);
-             loaddata();
-             },
-           error:function(e){alert(""+e);}
-         });
+  //      var progress=$("#progress");
+  //      progress.fadeIn("slow");
+  //      $.ajax({
+  //          url:'api/outlets-web.php?changerouteid',
+  //          type:'post',
+  //          data:{'ids':ids,'routeid':routeid},
+  //          success: function(data){
+  //              progress.fadeOut("slow");
+  //            alert(data);
+  //            loaddata();
+  //            },
+  //          error:function(e){alert(""+e);}
+  //        });
        
        
-       });
+  //      });
    
-});
+  });
 
 
 
@@ -1116,14 +1120,9 @@ function sendData(){
        
 	   //var form=$(this).parent("form");
 	       
-	 
-        var fd = new FormData($("#productform"));
+	    var fd = new FormData($("#productform"));
 		var progress=$("#progress");
-	//	$.each(files, function(key, value){
-     //       fd.append(key, value);
-      //  });
-		
-        var files = $('#empimage')[0].files[0];
+    var files = $('#empimage')[0].files[0];
 		var empname = $('#empname').val();
 		var empcode = $('#empcode').val();
 		var empemail = $('#empemail').val();
@@ -1137,7 +1136,8 @@ function sendData(){
 		var empsalary = $('#empsalary').val();
 		var empcomm = $('#empcomm').val();
 		var emppass = $('#emppass').val();
-        fd.append('empimage',files);
+    
+    fd.append('empimage',files);
 		fd.append('empname',empname);
 		fd.append('empcode',empcode);
 		fd.append('empemail',empemail);
@@ -1267,22 +1267,11 @@ $(document).ready(function() {
 			
                 }
         }) .on('success.form.bv', function(e) {
-            // Prevent form submission
-            e.preventDefault();
-			  sendData();
-	          		
-			
-            // Get the form instance
-          /*  var $form = $(e.target);
-
-            // Get the BootstrapValidator instance
-            var bv = $form.data('bootstrapValidator');
-
-            // Use Ajax to submit form data
-            $.post($form.attr('action'), $form.serialize(), function(result) {
-                console.log(result);
-            }, 'json');*/
-        });
+                // Prevent form submission
+                  e.preventDefault();
+                  sendData();
+                    
+            });
 		
 		
 		function importData(){
@@ -1357,27 +1346,11 @@ $(document).ready(function() {
 			
                 }
         }) .on('success.form.bv', function(e) {
-            // Prevent form submission
-            e.preventDefault();
-			importData();
-			// var $form = $(e.target);
-                 
-                    // Get the BootstrapValidator instance
-                   // var bv = $form.data('bootstrapValidator');
-                    //var progress=$("#progress2");
-					//progress.fadeIn("slow");
-                    // Use Ajax to submit form data
-                    
-                   /* $.post($form.attr('action'), $form.serialize(), function(result) {
-						alert(result);
-                        if (result == "success") {
-                           loaddata();
-						   progress.fadeOut("slow");
-                        }
-                        
-                    }, 'json');*/
-	        
-        });
+                // Prevent form submission
+                e.preventDefault();
+                importData();
+             
+            });
 });
 
 </script>
