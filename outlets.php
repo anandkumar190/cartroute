@@ -102,7 +102,7 @@
                   <div class="input-group input-group-sm" style="width: 80px;">
                  &nbsp;&nbsp;  <button type="button" id="btnsearch" class="form-control btn btn-default"><i class="fa fa-search"></i> Search</button>
                   </div>
-                  <div class="input-group input-group-sm" style="width: 80px;">
+                  <!-- <div class="input-group input-group-sm" style="width: 80px;">
                  &nbsp;&nbsp;  <button type="reset" id="btnreset" class="form-control btn btn-default"><i class="fa fa-refresh"></i> Reset</button>
                   </div>
                   <div class="input-group input-group-sm" style="width: 80px;">
@@ -110,7 +110,7 @@
                   </div>
                   <div class="input-group input-group-sm" style="width: 80px;">
                  &nbsp;&nbsp;  <button type="button" id="btnalloutlets" class="form-control btn btn-default"><i class="fa fa-refresh"></i> All Outlets</button>
-                  </div>
+                  </div> -->
                 </form>
 
 
@@ -249,32 +249,20 @@
 											<table id="userstable" class="table" data-paging="true" data-processing="true" data-filtering="true" data-sorting="true">
 												<thead>
 												<tr>
-                                                    <th>Select</th>
-													<th>Edit</th>
+                          <th>Select</th>
 													<th>State</th>
+                          <th>City</th>
 													<th>Region</th>
-													<th>Area</th>
 													<th>Route</th>
-                                                   <!--<th>AppArea</th>-->
-                                                    <th>Distributor</th>
-													<th>Outlet Name</th>
+                          <th>Distributor</th>
+													<th>Outlet Name</th>										
+													<th>Last Visit</th>
+                          <th>Last 30 days <br> Orders </th>
+                          <th>Past Orders <br> (PerMonth)</th>
+                          <th>Contact Person</th>
+                          <th>Phone No.</th>
 													<th>Outlet Address</th>
-                                                    <!--<th>Pincode</th>-->
-                                                    <!--<th>Sales Officer</th>-->
-												
-                                                    <!--<th>Super Stockist</th>-->
-                                    
-                                                    <!--<th>Outlet Type</th>-->
-                                                    <!--<th>Outlet Image</th>-->
-                                                    <!--<th>Created Date</th>-->
-                                                    <!--<th>Last Visit Date</th>-->
-                                                    
-                                                    <th>Contact Person</th>
-                                                    <th>Phone No.</th>
-                                                    <!--<th>GST No.</th>-->
-                                                    <th>Created Date</th>
-                                                    <th>Latitude</th>
-                                                    <th>Longitude</th>
+
 												</tr>
 												</thead>
 												<tbody>
@@ -538,38 +526,35 @@
                 'copy', { extend: 'csv', title: function () { var printTitle = 'All Visitis'; return printTitle; } }, 'excel', 'pdf', { extend: 'print', title: function () { var printTitle = ''; return printTitle; } }
             ],
 				  columns:[
-				          {
-					   data:'id',render:function(value){ 
-						  return "<input type='hidden' id='select' value='"+value+"' />";
-						  }},
-				          {
-					   data:'id',render:function(value){
-						  return "<a href='editoutlet?editid="+value+"'><span class='fa fa-edit'></span></a>";
-						  }},
-						  {
-							data:'state'
-						}, {
-							data:'region'
-						},
-						 {
-							data:'area'
-						},
-						{
-              data:'routename'
-						},
-						{data:'address'},
-						{data:'pincode'},
-
-						 {
-							data:'distributor'
-						},{
-							data:'routeid'
-						},
-						{data:'name'},{data:'outlettype'},/*{data:'lastvisitpic',render:function(value){
-							return "<a href='imgoutlets/"+value+"' target='_blank'><img src='imgoutlets/"+value+"' class='img img-thumbnail'/></a>";
-							}},*/{data:'creationdate'},{data:'lastvisit'},{data:'contactperson'},{data:'contact'},{data:'gstnumber'},{data:'longitude'},{data:'latitude'}	
-					  ]
-				});
+                            {
+                      data:'id',render:function(value){ 
+                        return "<input type='hidden' id='select' value='"+value+"' />";
+                        }},
+                        {
+                        data:'state'
+                      }, {
+                        data:'city'
+                      },
+                      {
+                        data:'region'
+                      },
+                      {
+                        data:'routename'
+                      },
+                      {
+                        data:'distributor'
+                      },
+                      {data:'name'},
+                      {data:'last_30_value'},
+                      {data:'past_order_per_month'},
+                      {data:'latitude'},
+              
+                      {data:'contactperson'},
+                      {data:'contact'},
+                      {data:'address'},
+              
+                  ]
+              });
 		       progress.fadeOut("slow");  		
 			  },
 		  error:function(e){
@@ -725,52 +710,36 @@ function loaddataduplicate()
 				  buttons: [
                 'copy', { extend: 'csv', title: function () { var printTitle = 'All Visitis'; return printTitle; } }, 'excel', 'pdf', { extend: 'print', title: function () { var printTitle = ''; return printTitle; } }
             ],
-				  columns:[
-				            {
-					   data:'id',render:function(value){ 
-						  return "<input type='hidden' id='select' value='"+value+"' />";
-						  }},
-				          {
-					   data:'id',render:function(value){
-						  return "<a href='editoutlet?editid="+value+"'><span class='fa fa-edit'></span></a>";
-						  }},
-						  {
-							data:'state'
-						}, {
-							data:'region'
-						},
-						 {
-							data:'area'
-						},
-						{
-							data:'routename'
-						},
-							 {
-							data:'distributor'
-						},
-						{data:'name'},
-						{data:'address'},
-					
-						{data:'contactperson'},
-					{data:'contact'},
-				//	{data:'gstnumber'},
-						{data:'creationdate'},
-				// 		{data:'pincode'},
-						 //{
-				// 			data:'so'
-				// 		},
-				// 	{
-				// 			data:'stockist'
-				// 		},
-				// 		{data:'name'},{data:'outlettype'},/*{data:'lastvisitpic',render:function(value){
-						//	return "<a href='imgoutlets/"+value+"' target='_blank'><img src='imgoutlets/"+value+"' class='img img-thumbnail'/></a>";
-					//		}},*/
-				// 		/*	{data:'lastvisit'},*/
-							
-				 			{data:'longitude'},{data:'latitude'}
-												
-							
-					  ]
+            columns:[
+                            {
+                      data:'id',render:function(value){ 
+                        return "<input type='hidden' id='select' value='"+value+"' />";
+                        }},
+                        {
+                        data:'state'
+                      }, {
+                        data:'city'
+                      },
+                      {
+                        data:'region'
+                      },
+                      {
+                        data:'routename'
+                      },
+                      {
+                        data:'distributor'
+                      },
+                      {data:'name'},
+                      {data:'lastvisit'},
+                      {data:'last_30_value'},
+                      {data:'past_order_per_month'},
+              
+                
+                      {data:'contactperson'},
+                      {data:'contact'},
+                      {data:'address'},
+              
+                  ]
 				
 				});	
 				progress.fadeOut("slow");	   
@@ -964,7 +933,7 @@ $(document).ready(function(){
 			   success: function(data){
 				     progress.fadeOut("slow");
 					 alert(data);
-					 loaddata();
+					    searchdata()
 				   },
 			   error:function(e){alert(""+e);}
 			 });

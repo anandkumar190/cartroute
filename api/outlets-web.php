@@ -443,11 +443,10 @@ if(isset($_GET['search']))
    {
 	   $state=trim($_GET['state']);
 	   $city=trim($_GET['region']); 
-	   $locality=trim($_GET['area']);
+	   $routeid=trim($_GET['area']);
 	   $so="";
 	   $distributor=trim($_GET['distributor']);
 	   $stockist="";
-	   $routeid=trim($_GET['routeid']);;
 	   $selectQry="select o.id,
 	   			  cities.city As city,
 				  o.locality,
@@ -461,7 +460,7 @@ if(isset($_GET['search']))
 				  o.gstnumber,
 				  o.outlettype,
 				  o.outletsubtype,
-				  o.routeid,
+				   o.routeid,
 				  o.latitude,
 				  o.longitude,
 				  o.areaid,
@@ -470,15 +469,10 @@ if(isset($_GET['search']))
 				  a.area,
 				  o.createdby,
 				  concat(d.name,' - ',d.empid) as 'distributor',
-				  concat(s.name,'-',s.empid) as 'stockist',
-				  s.id as 'stockistid',
-					concat(e.name,'-',e.empid)as 'so',
 					a.area, regions.name As region,
 					states.name As state  from outlets o 
-					join employees d on d.id=o.distributorid 
-					join employees s on s.id=d.stockistid 
-					join employees e on e.id=o.createdby 
-					join area a on a.id=o.areaid 
+					join area a on a.id=o.routeid 
+					JOIN employees d ON d.id = a.distributor_id
 					left join states on states.id= a.state 
 					left join cities on cities.id= a.city left 
 					join regions on regions.id= a.region ";
@@ -490,27 +484,22 @@ if(isset($_GET['search']))
 
 		 if ($distributor!="") {
 			$prefix="where";
-			$selectQry=$selectQry.$prefix." d.name like '%$distributor%'";
+			$selectQry=$selectQry.$prefix." d.id ='$distributor'";
 			$isSnd=1;
 		 }else {
 
 			if ($state!="") {
 				$prefix=$isSnd==0?" where ":" and ";
-				$selectQry=$selectQry.$prefix." a.state like '%$state%'";
+				$selectQry=$selectQry.$prefix." a.state='$state'";
 				$isSnd=1;
 			 }
 	
 			 if ($city!="") {
 				$prefix=$isSnd==0?" where ":" and ";
-				$selectQry=$selectQry.$prefix." a.region like '%$city%'";
+				$selectQry=$selectQry.$prefix." a.region ='$city'";
 				$isSnd=1;
 			 }
 	
-			 if ($locality!="") {
-				$prefix=$isSnd==0?" where ":" and ";
-				$selectQry=$selectQry.$prefix." a.area like '%$locality%'";
-				$isSnd=1;
-			 }
 	
 			 if ($routeid!="") {
 				$prefix=$isSnd==0?" where ":" and ";
@@ -521,42 +510,66 @@ if(isset($_GET['search']))
 
 
 		 $query=$selectQry."order by o.id desc";
-	   
-	   
+		     
+  
 	   $res=mysqli_query($con,$query) or die(mysqli_error($con));   
 	   $response=array();
 	   $num=mysqli_field_count($con);
 	   $total=0;$gt=0;$mt=0;$mtl=0;$milkbooth=0;
 	   while($row=mysqli_fetch_array($res))
 	   {
+		$currentDateTime = date('Y-m-d H:i:s');
+		$previous30DateTime = date('Y-m-d H:i:s', strtotime('-30 days'));
+		$previous180DateTime = date('Y-m-d H:i:s', strtotime('-180 days'));
+		
+		$outletId = $row["id"];
+		
+		// 30 days sum
+		$query30 = "
+			SELECT SUM(total_amount) AS total_amount 
+			FROM booking 
+			WHERE outlet_id = '$outletId' 
+			  AND booking_time BETWEEN '$previous30DateTime' AND '$currentDateTime' 
+			GROUP BY outlet_id
+		";
+		$res30days = mysqli_query($con, $query30);
+		$outletSum30Row = mysqli_fetch_assoc($res30days);
+		$outletSum30 = round(@$outletSum30Row['total_amount'],2) ?? 0;
+		
+		// 180 days sum
+		$query180 = "
+			SELECT SUM(total_amount) AS total_amount 
+			FROM booking 
+			WHERE outlet_id = '$outletId' 
+			  AND booking_time BETWEEN '$previous180DateTime' AND '$currentDateTime' 
+			GROUP BY outlet_id
+		";
+		$res180days = mysqli_query($con, $query180);
+		$outletSum180Row = mysqli_fetch_assoc($res180days);
+		$outletSum180 = @$outletSum180Row['total_amount']>0? round($outletSum180Row['total_amount']/6,2):0;
+	
+
+
+
 		   $rr=array();
 		   $rr["id"]=$row["id"];
 		   $rr["state"]=$row["state"];
 		   $rr["city"]=$row["city"];
 		   $rr["region"]=$row["region"];
-		   $rr["distributorid"]=$row["distributorid"];
+		   $rr["routename"]=$row["area"];
+		   $rr["distributor"]=$row["distributor"]; 
 		   $rr["name"]=$row["name"];
-		   $rr["address"]=$row['address'];
-		   $rr["lastvisitpic"]=$row["lastvisitpic"];
+		   $rr["lastvisit"]=$row["lastvisit"];
+
+
+		   $rr["last_30_value"]=$outletSum30;
+		   $rr["past_order_per_month"]=$outletSum180;
+
 		   $rr["contactperson"]=$row["contactperson"];
 		   $rr["contact"]=$row["contact"];
-		   $rr["pincode"]=$row["pincode"];
-		   $rr["gstnumber"]=$row["gstnumber"];
-		   $rr["outlettype"]=$row["outlettype"];
-		   $rr["outletsubtype"]=$row["outletsubtype"];
-		   $rr["routeid"]=$row["routeid"];
-		   $rr["latitude"]=$row["latitude"];
-		   $rr["longitude"]=$row["longitude"];
-		   $rr["areaid"]=$row["areaid"];
-		   $rr["lastvisit"]=$row["lastvisit"];
-		   $rr["creationdate"]=$row["creationdate"];
-		   $rr["createdby"]=$row["createdby"]; 
-		   $rr["distributor"]=$row["distributor"]; 
-		   $rr["stockist"]=$row["stockist"];
-		   $rr["stockistid"]=$row["stockistid"];  
-		   $rr["so"]=$row["so"];
-		   $rr["routename"]=$row["area"];
-		   $rr["area"]=$row["area"];
+		   $rr["address"]=$row['address'];
+
+	
 		   
 		   if($row["outlettype"]=="MTS")
 		   {
@@ -589,7 +602,6 @@ if(isset($_GET['search']))
 	   //$data=array();
 	   $data=json_encode($response);
 	   echo $data;
-	   die();
 	   return; 
    }
 
