@@ -610,38 +610,51 @@ if(isset($_GET['search']))
    
    if(isset($_GET['activityvisit']))
    {
-	   $res=mysqli_query($con,"select 
-	    o.id,
-		o.name,
-		o.address,
-		o.lastvisitpic,
-		o.contactperson,
-		o.contact,
-		o.gstnumber,
-		o.outlettype,
-		a.activitytype,
-		a.activitydate,
-		a.activitytime,
-		a.feedback,
-		a.battery,
-		a.rating,
-		area.area,
-		area.id as areaId,
-		regions.name AS regionsname,
-		cities.city,
-		states.name AS statesname,
-		e.name AS empname,
-		e.empid ,
-		emp.name AS distributorname
-	FROM outletactivity a 
-	Left JOIN outlets o ON a.outletid = o.id 
-	Left JOIN employees e ON e.id = a.userid 
-	Left JOIN area ON area.id = o.areaid 
-	Left JOIN employees emp ON emp.id=area.distributor_id
-	Left JOIN regions ON regions.id = area.region 
-	Left JOIN cities ON cities.id = regions.city_id 
-	Left JOIN states ON states.id = cities.state_id 
-	ORDER BY a.id DESC");   
+	   $res=mysqli_query($con,"SELECT 
+				o.id,
+				o.name,
+				o.address,
+				o.lastvisitpic,
+				o.contactperson,
+				o.contact,
+				o.gstnumber,
+				o.outlettype,
+				a.activitytype,
+				a.activitydate,
+				a.activitytime,
+				a.feedback,
+				a.battery,
+				a.rating,
+				area.area,
+				area.id AS areaId,
+				regions.name AS regionsname,
+				cities.city,
+				states.name AS statesname,
+				e.name AS empname,
+				e.empid,
+				CASE 
+					WHEN DATE(a.activitydate) = DATE(o.updated_at) THEN 'Yes'
+					ELSE 'No'
+				END AS is_updated_today,
+				emp.name AS distributorname,
+				-- Total amount from booking table for this activitydate
+				SUM(b.total_amount) AS total_booking_amount
+			FROM outletactivity a 
+			LEFT JOIN outlets o ON a.outletid = o.id 
+			LEFT JOIN employees e ON e.id = a.userid 
+			LEFT JOIN area ON area.id = o.areaid 
+			LEFT JOIN employees emp ON emp.id = area.distributor_id
+			LEFT JOIN regions ON regions.id = area.region 
+			LEFT JOIN cities ON cities.id = regions.city_id 
+			LEFT JOIN states ON states.id = cities.state_id 
+			-- Join booking table by matching activity date to booking_time date
+			LEFT JOIN booking b ON b.outlet_id = o.id AND DATE(b.booking_time) = a.activitydate
+			GROUP BY 
+				o.id, o.name, o.address, o.lastvisitpic, o.contactperson, o.contact, 
+				o.gstnumber, o.outlettype, a.activitytype, a.activitydate, a.activitytime, 
+				a.feedback, a.battery, a.rating, area.area, area.id, regions.name, 
+				cities.city, states.name, e.name, e.empid, o.updated_at, emp.name
+			ORDER BY a.id DESC");   
 	   $response=array();
 	   $num=mysqli_field_count($con);
 	   while($row=mysqli_fetch_array($res))
@@ -668,6 +681,10 @@ if(isset($_GET['search']))
 		   $rr["city"]=$row["city"];
 		   $rr["regionsname"]=$row["regionsname"];
 		   $rr["area"]=$row["area"];
+		   $rr['is_updated_today']=$row["is_updated_today"];
+		   $rr['total_booking_amount']=$row["total_booking_amount"];
+		   
+
 		   $rr["areaId"]=$row["areaId"];
 
 		   

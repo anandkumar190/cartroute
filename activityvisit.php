@@ -301,8 +301,22 @@
                }},{
 					   data:'id',render:function(value){
 						  return "<a href='editoutlet?editid="+value+"'><span class='fa fa-edit'></span></a>";
-						  }},{data:'activitydate'},{data:'empname'},{data:'activitytype'},{data:'name'},{data:'outlettype'},{data:'battery'},
-						  {data:'area'},{data:'area'}, {data:'distributorname'},{data:'area'},{data:'statesname'}, {data:'city'}, {data:'regionsname'},{data:'contactperson'},{data:'contact'},{data:'address'}
+						  }},{data:'activitydate'},
+              {data:'empname'},
+              {data:'activitytype'},
+              {data:'name'},
+              {data:'outlettype'},
+              {data:'battery'},
+						  {data:'is_updated_today'},
+              {data:'total_booking_amount'},
+               {data:'distributorname'},
+               {data:'area'},
+               {data:'statesname'},
+                {data:'city'}, 
+                {data:'regionsname'},
+                {data:'contactperson'},
+                {data:'contact'},
+                {data:'address'}
 					  ]
 				
 				});		   
