@@ -35,7 +35,7 @@
 	   $areaid=$_POST['areaid'];
 	   foreach($ids as $id)
 	   {
-		 mysqli_query($con,"update outlets set areaid='$areaid' where id='$id'");
+		 mysqli_query($con,"update outlets set areaid='$areaid',outletid='$areaid'  where id='$id'");
 	   }
 	   echo "Area Assign Successfully to Selected Outlets.";
    }

@@ -133,7 +133,7 @@
 	longitude='$longitude',
 	areaid='$areaid',
 	lastvisit='$datetime',
-	updated_at='$datetime'
+	updated_at='$datetime',
 	createdby='$createdby' where id='$id'");
 	  
 	  if(mysqli_affected_rows($con)>0)

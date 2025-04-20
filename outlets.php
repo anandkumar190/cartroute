@@ -979,7 +979,7 @@ $(document).ready(function(){
 			   success: function(data){
 				     progress.fadeOut("slow");
 					 alert(data);
-					 loaddata();
+           searchdata()
 				   },
 			   error:function(e){alert(""+e);}
 			 });
