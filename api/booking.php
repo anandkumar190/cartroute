@@ -316,30 +316,43 @@ if(isset($_GET['search'])){
                 $items['new_price'][$row3['product_id']]=$row3['new_price'];
                 $items['total_price'][$row3['product_id']]=$row3['total_price'];
             }
-
-            $tt['booking_time'] = $row2['booking_time'];
-            $tt['outlet_id']= $outlets[$row2['outlet_id']];
-            $tt['user_id']=$salesmans[$row2['user_id']];
-            $tt['distibuter']=$distibuters[$row2['distributorid']];
+            if (!empty($row2) ) {
+                $tt['booking_time'] = @$row2['booking_time'];
+                $tt['outlet_id']= @$outlets[$row2['outlet_id']];
+                $tt['user_id']=@$salesmans[$row2['user_id']];
+                $tt['distibuter']=@$distibuters[$row2['distributorid']];
+            }else {
+                $tt['booking_time'] = '';
+                $tt['outlet_id']= '';
+                $tt['user_id']='';
+                $tt['distibuter']='';
+            }
 
             $cat=mysqli_query($con,"select id,name from product_cat"); 
         
             while($catrow=mysqli_fetch_array($cat)){
-                $catTotal=0.00;
-                $res=mysqli_query($con,"select id,productid from skus where catid=".$catrow['id']." "); 
-                while($row=mysqli_fetch_array($res)){
-                        $tt[@$catrow['id'].$row['id']]=@$items['qty_no'][@$row['id']];
-                        $catTotal=@$items['total_price'][@$row['id']]+$catTotal;
-                            
-                    if(!empty($items['new_price'][$row['id']])){
-                            $tt['price'.$catrow['id']]=@$items['new_price'][@$row['id']];
-                        }  
-                }
-                if(empty($tt['price'.$catrow['id']])){
-                    $tt['price'.$catrow['id']]=0;
-                }
-                $tt['cattotal'.$catrow['id']]=$catTotal;
-            }   
+                $subcat=mysqli_query($con,"select id,name from parduct_sub_cat where cat_id=".$catrow['id']."  "); 
+                while($subcatrow=mysqli_fetch_array($subcat)){   
+                    $catTotal=0.00;
+                    $tempQty=0;
+                    $res=mysqli_query($con,"select id,productid from skus where scatid=".$subcatrow['id']." "); 
+                    while($row=mysqli_fetch_array($res)){
+
+                            $tempQty+=$tt[@$subcatrow['id'].$row['id']]=@$items['qty_no'][@$row['id']];
+                            $catTotal=@$items['total_price'][@$row['id']]+$catTotal;
+                                
+                        if(!empty($items['new_price'][$row['id']])){
+                                $tt['price'.$subcatrow['id']]=@$items['new_price'][@$row['id']];
+                            }   
+
+                    }
+                    if(empty($tt['price'.$subcatrow['id']])){
+                        $tt['price'.$subcatrow['id']]=0;
+                    }
+                    $tt['subcattotal'.$subcatrow['id']] =@$tt['price'.$subcatrow['id']]*$tempQty;
+                   // $tt['cattotal'.$subcatrow['id']]=$catTotal;
+                 }
+            } 
             $tt['total']=$row2['total_amount'];
             $total+=$row2['total_amount'];
             array_push($bookinglist,$tt);

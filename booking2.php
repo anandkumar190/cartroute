@@ -181,16 +181,18 @@ $outlets=array();
                                $cat=mysqli_query($con,"select id,name from product_cat"); 
                    
                                while($catrow=mysqli_fetch_array($cat)){
+                                $subcat=mysqli_query($con,"select id,name from parduct_sub_cat where cat_id=".$catrow['id']."  "); 
+                                while($subcatrow=mysqli_fetch_array($subcat)){ 
 
-                             $res=mysqli_query($con,"select id,productid from skus  where catid=".$catrow['id']."");
+                             $res=mysqli_query($con,"select id,productid from skus  where scatid=".$subcatrow['id']."");
                               while($row=mysqli_fetch_array($res)){
                                 ?>
                                                         <th><?php echo $row['productid'];?></th>
                               <?php }?>
                               <th>Rate</th>
-                              <th>Total</th>
+                              <th>Sub Total</th>
 
-                             <?php }?>
+                             <?php }}?>
 													<th>Total Value</th>
 												</tr>
 												</thead>
@@ -349,12 +351,17 @@ $(document).ready(function() {
              $cat=mysqli_query($con,"select id,name from product_cat"); 
                    
              while($catrow=mysqli_fetch_array($cat)){
-              $cattotal='cattotal'.$catrow['id'];
-             $price='price'.$catrow['id'];
 
-            $res=mysqli_query($con,"select id,productid from skus where catid=".$catrow['id']."");
+              $subcat=mysqli_query($con,"select id,name from parduct_sub_cat where cat_id=".$catrow['id']."  "); 
+              while($subcatrow=mysqli_fetch_array($subcat)){ 
+
+
+              $cattotal='subcattotal'.$subcatrow['id'];
+             $price='price'.$subcatrow['id'];
+
+            $res=mysqli_query($con,"select id,productid from skus where scatid=".$subcatrow['id']."");
                         
-                        while($row=mysqli_fetch_array($res)){  $qid=$catrow['id'].$row["id"]  ?>
+                        while($row=mysqli_fetch_array($res)){  $qid=$subcatrow['id'].$row["id"]  ?>
                             {
 							data:'<?php echo $qid ?>'
 						}, 
@@ -362,7 +369,7 @@ $(document).ready(function() {
                         <?php }?>
                       { data:'<?php echo $price ?>'},
                        { data:'<?php echo $cattotal ?>'},
-                        <?php }?>
+                        <?php }}?>
                         
                          {
 							data:'total'
