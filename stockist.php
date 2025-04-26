@@ -243,12 +243,12 @@
                
              <div class="form-group">
                   <label for="emplat">Latitude:</label>
-                  <input type="text" class="form-control pull-right" name="emplat" id="emplat" value=""  readonly="readonly"/>
+                  <input type="text" class="form-control pull-right" name="emplat" id="emplat" value=""  />
               </div>
              
             <div class="form-group">
                   <label for="emplng" >Longitude:</label>
-                  <input type="text" class="form-control pull-right" name="emplng" id="emplng" value=""  readonly="readonly"/>
+                  <input type="text" class="form-control pull-right" name="emplng" id="emplng" value="" />
                   <a href="#" data-target="#locationmodel" data-toggle="model">Set Location</a>
             </div>
              

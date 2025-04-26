@@ -637,23 +637,17 @@ if(isset($_GET['search']))
 					ELSE 'No'
 				END AS is_updated_today,
 				emp.name AS distributorname,
-				-- Total amount from booking table for this activitydate
-				SUM(b.total_amount) AS total_booking_amount
-			FROM outletactivity a 
-			LEFT JOIN outlets o ON a.outletid = o.id 
-			LEFT JOIN employees e ON e.id = a.userid 
-			LEFT JOIN area ON area.id = o.areaid 
-			LEFT JOIN employees emp ON emp.id = area.distributor_id
-			LEFT JOIN regions ON regions.id = area.region 
-			LEFT JOIN cities ON cities.id = regions.city_id 
-			LEFT JOIN states ON states.id = cities.state_id 
-			-- Join booking table by matching activity date to booking_time date
+				SUM(IFNULL(b.total_amount, 0)) AS total_booking_amount
+				 FROM outletactivity a 
+				 JOIN outlets o ON a.outletid = o.id 
+				 JOIN employees e ON e.id = a.userid 
+				 JOIN area ON area.id = o.routeid 
+				 JOIN employees emp ON emp.id = area.distributor_id
+				 JOIN regions ON regions.id = area.region 
+				 JOIN cities ON cities.id = regions.city_id 
+				 JOIN states ON states.id = cities.state_id 
 			LEFT JOIN booking b ON b.outlet_id = o.id AND DATE(b.booking_time) = a.activitydate
-			GROUP BY 
-				o.id, o.name, o.address, o.lastvisitpic, o.contactperson, o.contact, 
-				o.gstnumber, o.outlettype, a.activitytype, a.activitydate, a.activitytime, 
-				a.feedback, a.battery, a.rating, area.area, area.id, regions.name, 
-				cities.city, states.name, e.name, e.empid, o.updated_at, emp.name
+			GROUP BY o.id, a.activitydate, a.activitytime
 			ORDER BY a.id DESC");   
 	   $response=array();
 	   $num=mysqli_field_count($con);

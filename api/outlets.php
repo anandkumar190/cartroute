@@ -123,18 +123,18 @@
 	  outlettype='$outlettype',
 	  outletsubtype='$outletsubtype',
 	  distributorid='$distributorid',
-	  routeid='0',
+	  routeid='$areaId',
+	  areaid='$areaId',
 	  competitor_presense='0',
 	  street='$street',
 	  locality='$locality',
 	  city='$city',
-	state='$state',
-	latitude='$latitude',
-	longitude='$longitude',
-	areaid='$areaid',
-	lastvisit='$datetime',
-	updated_at='$datetime',
-	createdby='$createdby' where id='$id'");
+	  state='$state',
+	  latitude='$latitude',
+	  longitude='$longitude',
+	  lastvisit='$datetime',
+	  updated_at='$datetime',
+	  createdby='$createdby' where id='$id'");
 	  
 	  if(mysqli_affected_rows($con)>0)
 	  {

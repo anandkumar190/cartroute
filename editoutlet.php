@@ -62,13 +62,13 @@
         e.empid ,
         emp.id AS distributorid
       FROM outletactivity a 
-      Left JOIN outlets o ON a.outletid = o.id 
-      Left JOIN employees e ON e.id = a.userid 
-      Left JOIN area ON area.id = o.areaid 
-      Left JOIN employees emp ON emp.id=area.distributor_id
-      Left JOIN regions ON regions.id = area.region 
-      Left JOIN cities ON cities.id = regions.city_id 
-      Left JOIN states ON states.id = cities.state_id where o.id='$editid'");
+           JOIN outlets o ON a.outletid = o.id 
+           JOIN employees e ON e.id = a.userid 
+           JOIN area ON area.id = o.routeid 
+           JOIN employees emp ON emp.id=area.distributor_id
+           JOIN regions ON regions.id = area.region 
+           JOIN cities ON cities.id = regions.city_id 
+           JOIN states ON states.id = cities.state_id where o.id='$editid'");
 	if($row=mysqli_fetch_array($res))
 	{
 	
@@ -271,12 +271,12 @@
             
              <div class="form-group">
                   <label for="latitude">Latitude:</label>
-                  <input type="text" class="form-control pull-right" name="emplat" id="emplat" value="<?php echo $latitude;?>"  readonly="readonly"/>
+                  <input type="text" class="form-control pull-right" name="emplat" id="emplat" value="<?php echo $latitude;?>"  />
               </div>
              
             <div class="form-group">
                   <label for="longitude" >Longitude:</label>
-                  <input type="text" class="form-control pull-right" name="emplng" id="emplng" value="<?php echo $longitude;?>"  readonly="readonly"/>
+                  <input type="text" class="form-control pull-right" name="emplng" id="emplng" value="<?php echo $longitude;?>"/>
                   <a href="#locationmodel" data-target="#locationmodel" data-toggle="modal">Set Location</a>
             </div>
              

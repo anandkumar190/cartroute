@@ -158,12 +158,12 @@
                 </div>
              <div class="form-group">
                   <label for="emplat">Latitude:</label>
-                  <input type="text" class="form-control pull-right" name="emplat" id="emplat" value="<?php echo $lat;?>"  readonly="readonly"/>
+                  <input type="text" class="form-control pull-right" name="emplat" id="emplat" value="<?php echo $lat;?>" />
               </div>
              
             <div class="form-group">
                   <label for="emplng" >Longitude:</label>
-                  <input type="text" class="form-control pull-right" name="emplng" id="emplng" value="<?php echo $lng;?>"  readonly="readonly"/>
+                  <input type="text" class="form-control pull-right" name="emplng" id="emplng" value="<?php echo $lng;?>" />
                   <a href="#locationmodel" data-target="#locationmodel" data-toggle="modal">Set Location</a>
             </div>
              
