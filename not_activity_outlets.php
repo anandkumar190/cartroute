@@ -25,6 +25,7 @@ $outlets=array();
 <link rel="stylesheet" href="assets/node_modules/datatables/jquery.dataTables.min.css"/>
 
 <link rel="stylesheet" href="dist/dist/css/bootstrapValidator.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.7/css/select.dataTables.min.css">
     <!-- Main content -->
     <section class="content">
       <!-- Main row -->
@@ -41,7 +42,7 @@ $outlets=array();
             </ul>
             
             <div class="tab-content no-padding">
-              
+
               
               <!--Today Activity tab Start-->
               
@@ -57,9 +58,11 @@ $outlets=array();
                 
               </h3>
 
+            
+
               <div class="form-inline">
                 <form>
-                <!-- Date range -->
+
                 <div class="form-group">
                    <label>Date Range:</label>
 
@@ -71,73 +74,62 @@ $outlets=array();
                   </div>
                  <!-- /.input group -->
                 </div>
-               <!-- /.form group -->
-               <!-- Date and time range -->
-              
-              <!-- Date range -->
-         
+
                 <br>
                 <br>
-                 
-                      <div class="form-group">
-                   <label>Outlet:</label>
+                 <div class="input-group input-group-sm" style="width: 150px;">
+                       <label>State</label>
+                   <select class="form-control"  name="state" id="state" required>
+                   <option value="">Select State</option>
+                   <?php 
+                        $res=mysqli_query($con,"select  distinct area.state,s.name from area left join states s on s.id=area.state ");
+                        while($row=mysqli_fetch_array($res))
+                      {
+                        echo"<option value=".$row[0]." >$row[1]</option>";
+                      }
+                    ?>
+                  </select>
+                 </div>
+                 <div class="input-group input-group-sm" style="width: 150px;">
+                      <label>Region</label>
+                  <select class="form-control"  name="region" id="region" required>
+                  <option value="">Select Region</option>
+                </select>
+                 </div>
 
-                  <div class="input-group">
-                    <div class="input-group-addon">
-                      <i class="fa fa-user"></i>
-                    </div>
-                    <?php 
-					   $res=mysqli_query($con,"select * from outlets");
-					?>
-                    <select  class="form-control pull-right " id="outlet" name="outlet">
-                      <option value="">Select outlet</option>
-                      <?php while($row=mysqli_fetch_array($res)){?>
-                      <option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
-					  <?php }?>
-                    </select>
-                  </div>
-                 <!-- /.input group -->
-                </div>
-                                      <div class="form-group">
-                   <label>Distibuter:</label>
-
-                  <div class="input-group">
-                    <div class="input-group-addon">
-                      <i class="fa fa-user"></i>
-                    </div>
-                    <?php 
-					   $res=mysqli_query($con,"select id,name from employees where usertype='3'");
-					?>
-                    <select  class="form-control pull-right " id="distibuter" name="distibuter">
-                      <option value="">Select Distibuter</option>
-                      <?php while($row=mysqli_fetch_array($res)){?>
-                      <option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
-					  <?php }?>
-                    </select>
-                  </div>
-                 <!-- /.input group -->
-                </div>
-               <!-- /.form group -->
-               <!-- Date and time range -->
-              
-              <!-- Date range -->
-                <div class="form-group">
-                   <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-
-                  <div class="input-group">
+                 <div class="input-group input-group-sm" style="width: 150px;">  
+                 <label>Select Route</label>
+                  <select class="form-control select2" id="area">
+                    <option value="">Select Route</option>
                     
-                    <button type="button" id="btnsearch" name="btnsearch" value="btnsearch" class="btn btn-default form-control pull-right" >
-                      <i class="fa fa-search"></i> Show Report
-                      
-                    </button>
+                  </select>
+                 </div>
+
+                 <div class="input-group input-group-sm" style="width: 50px ">
+          
+                 </div>
+               
+ 
+                 <div class="input-group input-group-sm" style="width: 150px;">
+             
+                      <label>Select distributor</label>
+                          <select class="form-control select2" id="distributor">
+                            <option value="">Select distributor</option>
+                          </select>
+                 </div>
+      
+                  <div class="input-group input-group-sm" style="width: 80px;">
+                 &nbsp;&nbsp;  <button type="button" id="btnsearch" class="form-control btn btn-default"><i class="fa fa-search"></i> Search</button>
                   </div>
-                 <!-- /.input group -->
-                </div>
-               <!-- /.form group -->
-               <!-- Date and time range -->
-              
+
                 </form>
+
+
               </div>
+              <br>
+              <div class="col-lg-4">
+                                          <button type="button" id="deleteselected" class="btn btn-danger"><span class="fa fa-remove"></span> Delete Selected Outlets</button>
+               </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
@@ -151,28 +143,30 @@ $outlets=array();
 									<div class="panel-body">
 										<div class="table-wrap">
 										    
-										    		<table id="userstable" class="table" data-paging="true" data-processing="true" data-filtering="true" data-sorting="true">
+                    <table id="userstable" class="table" data-paging="true" data-processing="true" data-filtering="true" data-sorting="true">
 												<thead>
 												<tr>
-                                            
-												
-													<th>Outlets</th>
-													<th>Addres</th>
-													<th>Contact Person</th>
-													<th>Contact</th>
-													<th>Lastvist</th>
-													<!--<th>Distibuter</th>-->
-											
-												
-												
+                          <th>Select</th>
+													<th>State</th>
+                          <th>City</th>
+													<th>Region</th>
+													<th>Route</th>
+                          <th>Distributor</th>
+													<th>Outlet Name</th>										
+													<th>Last Visit</th>
+                          <th>Last 30 days <br> Orders </th>
+                          <th>Past Orders <br> (PerMonth)</th>
+                          <th>Contact Person</th>
+                          <th>Phone No.</th>
+													<th>Outlet Address</th>
+
 												</tr>
 												</thead>
 												<tbody>
-									
-                                            
-                                            
+                                                    
 												</tbody>
 											</table>
+
 											
 									</div>
 								</div>
@@ -225,10 +219,227 @@ $outlets=array();
     <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
     <!-- end - This is for export functionality only -->
 
 <script>
     
+function searchdata()
+	{
+		var state=$("#state").val();
+		 
+    var reservation = $('#reservation').val();
+		var region=$("#region").val();
+		var area=$("#area").val();
+		// var so=$("#so").val();
+		var distributor=$("#distributor").val();
+		var routeid='';
+		
+		$mt=$("#mt");$gt=$("#gt");$mtl=$("#mtl");
+		$milkbooth=$("#milkbooth");$total=$("#total");
+		var progress=$("#progress");
+		 progress.fadeIn("slow");
+		 
+         $.ajax({
+		  url:"api/booking.php?notvist&h&state="+state+"&reservation="+reservation+"&region="+region+"&area="+area+"&distributor="+distributor+"&routeid="+routeid,
+		  type:"POST",
+		  //&so="+so+
+		  contentType:"application/json; charset=utf-8",
+		  success:function(data){
+			   //alert(data);
+			   data=JSON.parse(data);
+			   if(data.length==0)
+			   {
+				   progress.fadeOut("slow");		   
+				   alert("No Records Found on Selected Search Pattern...");
+				   location.reload();
+			   }
+	           $mt.html("MTS - "+data[data.length-1].mt);
+			   $gt.html("G.T. - "+data[data.length-1].gt);
+			   $mtl.html("MTL - "+data[data.length-1].mtl);
+			   $milkbooth.html("Milk Booth - "+data[data.length-1].milkbooth);
+			   $total.html("Total Outlets - "+data[data.length-1].total);
+	           
+			    $("#userstable").dataTable(
+				{
+					columnDefs: [ {
+                    orderable: false,
+                    className: 'select-checkbox',
+                    targets:   0
+                    } ],
+                    select: {
+                    style:    'os',
+                    selector: 'td:first-child'
+                    },
+                   order: [[ 1, 'asc' ]],
+				  dom: 'Bfrtip',
+				  sort:false,
+				  data:data,
+				  destroy:true,
+				  paging:false,
+				  processing: true,
+                  language: {
+                        processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '},
+				  
+				  buttons: [
+                'copy', { extend: 'csv', title: function () { var printTitle = 'All Visitis'; return printTitle; } }, 'excel', 'pdf', { extend: 'print', title: function () { var printTitle = ''; return printTitle; } }
+            ],
+            columns:[
+                            {
+                      data:'id',render:function(value){ 
+                        return "<input type='hidden' id='select' value='"+value+"' />";
+                        }},
+                        {
+                        data:'state'
+                      }, {
+                        data:'city'
+                      },
+                      {
+                        data:'region'
+                      },
+                      {
+                        data:'routename'
+                      },
+                      {
+                        data:'distributor'
+                      },
+                      {data:'name'},
+                      {data:'lastvisit'},
+                      {data:'last_30_value'},
+                      {data:'past_order_per_month'},
+              
+                
+                      {data:'contactperson'},
+                      {data:'contact'},
+                      {data:'address'},
+              
+                  ]
+				
+				});	
+				progress.fadeOut("slow");	   
+			  },
+		  error:function(e){
+			   alert(e.error);
+			  }	  
+		 });
+   
+	}
+
+  function state()
+	  {
+             //alert("Hello");
+             $.ajax({
+			 url:"api/outlets-web.php?getstate",
+			 type:"GET",			 
+			 contentType:"application/json; charset=utf-8",
+			 success: function(data){
+			 data=JSON.parse(data);
+			   var state=$("#state");
+			   state.empty();
+			   var option=$("<option value='' >").html("Select State");
+			   state.append(option);
+			   $.each(data, function (i, user) {
+                        //Create new option
+                        option = $('<option value='+user.state+'>').html(user.name);
+                        //append city states drop down
+                        state.append(option);
+                    });
+			 }});
+	  }
+	  
+	  function region(state)
+	  {
+            
+             $.ajax({
+			 url:"api/outlets-web.php?getregion&state="+state,
+			 type:"GET",			 			 
+			 contentType:"application/json; charset=utf-8",
+			 success: function(data){
+			 //alert(data);
+			 data=JSON.parse(data);
+			   
+			   var state=$("#region");
+			   state.empty();
+			   var option=$("<option value='' />").html("Select Region");
+			   state.append(option);
+			   $.each(data, function (i, user) {
+                        //Create new option
+                        option = $('<option value='+user.region+' />').html(user.name);
+                        //append city states drop down
+                        state.append(option);
+                    });
+			 }});
+	  }
+	  
+	  function area(state,region)
+	  {
+
+      $.ajax({
+			 url:"api/outlets-web.php?getcity&region="+region+"&state="+state,
+			 type:"GET",			 
+			 contentType:"application/json; charset=utf-8",
+			 success: function(data){
+				 //alert(data);
+			 data=JSON.parse(data);
+			   
+			   var state=$("#area");
+			   state.empty();
+			   var option=$("<option value='' />").html("Select Area");
+			   state.append(option);
+			   $.each(data, function (i, user) {
+                        //Create new option
+                        option = $('<option value='+user.id+'>').html(user.area);
+                        //append city states drop down
+                        state.append(option);
+                    });
+			 }});
+	  }
+
+
+    function distributor()
+	  {
+
+      $.ajax({
+			 url:"api/outlets-web.php?getdistributor",
+			 type:"GET",			 
+			 contentType:"application/json; charset=utf-8",
+			 success: function(data){
+				 //alert(data);
+			 data=JSON.parse(data);
+			   
+			   var distributor=$("#distributor");
+			   distributor.empty();
+			   var option=$("<option value='' />").html("Select distributor");
+			   distributor.append(option);
+			   $.each(data, function (i, res) {
+                        //Create new option
+                        option = $('<option value='+res.id+'>').html(res.name);
+                        //append city distributors drop down
+                        distributor.append(option);
+                    });
+			 }});
+	  }
+
+
+
+	  $("#state").change(function(){
+		   var state=$("#state option:selected").val();
+		   region(state);
+		  });
+		  
+		  $("#region").change(function(){
+		   var state=$("#state option:selected").val();
+		   var region=$("#region option:selected").val();
+		   area(state,region);
+		  });
+		  
+      $("#area").change(function(){
+		   var areaId=$("#area option:selected").val();
+		  
+		  });
+
+
+
 $(document).ready(function(){
 	
 	
@@ -238,7 +449,6 @@ $(document).ready(function(){
 		opens: 'right'
        });
 	
-	//$('#reservation').daterangepicker({format:'yyyy-m-dd'});
    $("#empdoj").datepicker({format:'yyyy-m-dd'});
    
 //   $("#userstable").dataTable(
@@ -252,6 +462,92 @@ $(document).ready(function(){
 //                 'copy', { extend: 'csv', title: function () { var printTitle = 'All Visitis'; return printTitle; } }, 'excel', 'pdf', { extend: 'print', title: function () { var printTitle = ''; return printTitle; } }
 //                   ]
 // 				});
+
+$("#btnsearch").click(function(){searchdata();});
+          $("#deleteselected").click(function(){
+
+       var ids=Array();
+       var table=$("#userstable").DataTable();
+       var data = table.rows('.selected').data();      
+           //alert("jhgf");
+       if(data.length<=0)
+       {
+         alert("Please Select any Row in table");
+         return;
+       }
+        for (var i=0; i < data.length ;i++)
+        {
+            ids.push(data[i].id);
+          } 
+       
+       if(!confirm("Are you sure, You want to remove selected Outlets from the Database"))
+         {
+         return;
+         }
+       
+       var progress=$("#progress");
+       progress.fadeIn("slow");
+       $.ajax({
+           url:'api/outlets-web.php?delete',
+           type:'post',
+           data:{'ids':ids},
+           success: function(data){
+               progress.fadeOut("slow");
+             alert(data);
+                searchdata()
+             },
+           error:function(e){alert(""+e);}
+         });
+       
+       
+       });
+  
+  
+     $("#areaselected").click(function(){
+         
+       
+       var ids=Array();
+       var table=$("#userstable").DataTable();
+       var data = table.rows('.selected').data();      
+           var area=$("#selectarea").val();
+       if(data.length<=0)
+       {
+         alert("Please Select any Row in table");
+         return;
+       }
+       if(area=="")
+       {
+         alert("Please Select Route");
+         return;
+       }
+       for (var i=0; i < data.length ;i++)
+       {
+         //alert(data[i].id);
+             ids.push(data[i].id);
+           } 
+       
+       if(!confirm("Are you sure, You want to change route of selected Outlets."))
+         {
+         return;
+         }
+       
+       var progress=$("#progress");
+       progress.fadeIn("slow");
+       $.ajax({
+           url:'api/outlets-web.php?changearea',
+           type:'post',
+           data:{'ids':ids,'areaid':area},
+           success: function(data){
+               progress.fadeOut("slow");
+             alert(data);
+             searchdata()
+             },
+           error:function(e){alert(""+e);}
+         });
+       
+       
+       });
+
    
 });
 
@@ -260,78 +556,11 @@ $(document).ready(function(){
 <script>
 
 $(document).ready(function() {
-    $("#btnsearch").click(function(){
-        
-        	var reservation = $('#reservation').val();
-        	var outlet = $('#outlet').val();
-        	var distibuter = $('#distibuter').val();
-        	
-    	//alert(employee+'  '+reservation);
-        //+"&area="+area+"&so="+so+"&distributor="+distributor+"&stockist="+stockist
-		
-		var progress=$("#progress");
-		 progress.fadeIn("slow");
-		 
-         $.ajax({
-		  url:"api/booking.php?notvist&reservation="+reservation+"&outlet="+outlet+"&distibuter="+distibuter,
-		  type:"GET",
-		  
-		  contentType:"application/json; charset=utf-8",
-		  success:function(data){
-			 
-			   data=JSON.parse(data);
-			 
-			   
-			   if(data.length==0)
-			   {
-				   progress.fadeOut("slow");		   
-				   alert("No Records Found on Selected Search Pattern...");
-				   //return;
-			   }
-			   
+  //  var reservation = $('#reservation').val();
+  //       	var outlet = $('#outlet').val();
+  //       	var distibuter = $('#distibuter').val();
 
-			    $("#userstable").dataTable(
-				{
-				    
-				    
-				  dom: 'Bfrtip',
-				  sort:false,
-				  data:data,
-				  destroy:true,
-				  paging:false,
-				  processing: true,
-                  language: {
-                        processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '},
-				  
-				  buttons: [
-                'copy', { extend: 'csv', title: function () { var printTitle = 'All Visitis'; return printTitle; } }, 'excel', 'pdf', { extend: 'print', title: function () { var printTitle = ''; return printTitle; } }
-            ],
-				  columns:[
-				           
-						    {
-							data:'name'
-						}, 
-						{data:'address'},
-						{data:'contactperson'},
-						{data:'contact'},
-						{data:'lastvisit'}
-					
-						
-				
-						
-							
-					  ]
-				
-				});	
-				progress.fadeOut("slow");	   
-			  },
-		  error:function(e){
-			   alert(e.error);
-			  }	  
-		 });
-    
-    
- });
+
 });
 
 </script>

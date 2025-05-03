@@ -86,31 +86,11 @@
                             <option value="">Select distributor</option>
                           </select>
                  </div>
-
-                 <!-- <div class="input-group input-group-sm" style="width: 150px;">
-                       <label>route</label>
-                   <select class="form-control select2 "   name="routeid" id="routeid" required>
-                   <option value="">Select route</option>
-                    
-                   </select>
-                 
-                 </div> -->
-
-
-
-                         
+      
                   <div class="input-group input-group-sm" style="width: 80px;">
                  &nbsp;&nbsp;  <button type="button" id="btnsearch" class="form-control btn btn-default"><i class="fa fa-search"></i> Search</button>
                   </div>
-                  <!-- <div class="input-group input-group-sm" style="width: 80px;">
-                 &nbsp;&nbsp;  <button type="reset" id="btnreset" class="form-control btn btn-default"><i class="fa fa-refresh"></i> Reset</button>
-                  </div>
-                  <div class="input-group input-group-sm" style="width: 80px;">
-                 &nbsp;&nbsp;  <button type="button" id="btnduplicate" class="form-control btn btn-default"><i class="fa fa-refresh"></i> Duplicate</button>
-                  </div>
-                  <div class="input-group input-group-sm" style="width: 80px;">
-                 &nbsp;&nbsp;  <button type="button" id="btnalloutlets" class="form-control btn btn-default"><i class="fa fa-refresh"></i> All Outlets</button>
-                  </div> -->
+
                 </form>
 
 
@@ -468,17 +448,7 @@
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
 
-<!--<script src="assets/node_modules/datatables/jquery.dataTables.min.js"></script>
- <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-    
-    <script src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
-    -->
+
 <script>
 
     $(".select2").select2();
@@ -847,30 +817,6 @@ function loaddataduplicate()
 	  }
 
 
-        // function router(distributorId)
-        // {
-
-        //   $.ajax({
-        //   url:"api/outlets-web.php?getrouter&distributorid="+distributorId,
-        //   type:"GET",			 
-        //   contentType:"application/json; charset=utf-8",
-        //   success: function(data){
-        //     //alert(data);
-        //   data=JSON.parse(data);
-            
-        //     var routeid=$("#routeid");
-        //     routeid.empty();
-        //     var option=$("<option value='' />").html("Select distributor");
-        //     routeid.append(option);
-        //     $.each(data, function (i, res) {
-        //                     //Create new option
-        //                     option = $('<option value='+res.id+'>').html(res.name);
-        //                     //append city routeids drop down
-        //                     routeid.append(option);
-        //                 });
-        //   }});
-        // }
-	  
 
 	  $("#state").change(function(){
 		   var state=$("#state option:selected").val();
@@ -888,10 +834,7 @@ function loaddataduplicate()
 		  
 		  });
 
-      // $("#distributor").change(function(){
-		  //  var areaId=$("#distributor option:selected").val();
-		  //  router(areaId);
-		  // });
+
 
 
 $(document).ready(function(){
@@ -913,11 +856,10 @@ $(document).ready(function(){
 			 alert("Please Select any Row in table");
 			 return;
 		 }
-		 for (var i=0; i < data.length ;i++)
-		 {
-			 //alert(data[i].id);
-           ids.push(data[i].id);
-         } 
+      for (var i=0; i < data.length ;i++)
+      {
+          ids.push(data[i].id);
+        } 
 		 
 		 if(!confirm("Are you sure, You want to remove selected Outlets from the Database"))
 		   {

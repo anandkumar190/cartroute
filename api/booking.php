@@ -507,7 +507,7 @@ if(isset($_GET['outletwisesummary'])){
 
 
 
-if(isset($_GET['notvist'])){
+if(isset($_GET['notvistdasdasasd'])){
     
     $employee=trim($_GET['employee']);
     $reservation=trim($_GET['reservation']);
@@ -568,6 +568,198 @@ if(isset($_GET['notvist'])){
     echo $data;
     return; 
 }
+
+
+if(isset($_GET['notvist']))
+    {
+
+        $reservation=trim($_GET['reservation']);
+        $dates=explode("-",$reservation);
+        $start=strtotime(trim($dates[0]));
+        $end=strtotime(trim($dates[1]));
+        $start=date("Y-m-d h:i:s ",$start);
+        $end=date("Y-m-d h:i:s",$end);
+           
+        $sqlqry='where bk.id > 0 ';
+    
+        if(!empty($end) and !is_null($start)){
+        $sqlqry.=" and bk.booking_time >= '$start' and bk.booking_time <= '$end' " ;  
+        }
+
+
+        $state=trim($_GET['state']);
+        $city=trim($_GET['region']); 
+        $routeid=trim($_GET['area']);
+        $so="";
+        $distributor=trim($_GET['distributor']);
+        $stockist="";
+        $selectQry="select o.id,
+                      cities.city As city,
+                   o.locality,
+                   o.distributorid,
+                   o.name,
+                   o.address,
+                   o.lastvisitpic,
+                   o.contactperson,
+                   o.contact,
+                   o.pincode,
+                   o.gstnumber,
+                   o.outlettype,
+                   o.outletsubtype,
+                    o.routeid,
+                   o.latitude,
+                   o.longitude,
+                   o.areaid,
+                   o.lastvisit,
+                   o.creationdate,
+                   a.area,
+                   o.createdby,
+                   concat(d.name,' - ',d.empid) as 'distributor',
+                     a.area, regions.name As region,
+                     states.name As state  from outlets o 
+                     join area a on a.id=o.routeid 
+                     JOIN employees d ON d.id = a.distributor_id
+                     left join states on states.id= a.state 
+                     left join cities on cities.id= a.city left 
+                     join regions on regions.id= a.region 
+                    WHERE o.id NOT IN (
+                        SELECT DISTINCT bk.outlet_id
+                        FROM booking bk
+                        WHERE bk.booking_time >= '$start' 
+                        AND bk.booking_time <= '$end'
+                    )";
+           
+          $isSnd=1;
+ 
+ 
+ 
+ 
+          if ($distributor!="") {
+             $prefix="where";
+             $selectQry=$selectQry.$prefix." d.id ='$distributor'";
+             $isSnd=1;
+          }else {
+ 
+             if ($state!="") {
+                 $prefix=$isSnd==0?" where ":" and ";
+                 $selectQry=$selectQry.$prefix." a.state='$state'";
+                 $isSnd=1;
+              }
+     
+              if ($city!="") {
+                 $prefix=$isSnd==0?" where ":" and ";
+                 $selectQry=$selectQry.$prefix." a.region ='$city'";
+                 $isSnd=1;
+              }
+     
+     
+              if ($routeid!="") {
+                 $prefix=$isSnd==0?" where ":" and ";
+                 $selectQry=$selectQry.$prefix." o.routeid = '$routeid'";
+                 $isSnd=1;
+              }
+          }
+ 
+ 
+          $query=$selectQry."order by o.id desc";
+              
+   
+        $res=mysqli_query($con,$query) or die(mysqli_error($con));   
+        $response=array();
+        $num=mysqli_field_count($con);
+        $total=0;$gt=0;$mt=0;$mtl=0;$milkbooth=0;
+        while($row=mysqli_fetch_array($res))
+        {
+         $currentDateTime = date('Y-m-d H:i:s');
+         $previous30DateTime = date('Y-m-d H:i:s', strtotime('-30 days'));
+         $previous180DateTime = date('Y-m-d H:i:s', strtotime('-180 days'));
+         
+         $outletId = $row["id"];
+         
+         // 30 days sum
+         $query30 = "
+             SELECT SUM(total_amount) AS total_amount 
+             FROM booking 
+             WHERE outlet_id = '$outletId' 
+               AND booking_time BETWEEN '$previous30DateTime' AND '$currentDateTime' 
+             GROUP BY outlet_id
+         ";
+         $res30days = mysqli_query($con, $query30);
+         $outletSum30Row = mysqli_fetch_assoc($res30days);
+         $outletSum30 = round(@$outletSum30Row['total_amount'],2) ?? 0;
+         
+         // 180 days sum
+         $query180 = "
+             SELECT SUM(total_amount) AS total_amount 
+             FROM booking 
+             WHERE outlet_id = '$outletId' 
+               AND booking_time BETWEEN '$previous180DateTime' AND '$currentDateTime' 
+             GROUP BY outlet_id
+         ";
+         $res180days = mysqli_query($con, $query180);
+         $outletSum180Row = mysqli_fetch_assoc($res180days);
+         $outletSum180 = @$outletSum180Row['total_amount']>0? round($outletSum180Row['total_amount']/6,2):0;
+     
+ 
+ 
+ 
+            $rr=array();
+            $rr["id"]=$row["id"];
+            $rr["state"]=$row["state"];
+            $rr["city"]=$row["city"];
+            $rr["region"]=$row["region"];
+            $rr["routename"]=$row["area"];
+            $rr["distributor"]=$row["distributor"]; 
+            $rr["name"]=$row["name"];
+            $rr["lastvisit"]=$row["lastvisit"];
+ 
+ 
+            $rr["last_30_value"]=$outletSum30;
+            $rr["past_order_per_month"]=$outletSum180;
+ 
+            $rr["contactperson"]=$row["contactperson"];
+            $rr["contact"]=$row["contact"];
+            $rr["address"]=$row['address'];
+ 
+     
+            
+            if($row["outlettype"]=="MTS")
+            {
+                $mt++;
+            }
+            if($row["outlettype"]=="G.T.")
+            {
+                $gt++;
+            }
+            if($row["outlettype"]=="Milk Booth")
+            {
+                $milkbooth++;
+            }
+            if($row["outlettype"]=="MTL")
+            {
+                $mtl++;
+            }
+            
+            $total++;
+            
+            $rr["mt"]=$mt;
+            $rr["gt"]=$gt;
+            $rr["mtl"]=$mtl;
+            $rr["milkbooth"]=$milkbooth;
+            $rr["total"]=$total;
+              
+            array_push($response,$rr);
+        } 
+        print_r($row);
+        //$data=array();
+        $data=json_encode($response);
+        echo $data;
+        return; 
+    }
+
+
+
+
 
 
 ?>
