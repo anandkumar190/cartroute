@@ -78,8 +78,8 @@
 													<th>Email</th>
 													<th>Contact</th>
 													<th>Address</th>
-                                                    <td>Designation</td>
-                                                    <td>Role</td>
+                                                    <th>Designation</th>
+                                                    <th>Role</th>
                                                     <th>Image</th>
 												</tr>
 												</thead>
@@ -262,9 +262,15 @@
 						  }},
 						 <?php } ?>
 					      {
-							 data:'id',render:function(value){
-						     return "<a href='api/adduser?delete_user&id="+value+"'><span class='fa fa-trash'></span></a> | <a href='edituser?editid="+value+"'><span class='fa fa-edit'></span></a> | <a href='newmap?userid="+value+"' target='_blank'><span class='fa fa-map-marker'></span></a>";
-						  }},
+                  data: 'id',
+                  render: function(value) {
+                    return "<a href='api/adduser?delete_user&id=" + value + "' onclick=\"return confirm('Are you sure you want to delete this user?');\">" +
+                          "<span class='fa fa-trash'></span></a> | " +
+                          "<a href='edituser?editid=" + value + "'>" +
+                          "<span class='fa fa-edit'></span></a> | " +
+                          "<a href='newmap?userid=" + value + "' target='_blank'>" +
+                          "<span class='fa fa-map-marker'></span></a>";
+                  }},
 						  {
 							data:'name'
 						},

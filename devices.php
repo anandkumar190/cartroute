@@ -237,7 +237,7 @@
             ],
 				  columns:[{
 							 data:'id',render:function(value){
-						     return "<a href='api/login?delete_devices&id="+value+"'><span class='fa fa-trash'></span></a> ";
+						     return "<a href='api/login?delete_devices&id="+value+"' onclick=\"return confirm('Are you sure you want to delete this Device?');\"><span class='fa fa-trash'></span></a> ";
 						  }},{
 							   data:{id:'id',status:'status'},render:function(data,type,set){
 						   if(data.status=="1")
@@ -303,7 +303,7 @@ function loaddatatoday()
             ],
 				 columns:[{
 							 data:'id',render:function(value){
-						     return "<a href='api/login?delete_devices&id="+value+"'><span class='fa fa-trash'></span></a> ";
+						     return "<a href='api/login?delete_devices&id="+value+"' onclick=\"return confirm('Are you sure you want to delete this user?');\"><span class='fa fa-trash'></span></a> ";
 						  }},{
 					   data:{id:'id',status:'status'},render:function(data,type,set){
 						   if(data.status=="1")

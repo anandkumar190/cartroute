@@ -248,7 +248,7 @@
             ],
 				  columns:[{
 					   data:'id',render:function(value){
-						  return "<a href='editskus?editid="+value+"'><span class='fa fa-edit'></span></a> <a href='api/addproduct?deleteskus&id="+value+" '><span class='fa fa-trash'></span></a>";
+						  return "<a href='editskus?editid="+value+"'><span class='fa fa-edit'></span></a> <a href='api/addproduct?deleteskus&id="+value+"' onclick=\"return confirm('Are you sure you want to delete this Sku?');\"><span class='fa fa-trash'></span></a>";
 						  }},
 						  {
 							data:'productname'

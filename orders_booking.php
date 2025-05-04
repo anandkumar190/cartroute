@@ -297,7 +297,7 @@
 				
 					      {
 							 data:'id',render:function(value){
-						     return "<a href='edit_product_sub_cat?editid="+value+"'><span class='fa fa-edit'></span></a><a href='api/product-sub_catapi?deletescat&id="+value+"'><span class='fa fa-trash'></span></a> ";
+						     return "<a href='edit_product_sub_cat?editid="+value+"' onclick=\"return confirm('Are you sure you want to delete this Order?');\"><span class='fa fa-edit'></span></a><a href='api/product-sub_catapi?deletescat&id="+value+"'><span class='fa fa-trash'></span></a> ";
 						  }},
 						 	  {
 						 	data:'name'

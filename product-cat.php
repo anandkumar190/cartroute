@@ -218,7 +218,7 @@
         
                 {
                data:'id',render:function(value){
-                 return "<a href='edit-product-cat?editid="+value+"'><span class='fa fa-edit'></span></a><a href='api/product_catapi?deletecatid&id="+value+"'><span class='fa fa-trash'></span></a> ";
+                 return "<a href='edit-product-cat?editid="+value+"' onclick=\"return confirm('Are you sure you want to delete this Category?');\"><span class='fa fa-edit'></span></a><a href='api/product_catapi?deletecatid&id="+value+"'><span class='fa fa-trash'></span></a> ";
               }},
         
 

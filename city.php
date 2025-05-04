@@ -267,7 +267,7 @@
 				
 					      {
 							 data:'id',render:function(value){
-						     return "<a href='edit_city?editid="+value+"'><span class='fa fa-edit'></span></a> |<a href='api/cities?deletecityid&id="+value+"'><span class='fa fa-trash'></span></a>";
+						     return "<a href='edit_city?editid="+value+"'><span class='fa fa-edit'></span></a> |<a href='api/cities?deletecityid&id="+value+"' onclick=\"return confirm('Are you sure you want to delete this City?');\"><span class='fa fa-trash'></span></a>";
 						  }},
 						 	  {
 						 	data:'name'

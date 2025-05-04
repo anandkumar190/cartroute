@@ -218,7 +218,7 @@
 				
 					      {
 							 data:'id',render:function(value){
-						     return "<a href='edit-sku-unit?editid="+value+"'><span class='fa fa-edit'></span></a><a href='api/sku_unitapi?deletesunit&id="+value+"'><span class='fa fa-trash'></span></a>";
+						     return "<a href='edit-sku-unit?editid="+value+"'><span class='fa fa-edit'></span></a><a href='api/sku_unitapi?deletesunit&id="+value+"' onclick=\"return confirm('Are you sure you want to delete this Unit?');\"><span class='fa fa-trash'></span></a>";
 						  }},
 						 	  {
 						 	data:'name'

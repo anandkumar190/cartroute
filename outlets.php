@@ -59,6 +59,13 @@
                     ?>
                   </select>
                  </div>
+
+                 <div class="input-group input-group-sm" style="width: 150px;">
+                      <label>City</label>
+                  <select class="form-control"  name="city" id="city" required>
+                  <option value="">Select City</option>
+                </select>
+                 </div>
                  <div class="input-group input-group-sm" style="width: 150px;">
                       <label>Region</label>
                   <select class="form-control"  name="region" id="region" required>
@@ -173,49 +180,6 @@
                                           </div>
                                         </div>
                                       <br>     
-                                	     <!-- <div class="row">
-                                          <div class="col-lg-4">
-                                      
-                                          </div>
-                                          <div class="col-lg-4">
-                                          <select name="select_distributer" id="select_distributer" class="form-control select2">
-                                             <option value="">Select Distributer</option>
-                                             <?php
-                                               $res=mysqli_query($con,"select id,name from employees where usertype='3'")or die(mysqli_error($con));                 
-                                                  while($row=mysqli_fetch_array($res))
-                                                  {
-                                                  echo "<option value='$row[0]'>$row[1] $row[2] </option>"; 
-                                                  }
-                                                ?>
-                                           </select>
-                                           
-                                          </div>
-                                          <div class="col-lg-4">
-                                            <button type="button" id="distributerselected" class="btn btn-info"><span class="fa fa-tasks"></span> Change Distributer </button>
-                                          </div>
-                                       </div>  
-
-                                        <div class="row">
-                                                <div class="col-lg-4">
-                                            
-                                                </div>
-                                                <div class="col-lg-4">
-                                                <select name="select_route" id="select_route" class="form-control select2">
-                                                  <option value="">Select Route</option>
-                                                  <?php
-                                                      $res=mysqli_query($con,"select id,routename from route")or die(mysqli_error($con));                 
-                                                      while($row=mysqli_fetch_array($res))
-                                                      {
-                                                      echo "<option value='$row[0]'> $row[1] </option>"; 
-                                                      }
-                                                    ?>
-                                                </select>
-                                                
-                                                </div>
-                                                <div class="col-lg-4">
-                                                  <button type="button" id="routeselected" class="btn btn-info"><span class="fa fa-tasks"></span> Change Route </button>
-                                                </div>
-                                        </div>        -->
                                            
                                                 
                                            <br/>
@@ -625,6 +589,7 @@ function loaddataduplicate()
 	{
 		var state=$("#state").val();
 		
+		var city=$("#city").val();
 		var region=$("#region").val();
 		var area=$("#area").val();
 		// var so=$("#so").val();
@@ -637,7 +602,7 @@ function loaddataduplicate()
 		 progress.fadeIn("slow");
 		 
          $.ajax({
-		  url:"api/outlets-web.php?search&state="+state+"&region="+region+"&area="+area+"&distributor="+distributor+"&routeid="+routeid,
+		  url:"api/outlets-web.php?search&state="+state+"&city="+city+"&region="+region+"&area="+area+"&distributor="+distributor+"&routeid="+routeid,
 		  type:"POST",
 		  //&so="+so+
 		  contentType:"application/json; charset=utf-8",
@@ -742,12 +707,35 @@ function loaddataduplicate()
                     });
 			 }});
 	  }
+
+    function city(state)
+	  {          
+      $.ajax({
+			 url:"api/outlets-web.php?getcity&state="+state,
+			 type:"GET",			 			 
+			 contentType:"application/json; charset=utf-8",
+			 success: function(data){
+			 //alert(data);
+			 data=JSON.parse(data);
+			   
+			   var state=$("#city");
+			   state.empty();
+			   var option=$("<option value='' />").html("Select City");
+			   state.append(option);
+			   $.each(data, function (i, user) {
+                        //Create new option
+                        option = $('<option value='+user.id+' />').html(user.city);
+                        //append city states drop down
+                        state.append(option);
+                    });
+			 }});
+	  }
+
 	  
-	  function region(state)
-	  {
-            
-             $.ajax({
-			 url:"api/outlets-web.php?getregion&state="+state,
+	  function region(city)
+	  {          
+      $.ajax({
+			 url:"api/outlets-web.php?getregion&city="+city,
 			 type:"GET",			 			 
 			 contentType:"application/json; charset=utf-8",
 			 success: function(data){
@@ -767,11 +755,11 @@ function loaddataduplicate()
 			 }});
 	  }
 	  
-	  function area(state,region)
+	  function area(region)
 	  {
 
       $.ajax({
-			 url:"api/outlets-web.php?getcity&region="+region+"&state="+state,
+			 url:"api/outlets-web.php?getrouter&region="+region,
 			 type:"GET",			 
 			 contentType:"application/json; charset=utf-8",
 			 success: function(data){
@@ -820,13 +808,19 @@ function loaddataduplicate()
 
 	  $("#state").change(function(){
 		   var state=$("#state option:selected").val();
-		   region(state);
+		   city(state);
 		  });
 		  
+      $("#city").change(function(){
+		   var city=$("#city option:selected").val();
+    
+		   region(city);
+		  });
+
+
 		  $("#region").change(function(){
-		   var state=$("#state option:selected").val();
 		   var region=$("#region option:selected").val();
-		   area(state,region);
+		   area(region);
 		  });
 		  
       $("#area").change(function(){

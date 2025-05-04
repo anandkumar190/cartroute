@@ -279,7 +279,7 @@
 				
 					      {
 							 data:'id',render:function(value){
-						     return "<a href='edit_region?editid="+value+"'><span class='fa fa-edit'></span></a>  <a href='api/regionapi?deleteregon&id="+value+"'><span class='fa fa-trash'></span></a> ";
+						     return "<a href='edit_region?editid="+value+"'><span class='fa fa-edit'></span></a>  <a href='api/regionapi?deleteregon&id="+value+"' onclick=\"return confirm('Are you sure you want to delete this Region?');\"><span class='fa fa-trash'></span></a> ";
 						  }},
 						  {
 							data:'name'

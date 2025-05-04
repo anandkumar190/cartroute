@@ -442,7 +442,8 @@ if(isset($_GET['showmap']))
 if(isset($_GET['search']))
    {
 	   $state=trim($_GET['state']);
-	   $city=trim($_GET['region']); 
+	   $city=trim($_GET['city']); 
+	   $region=trim($_GET['region']); 
 	   $routeid=trim($_GET['area']);
 	   $so="";
 	   $distributor=trim($_GET['distributor']);
@@ -496,7 +497,13 @@ if(isset($_GET['search']))
 	
 			 if ($city!="") {
 				$prefix=$isSnd==0?" where ":" and ";
-				$selectQry=$selectQry.$prefix." a.region ='$city'";
+				$selectQry=$selectQry.$prefix." a.city ='$city'";
+				$isSnd=1;
+			 }
+
+			 if ($region!="") {
+				$prefix=$isSnd==0?" where ":" and ";
+				$selectQry=$selectQry.$prefix." a.region ='$region'";
 				$isSnd=1;
 			 }
 	
@@ -742,14 +749,14 @@ if(isset($_GET['search']))
    
    if(isset($_GET['getregion']))
    {
-	   $state=$_GET["state"];
+	   $city=$_GET["city"];
 	   
-	   $res=mysqli_query($con,"select distinct a.region,rg.name from area a join regions rg on a.region=rg.id  where state='$state'");
+	   $res=mysqli_query($con,"select distinct id,name from regions where city_id='$city'");
 	   $regions=array();
 	   while($row=mysqli_fetch_array($res))
 	   {
 	       $rr=array();	
-	        $rr["region"]=$row["region"];
+	        $rr["region"]=$row["id"];
           $rr["name"]=$row["name"];
           array_push($regions,$rr);		   
 	   }
@@ -761,14 +768,13 @@ if(isset($_GET['search']))
    
    if(isset($_GET['getcity']))
    {
-	   $region=$_GET['region'];
 	   $state=$_GET['state'];
-	   $res=mysqli_query($con,"select distinct area , id from area where state='$state' and region='$region'");
+	   $res=mysqli_query($con,"select distinct city , id from cities where state_id='$state'");
 	   $cities=array();
 	   while($row=mysqli_fetch_array($res))
 	   {
 		$rr["id"]=$row["id"];
-		$rr["area"]=$row["area"];
+		$rr["city"]=$row["city"];
           array_push($cities,$rr);		   
 	   }
 	   $data=json_encode($cities);
@@ -800,15 +806,15 @@ if(isset($_GET['getdistributor']))
 // getrouter
 if(isset($_GET['getrouter']))
 {
-	$distributorid=$_GET["distributorid"];
+	$region=$_GET["region"];
 	
-	$res=mysqli_query($con,"select id ,routename from route where distributorid='$distributorid'");
+	$res=mysqli_query($con,"select id,area from area where region='$region'");
 	$regions=array();
 	while($row=mysqli_fetch_array($res))
 	{
 		$rr=array();	
 		$rr["id"]=$row["id"];
-	   	$rr["name"]=$row["routename"];
+	   	$rr["area"]=$row["area"];
 	   	array_push($regions,$rr);		   
 	}
 	
