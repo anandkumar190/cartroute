@@ -74,7 +74,7 @@
                       <option value="">Select Employee</option>
                       <?php while($row=mysqli_fetch_array($res)){?>
                       <option value="<?php echo $row['id']?>"><?php echo $row['name'].' - ('.$row['empid'].')'?></option>
-					  <?php }?>
+		          			  <?php }?>
                     </select>
                   </div>
                  <!-- /.input group -->
@@ -104,22 +104,28 @@
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
               
-              <!-- Row -->
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="panel panel-default card-view">
-								
-								<div class="panel-wrapper collapse in">
-									<div class="panel-body">
-										<div class="table-wrap" id="responseDiv">
-											
-									</div>
-								</div>
-							</div>
-							</div>
-						</div>
-					</div>
-					<!-- /Row -->
+                <!-- Row -->
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="panel panel-default card-view">
+                      
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div style="margin-bottom: 10px;">
+    <button class="btn btn-primary" onclick="printTable()">🖨️ Print Table</button>
+    <button class="btn btn-success" onclick="downloadCSV()">📥 Download CSV</button>
+  </div>
+
+                              <div class="table-wrap" id="responseDiv">	
+                              </div>
+
+                          </div>			<!-- /panel-body -->
+                      </div>			<!-- /panel-wrapper -->
+                      
+                    </div>			<!-- /Row -->
+                  </div>			<!-- /Row -->
+                </div>			<!-- /Row --> 
+                <!-- /Row -->
               
             </div>
             <!-- /.box-body -->
@@ -252,4 +258,51 @@ $(document).ready(function() {
         });
 });
 
+</script>
+
+<script>
+// PRINT FUNCTION
+function printTable() {
+    const tableDiv = document.getElementById("responseDiv");
+    if (!tableDiv || !tableDiv.innerHTML.trim()) {
+        alert("No table data to print.");
+        return;
+    }
+    const newWin = window.open("");
+    newWin.document.write('<html><head><title>Print</title>');
+    newWin.document.write('<style>table, th, td { border: 1px solid black; border-collapse: collapse; padding: 5px; }</style>');
+    newWin.document.write('</head><body>');
+    newWin.document.write(tableDiv.innerHTML);
+    newWin.document.write('</body></html>');
+    newWin.document.close();
+    newWin.print();
+}
+
+// CSV DOWNLOAD FUNCTION
+function downloadCSV() {
+    const table = document.querySelector("#responseDiv table");
+    if (!table) {
+        alert("No table to export.");
+        return;
+    }
+
+    const rows = table.querySelectorAll("tr");
+    let csv = [];
+
+    rows.forEach(row => {
+        const cols = row.querySelectorAll("th, td");
+        const rowData = [];
+        cols.forEach(col => {
+            let text = col.innerText.replace(/\n/g, " ").replace(/,/g, " "); // clean line breaks & commas
+            rowData.push('"' + text + '"');
+        });
+        csv.push(rowData.join(","));
+    });
+
+    const blob = new Blob([csv.join("\n")], { type: "text/csv" });
+    const link = document.createElement("a");
+    link.download = "mothly-attendance-report.csv";
+    link.href = URL.createObjectURL(blob);
+    link.click();
+}
 </script>

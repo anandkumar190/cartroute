@@ -53,20 +53,21 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
     if(isset
 	($_POST['reservation']))
      {
+		$name="";$Period="";$totalCount=0;
 	   $daterange=$_POST['reservation'];
        $dates=explode("-",$daterange);
 	   $start=strtotime(trim($dates[0]));
 	   $end=strtotime(trim($dates[1]));
+	   $Period=date("m-d-Y",$start).' To '.date("m-d-Y",$end);
 	   $start=date("Y-m-d",$start);
 	   $end=date("Y-m-d",$end);
 	   $employee=$_POST['employee'];
-	   $res=mysqli_query($con,"select e.name,e.empid,e.contact,d.name as 'designation' from employees e join designation d on e.designationid=d.id where e.usertype='1' and e.id='$employee'");
-	   $name="";$contact="";$designation="";
+	   $res=mysqli_query($con,"select e.name from employees e where e.usertype='1' and e.id='$employee'");
+	   
 	   while($row=mysqli_fetch_array($res))
 	   {
-		  $name=$row["name"]." - (".$row["empid"].")";
-		  $designation=$row["designation"];
-		  $contact=$row["contact"];
+		  $name=$row["name"];
+		
 	   }
 	   
 	   $dates=getDatesFromRange($start,$end);
@@ -76,22 +77,32 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
        $data="<table id='userstable' border='1' cellpadding='10' cellspacing='0' class='table'  data-processing='true' data-filtering='true' data-sorting='true'>
            
               <tr>
-                <th colspan='6'>Employee Name :  </th><th colspan='10'>$name</th>
+                <th colspan='6'>Employee Name : $name </th><th colspan='11'> Total Days Reported for Work : $totalCount </th>
               </tr>
               <tr>
-			   <th colspan='6'>Designation : </th><th colspan='4'>$designation</th><th colspan='7'>Selected Period : $end to $end</th>
+			   <th colspan='6'> Selected Period : $Period  </th> <th colspan='11'>  </th>
 			  </tr>
-			  <tr>
-			   <th colspan='6'> Contact : </th><th colspan='4'>$contact</th> <th colspan='7'>Report Total No of Working Days of Selected Period</th>
-			  </tr>
-			  <tr>
-			   <th colspan='6'> </th><th colspan='4'></th> <th colspan='7'></th>
-			  </tr>
+		
 			  <tr>
 			   <th colspan='6'>  </th><th colspan='4'></th> <th colspan='7'></th>
 			  </tr>                                          
               <tr>
-			   <th>Date</th><th>First Sale Call Time</th><th>Last sale Call Time </th><th>Working Time (Hours)</th><th>Total Distance Covered</th><th>Area Visited</th><th>Visit Details</th><th>Old Store Visited</th><th>New Store Visited</th><th>Visit To Distr/SS</th> <th>Other Visits</th><th>Total Visit for Day</th><th>Milk Booth Visit</th><th>GT Visit</th><th>MTS Visit</th><th>MTL Visit</th><th>Horeca Visit </th>
+			    <th>Date</th>
+			    <th>Day</th>
+			    <th>First Sales Call Time</th>
+			    <th>Last Sales Call Time</th>
+				<th>Working Time (Hrs.) </th>
+			    <th>Routes Visited</th>
+				<th>Total Outlets on Route</th>
+			    <th>New Outlet Made</th>
+			    <th>New Total Oulets</th>
+			    <th>No. of Outlets Visited</th>
+			    <th>Productive Outlets</th>
+				<th>Outlets Not Visited</th>
+				<th>Productive Call %</th>
+				<th>Total Value of Orders</th>
+				<th>Name of Distributors Visited</th>
+
 			  </tr>";
 			  $starttimearray=array();
 			  $endtimearray=array();
@@ -101,8 +112,9 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 			  $totalnew=0;
 			  $totalss=0;
 			  $totaldistributor=0;
-			  $totalothervisit=0;
-			  $totalallvisits=0;
+			  $productivOutlets=$totalothervisit=0;
+			 $totalProductivePercentage= $totaloutletsNotVisited=0;
+			  $totalProductivValueOrders=$totalallvisits=0;
 			  $totalmilkbooth=0;
 			  $totalmts=0;
 			  $totalmtl=0;
@@ -111,286 +123,243 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 			  $sunday=0;
 			  $workingday=0;
 			  $leave=0;
-			  foreach($dates as $dd)
-			  {
-				  $selectdate=date('Y-m-d', strtotime($dd));
-				  $res=mysqli_query($con,"select * from outletactivity where userid='$employee' and activitydate='$selectdate' order by id asc");
-				  
-				  $starttime=0;$endtime=0;
-				  $count=mysqli_num_rows($res);
-				  
-				  for($i=0;$i<$count;$i++)
-				  {
-				    $row=mysqli_fetch_array($res);
-				    if($i==0)
-					{
-					  $starttime=$row["activitytime"];  
-					}
-					if($i==$count-1)
-					{
-				      $endtime=$row["activitytime"];  
-					}
-				  }
-				  //$res1=mysqli_query($con,"select * from outletactivity where userid='$employee' and activitydate='$selectdate' order by id desc limit 1");
-				 // if($row1=mysqli_fetch_array($res1))
-				 // {
-				//	$endtime=$row1["activitytime"];  
-				 // }
-				  
-                  $starttime = strtotime($starttime);
-                  $endtime = strtotime($endtime);
-                  
-				  
-				  $workinghours = round(abs($starttime - $endtime) / 3600,2);
-                  $res1=mysqli_query($con,"select * from outletactivity where userid='$employee' and activitydate='$selectdate' order by id asc");          
-				  $distance=0;
-				  $prelat=0;
-				  $prelng=0;
-				  while($row=mysqli_fetch_array($res1))
-				  {
-					  if($prelat==0 || $prelng==0)
-					  {
-						  $prelat=$row["Latitude"];
-						  $prelng=$row["Longitude"];
-					  }
-					  $lat=$row["Latitude"];
-					  $lng=$row["Longitude"];
-					  $distance+=distance($prelat,$prelng,$lat,$lng,'K');
-					  $prelat=$lat;
-					  $prelng=$lng;
-				  }
-				  $res=mysqli_query($con,"select distinct o.locality from outletactivity a join outlets o on a.outletid=o.id where a.userid='$employee' and a.activitydate='$selectdate' and a.visittype='0' order by a.id asc"); 
-				  $areas=array();
-				  $visitDetails=array();  
-				  $new=0;$old=0;$milkbooth=0;$gt=0;$mts=0;$mtl=0;$horeca=0;
-				  while($row=mysqli_fetch_array($res))
-				  {
-					$area=$row["locality"];
-					array_push($areas,$area);  
-					$res1=mysqli_query($con,"select o.locality,o.name,o.outlettype,a.activitytype from outletactivity a join outlets o on a.outletid=o.id where a.userid='$employee' and a.activitydate='$selectdate' and a.visittype='0' and o.locality='$area' order by a.id asc"); 
-					$visits="";
-					while($row1=mysqli_fetch_array($res1))
-					{
-						$actype=$row1["activitytype"];
-						$octype=$row1["outlettype"];
-						if($octype=="GT" || $octype=="G.T.")
-						{
-							$gt++;
-						}
-						if($octype=="Milk Booth")
-						{
-							$milkbooth++;
-						}
-						if($octype=="MTS" || $octype=="MT")
-						{
-							$mts++;
-						}
-						if($octype=="MTL")
-						{
-							$mtl++;
-						}
-						if($octype=="HORECA" || $octype=="Horeca")
-						{
-							$horeca++;
-						}
-						
-						if($actype=="Outlet Visit" || $actype=="Visit")
-						{
-							$old++;
-					        $visits.=$row1["name"]."( Outlet ".$row1["activitytype"].")".",";	
-						}
-						else 
-						{
-						    $new++;
-						    $visits.=$row1["name"]."(".$row1["activitytype"].")".",";		
-						}
-					}
-					array_push($visitDetails,$visits);
-					
-				  }
-				  
-				  
-				  $res=mysqli_query($con,"select distinct a.area,a.id from outletactivity o join employees e on o.outletid=e.id join area a on e.areaid=a.id where o.userid='$employee' and o.activitydate='$selectdate' and (o.visittype='2' || o.visittype='3') order by o.id asc"); 
-				  $stockist=0;$distributor=0;
-				  while($row=mysqli_fetch_array($res))
-				  {
-					$area=$row["area"];
-					$areaid=$row["id"];
-					array_push($areas,$area);  
-					$res1=mysqli_query($con,"select e.name,o.visittype,o.activitytype from outletactivity o join employees e on o.outletid=e.id where o.userid='$employee' and o.activitydate='$selectdate' and (o.visittype='2' || o.visittype='3') and e.area='$areaid' order by id o.asc"); 
-					$visits="";
-					while($row1=mysqli_fetch_array($res1))
-					{
-						$actype=$row1["activitytype"];
-						$visittype=$row1["visittype"];
-						if($visittype=="2")
-						{
-							$stockist++;
-							$visits.=$row1["name"]."(".$row1["activitytype"].")".",";	
-						}
-						if($visittype=="3")
-						{
-							$distributor++;
-							$visits.=$row1["name"]."(".$row1["activitytype"].")".",";
-						}    
-					}
-					array_push($visitDetails,$visits);
-					
-				  }
-				  
-				  
-				  $res=mysqli_query($con,"select distinct city from outletactivity  where userid='$employee' and activitydate='$selectdate' and visittype='4' order by id asc"); 
-				  $othervisit=0;
-				  while($row=mysqli_fetch_array($res))
-				  {
-					$area=$row["city"];
-					
-					array_push($areas,$area);  
-					$res1=mysqli_query($con,"select companyname,visittype,activitytype from outletactivity  where userid='$employee' and activitydate='$selectdate' and visittype='4' and city='$area' order by id asc"); 
-					$visits="";
-					while($row1=mysqli_fetch_array($res1))
-					{
-						$actype=$row1["activitytype"];
-						$visittype=$row1["visittype"];
-						if($visittype=="4")
-						{
-							$othervisit++;
-							$visits.=$row1["companyname"]."(".$row1["activitytype"].")".",";	
-						}
-						  
-					}
-					array_push($visitDetails,$visits);
-					
-				  }
-				  
-				  $totalhours+=$workinghours;
-				  $totaldistance+=$distance;
-				  $totalold+=$old;
-				  $totalnew+=$new;
-				  $totalss+=$stockist;
-				  $totaldistributor+=$distributor;
-				  $totalothervisit+=$othervisit;
-				  $totalallvisits+=($totalold+$totalnew+$totalss+$totaldistributor+$totalothervisit);
-				  $totalmilkbooth+=$milkbooth;
-				  $totalgt+=$gt;
-				  $totalmts+=$mts;
-				  $totalmtl+=$mtl;
-				  $totalhoreca+=$horeca;
-				  
-				$data.="<tr>"; 
-				
-				$data.="<td>";
-				$day=date('l', strtotime($dd));
-				if($day=="Sunday")
-				{
-					$sunday++;
-				  $data.=date('d-M-Y', strtotime($dd))." ".$day;
+		foreach ($dates as $dd) {
+			$selectdate = date('Y-m-d', strtotime($dd));
+			
+			// Reset for each day
+			$starttime = 0;
+			$endtime = 0;
+			$totalWorkingdays=$workingdays=$workinghours = 0;
+			$visitDetails = [];
+			$outletActivities = [];
+			$distance = 0;
+
+			// Get outlet activity for the day
+			$res = mysqli_query($con, "SELECT * FROM outletactivity WHERE userid='$employee' AND activitydate='$selectdate' ORDER BY id ASC");
+			$count = mysqli_num_rows($res);
+
+			for ($i = 0; $i < $count; $i++) {
+				$row = mysqli_fetch_array($res);
+				if ($i == 0) $starttime = $row["activitytime"];
+				if ($i == $count - 1) $endtime = $row["activitytime"];
+			}
+
+			// Convert to timestamps
+			$starttimeStamp = strtotime($starttime);
+			$endtimeStamp = strtotime($endtime);
+
+			if ($starttimeStamp && $endtimeStamp) {
+				$workinghours = round(abs($starttimeStamp - $endtimeStamp) / 3600, 2);
+			}
+
+			// Fetch area details
+			$areaQuery = "
+				SELECT o.areaid, area.area as areaName 
+				FROM outletactivity a 
+				JOIN outlets o ON a.outletid = o.id 
+				JOIN area ON o.areaid = area.id 
+				WHERE a.userid='$employee' AND a.activitydate='$selectdate' AND a.visittype='0' 
+				GROUP BY o.areaid, area.area 
+				ORDER BY a.id ASC
+			";
+			$areaRes = mysqli_query($con, $areaQuery);
+			$areas = [];
+
+			while ($row = mysqli_fetch_array($areaRes)) {
+				$area = $row["areaid"];
+				$areaName = $row["areaName"];
+				$areas[] = $area;
+
+				// Queries per area
+				$res1 = mysqli_query($con, "
+					SELECT o.locality, o.name, o.outlettype, a.activitytype 
+					FROM outletactivity a 
+					JOIN outlets o ON a.outletid = o.id 
+					WHERE a.userid = '$employee' AND a.activitydate = '$selectdate' AND a.visittype = '0' AND o.areaid = '$area'
+				");
+				while ($activityRow = mysqli_fetch_assoc($res1)) {
+					$outletActivities[] = $activityRow;
 				}
-				else
-				{
-					$data.=date('d-M-Y', strtotime($dd));
+
+				// Total outlets
+				$totalOutelate = mysqli_fetch_assoc(mysqli_query($con, "
+					SELECT COUNT(id) as total_outelate 
+					FROM outlets 
+					WHERE areaid = '$area' AND DATE(creationdate) < '$selectdate'
+				")) ?: ['total_outelate' => 0];
+
+				// New outlets
+				$newTotalOutelate = mysqli_fetch_assoc(mysqli_query($con, "
+					SELECT COUNT(DISTINCT o.id) as new_total_outelate 
+					FROM outletactivity a 
+					JOIN outlets o ON a.outletid = o.id 
+					WHERE a.userid = '$employee' AND a.activitydate = '$selectdate' AND a.activitytype = 'New Outlet Create' AND o.areaid = '$area'
+				")) ?: ['new_total_outelate' => 0];
+
+				// Visited outlets
+				$totalVistingOutlate = mysqli_fetch_assoc(mysqli_query($con, "
+					SELECT COUNT(DISTINCT o.id) as total_visting_outlate 
+					FROM outletactivity a 
+					JOIN outlets o ON a.outletid = o.id 
+					WHERE a.userid = '$employee' AND a.activitydate = '$selectdate' AND a.activitytype = 'Outlet Visit' AND o.areaid = '$area'
+				")) ?: ['total_visting_outlate' => 0];
+
+				// Booking
+				$booking = mysqli_fetch_assoc(mysqli_query($con, "
+					SELECT COUNT(outlet_id) as productive_outlets, SUM(total_amount) as total_value_orders 
+					FROM booking 
+					WHERE user_id = '$employee' AND DATE(booking_time) = '$selectdate'
+				")) ?: ['productive_outlets' => 0, 'total_value_orders' => 0];
+
+				// Calculations
+				$newTotalOulets = $totalOutelate['total_outelate'] + $newTotalOutelate['new_total_outelate'];
+				$visitedOutlets = $totalVistingOutlate['total_visting_outlate'];
+				$outletsNotVisited = $newTotalOulets - $visitedOutlets;
+
+				$productivePercentage = ($newTotalOulets > 0)
+					? round(($booking['productive_outlets'] / $newTotalOulets) * 100)
+					: 0.0;
+
+				$visitDetails[$area] = [
+					'area_name' => $areaName,
+					'total_outlets_on_route' => $totalOutelate['total_outelate'],
+					'new_outlet_made' => $newTotalOutelate['new_total_outelate'],
+					'new_total_oulets' => $newTotalOulets,
+					'No_of_outlets_visited' => $visitedOutlets,
+					'productive_outlets' => $booking['productive_outlets'],
+					'outlets_not_visited' => $outletsNotVisited,
+					'productive_percentage' => $productivePercentage,
+					'total_value_orders' => $booking['total_value_orders'],
+				];
+			}
+
+			// Output table row
+			$data .= "<tr>";
+			$data .= "<td>";
+
+			$day = date('l', strtotime($dd));
+			if ($day == "Sunday") {
+				$sunday++;
+				$data .= date('d-M-Y', strtotime($dd)) . " " . $day;
+			} else {
+				$data .= date('d-M-Y', strtotime($dd));
+			}
+			$data .= "</td>";
+			$data .= "<td> $day </td>";
+
+			// Start time
+			$data .= "<td>";
+			if ($starttimeStamp > 0) {
+				$starttimearray[] = $starttimeStamp;
+				$workingday++;
+				$data .= date('h:i:s A', $starttimeStamp);
+			} else {
+				if ($day != "Sunday") $leave++;
+				$data .= "Leave";
+			}
+			$data .= "</td>";
+
+			// End time
+			$data .= "<td>";
+			if ($endtimeStamp > 0) {
+				$endtimearray[] = $endtimeStamp;
+				$data .= date('h:i:s A', $endtimeStamp);
+			} else {
+				$data .= "Leave";
+			}
+			$data .= "</td>";
+
+			$data .= "<td>" . $workinghours . " Hrs</td>";
+	        
+			 $totalhours+=$workinghours>0?$workinghours:0;
+
+			// Visit details table inside a cell
+
+				// 1. Area Name(s)
+				$data .= "<td>";
+				foreach ($visitDetails as $vv) {
+					$data .= $vv['area_name'] . "<br>";
 				}
-				$data.="</td>";
-				
-				$data.="<td>";
-				if($starttime!=0)
-				{
-				  array_push($starttimearray,$starttime);
-				  $workingday++;	
-				  $starttime=date('h:i:s A', $starttime);
-				  $data.=$starttime;
+				$data .= "  </td>";
+
+				// 2. Total Outlets on Route
+				$data .= "<td>";
+				foreach ($visitDetails as $vv) {
+					$data .= $vv['total_outlets_on_route'] . "<br>";
+					$totalold+=$vv['total_outlets_on_route'];
 				}
-				else
-				{
-				  if($day!="Sunday" )
-			      $leave++;
-				  
-				  $data.="Leave";
+				$data .= " </td>";
+
+				// 3. New Outlet Made
+				$data .= "<td>";
+				foreach ($visitDetails as $vv) {
+					$data .= $vv['new_outlet_made'] . "<br>";
+					$totalnew+=$vv['new_outlet_made'];
 				}
-				$data.="</td>";
-				
-				$data.="<td>";
-				if($endtime!=0)
-				{
-					
-				  array_push($endtimearray,$endtime);	
-				  $endtime=date('h:i:s A', $endtime);
-				  $data.=$endtime;
-				  
+				$data .= "  </td>";
+
+				// 4. New Total Outlets
+				$data .= "<td>";
+				foreach ($visitDetails as $vv) {
+					$data .= $vv['new_total_oulets'] . "<br>";
 				}
-				else
-				{
-					$data.="Leave";
+				$data .= "  </td>";
+
+
+					// 4. New Total Outlets
+				$data .= "<td>";
+				foreach ($visitDetails as $vv) {
+					$data .= $vv['No_of_outlets_visited'] . "<br>";
+					$totalothervisit+=$vv['No_of_outlets_visited'];
 				}
-				$data.="</td>";
-				
-				$data.="<td>";
-				$data.=$workinghours." Hrs";
-				$data.="</td>";
-				
-				$data.="<td>";
-				$data.=round($distance,2)." Km";
-				$data.="</td>";
-				
-				$data.="<td><table border='1' cellspacing='0' cellpadding='5'>";
-				foreach($areas as $vv)
-				{
-					$data.="<tr><td>$vv</td></tr>";
+				$data .= "  </td>";
+
+
+
+				// 5. Productive Outlets
+				$data .= "<td>";
+				foreach ($visitDetails as $vv) {
+					$data .= $vv['productive_outlets'] . "<br>";
+					$productivOutlets+=$vv['productive_outlets'];
 				}
+				$data .= " </td>";
+
+
+
 				
-				$data.="</table></td>";
-				
-				$data.="<td><table border='1' cellspacing='0' cellpadding='5'>";
-				foreach($visitDetails as $vv)
-				{
-					$data.="<tr><td>$vv</td></tr>";
+				// 6. Outlets Not Visited
+				$data .= "<td>";
+				foreach ($visitDetails as $vv) {
+					$data .= $vv['outlets_not_visited'] . "<br>";
+					$totaloutletsNotVisited+=$vv['outlets_not_visited'];
 				}
-				$data.="</table></td>";
-				
-				$data.="<td>";
-				$data.=$old;
-				$data.="</td>";
-				
-				$data.="<td>";
-				$data.=$new;
-				$data.="</td>";
-				
-				$data.="<td>";
-				$data.=($stockist+$distributor);
-				$data.="</td>";
-				
-				
-				$data.="<td>";
-				$data.=($othervisit);
-				$data.="</td>";
-				
-				$data.="<td>";
-				$data.=($old+$new+$stockist+$distributor+$othervisit);
-				$data.="</td>";
-				
-				$data.="<td>";
-				$data.=$milkbooth;
-				$data.="</td>";
-				
-				$data.="<td>";
-				$data.=$gt;
-				$data.="</td>";
-				
-				$data.="<td>";
-				$data.=$mts;
-				$data.="</td>";
-				
-				$data.="<td>";
-				$data.=$mtl;
-				$data.="</td>";
-				
-				$data.="<td>";
-				$data.=$horeca;
-				$data.="</td>";
-				
-				$data.="</tr>";
-				  
-			  }
+				$data .= "  </td>";
+
+				// 7. Productive Percentage
+				$data .= "<td>";
+				foreach ($visitDetails as $vv) {
+					$data .= $vv['productive_percentage'] . "%<br>";
+					$totalProductivePercentage+=$vv['productive_percentage'];
+				}
+				$data .= "</td>";
+
+				// 8. Total Order Value
+				$data .= "<td>";
+				foreach ($visitDetails as $vv) {
+					$data .= $vv['total_value_orders'] . "<br>";
+					$totalProductivValueOrders+=$vv['total_value_orders'];
+				}
+				$data .= "</td>";
+
+			
+			$data .= "<td></td>";
+			$data .= "</tr>";
+		}
+
+
+
+
+
 			  $totalstime=0;
 			  $totaletime=0;
 			  foreach($starttimearray as $stime)
@@ -405,41 +374,56 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 				  
 			  }
 			  
-		  $avgTotaldistance=($totaldistance>0 and $workingday >0)?($totaldistance/$workingday):0;
 			  $avgTotalhours=($totalhours>0 and $workingday >0)?($totalhours/$workingday):0;
 			  $avgstarttime= (count($starttimearray)>0 and  $totalstime>0) ? ($totalstime/count($starttimearray)):0;
 			  $avgendtime= (count($endtimearray)>0 and  $totaletime>0) ? ($totaletime/count($endtimearray)):0;
 			  
 			  
 	    $data.="<tr>
-		         <th>Averages</th><th>".date('H:i:s',$avgstarttime)."</th><th>".date('H:i:s',$avgendtime)."</th><th>".round(($avgTotalhours),2)." Hrs</th><th>".round(($avgTotaldistance),2)." Km</th><th colspan='2'> Total </th><th>".$totalold."</th><th>".$totalnew."</th><th>".($totalss+$totaldistributor)."</th><th>".$totalothervisit."</th><th>".($totalold+$totalnew+$totalss+$totaldistributor+$totalothervisit)."</th><th>".$totalmilkbooth."</th><th>".$totalgt."</th><th>".$totalmts."</th><th>".$totalmtl."</th><th>".$totalhoreca."</th>
+		         <th>Averages</th> <th> </th> 
+				 <th>".date('H:i:s',$avgstarttime)."</th>
+				 <th>".date('H:i:s',$avgendtime)."</th>
+				 <th>".round(($avgTotalhours),2)." Hrs</th>
+				 <th>  </th> 
+				 <th>".$totalold."</th>
+				 <th>".$totalnew."</th>
+				 <th>".($totalold+$totalnew)."</th>
+				 <th>".$totalothervisit."</th>
+				 <th>".$productivOutlets."</th>
+				 <th>".$totaloutletsNotVisited."</th>
+				 <th>".$totalProductivePercentage."%</th>
+				 <th>".$totalProductivValueOrders."</th>
+				 <th></th>
 		       </tr>";		  
 		$data.="</table>";
+
+
 		
-		$data.="<table border='1' cellspacing='0' cellpadding='5'>";
+		// $data.="<table border='1' cellspacing='0' cellpadding='5'>";
 		
-		$data.="<tr>
-		         <th></th><th></th>
-		       </tr>";
-	    $data.="<tr>
-		         <th></th><th></th>
-		       </tr>";
+		// $data.="<tr>
+		//          <th></th><th></th>
+		//        </tr>";
+	    // $data.="<tr>
+		//          <th></th><th></th>
+		//        </tr>";
 		
-		$data.="<tr>
-		         <th>Total Working Days</th><th>".$workingday."</th>
-		       </tr>";
-		$data.="<tr>
-		         <th>Total Leave </th><th>".$leave."</th>
-		       </tr>";	   		  
-		$data.="<tr>
-		         <th>Total Sunday</th><th>".$sunday."</th>
-		       </tr>";
-		$data.="</table>";
+		// $data.="<tr>
+		//          <th>Total Working Days</th><th>".$workingday."</th>
+		//        </tr>";
+		// $data.="<tr>
+		//          <th>Total Leave </th><th>".$leave."</th>
+		//        </tr>";	   		  
+		// $data.="<tr>
+		//          <th>Total Sunday</th><th>".$sunday."</th>
+		//        </tr>";
+		// $data.="</table>";
 		header('Content-type: application/excel');
         header("Content-Disposition: attachment; filename=$name Report.html");
         header("Pragma: no-cache");
         header("Expires: 0");
 	    echo $data;
+
 		exit();
        
    }
