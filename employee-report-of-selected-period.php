@@ -71,39 +71,10 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 	   }
 	   
 	   $dates=getDatesFromRange($start,$end);
+	   $totalCount=count($dates);
 	   
 	    
 	   
-       $data="<table id='userstable' border='1' cellpadding='10' cellspacing='0' class='table'  data-processing='true' data-filtering='true' data-sorting='true'>
-           
-              <tr>
-                <th colspan='6'>Employee Name : $name </th><th colspan='11'> Total Days Reported for Work : $totalCount </th>
-              </tr>
-              <tr>
-			   <th colspan='6'> Selected Period : $Period  </th> <th colspan='11'>  </th>
-			  </tr>
-		
-			  <tr>
-			   <th colspan='6'>  </th><th colspan='4'></th> <th colspan='7'></th>
-			  </tr>                                          
-              <tr>
-			    <th>Date</th>
-			    <th>Day</th>
-			    <th>First Sales Call Time</th>
-			    <th>Last Sales Call Time</th>
-				<th>Working Time (Hrs.) </th>
-			    <th>Routes Visited</th>
-				<th>Total Outlets on Route</th>
-			    <th>New Outlet Made</th>
-			    <th>New Total Oulets</th>
-			    <th>No. of Outlets Visited</th>
-			    <th>Productive Outlets</th>
-				<th>Outlets Not Visited</th>
-				<th>Productive Call %</th>
-				<th>Total Value of Orders</th>
-				<th>Name of Distributors Visited</th>
-
-			  </tr>";
 			  $starttimearray=array();
 			  $endtimearray=array();
 			  $totalhours=0;
@@ -123,6 +94,7 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 			  $sunday=0;
 			  $workingday=0;
 			  $leave=0;
+			  $rowData='';
 		foreach ($dates as $dd) {
 			$selectdate = date('Y-m-d', strtotime($dd));
 			
@@ -234,126 +206,126 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 			}
 
 			// Output table row
-			$data .= "<tr>";
-			$data .= "<td>";
+			$rowData .= "<tr>";
+			$rowData .= "<td>";
 
 			$day = date('l', strtotime($dd));
 			if ($day == "Sunday") {
 				$sunday++;
-				$data .= date('d-M-Y', strtotime($dd)) . " " . $day;
+				$rowData .= date('d-M-Y', strtotime($dd)) . " " . $day;
 			} else {
-				$data .= date('d-M-Y', strtotime($dd));
+				$rowData .= date('d-M-Y', strtotime($dd));
 			}
-			$data .= "</td>";
-			$data .= "<td> $day </td>";
+			$rowData .= "</td>";
+			$rowData .= "<td> $day </td>";
 
 			// Start time
-			$data .= "<td>";
+			$rowData .= "<td>";
 			if ($starttimeStamp > 0) {
 				$starttimearray[] = $starttimeStamp;
 				$workingday++;
-				$data .= date('h:i:s A', $starttimeStamp);
+				$rowData .= date('h:i:s A', $starttimeStamp);
 			} else {
 				if ($day != "Sunday") $leave++;
-				$data .= "Leave";
+				$rowData .= "Leave";
 			}
-			$data .= "</td>";
+			$rowData .= "</td>";
 
 			// End time
-			$data .= "<td>";
+			$rowData .= "<td>";
 			if ($endtimeStamp > 0) {
 				$endtimearray[] = $endtimeStamp;
-				$data .= date('h:i:s A', $endtimeStamp);
+				$rowData .= date('h:i:s A', $endtimeStamp);
 			} else {
-				$data .= "Leave";
+				$rowData .= "Leave";
 			}
-			$data .= "</td>";
+			$rowData .= "</td>";
 
-			$data .= "<td>" . $workinghours . " Hrs</td>";
+			$rowData .= "<td>" . $workinghours . " Hrs</td>";
 	        
 			 $totalhours+=$workinghours>0?$workinghours:0;
 
 			// Visit details table inside a cell
 
 				// 1. Area Name(s)
-				$data .= "<td>";
+				$rowData .= "<td>";
 				foreach ($visitDetails as $vv) {
-					$data .= $vv['area_name'] . "<br>";
+					$rowData .= $vv['area_name'] . "<br>";
 				}
-				$data .= "  </td>";
+				$rowData .= "  </td>";
 
 				// 2. Total Outlets on Route
-				$data .= "<td>";
+				$rowData .= "<td>";
 				foreach ($visitDetails as $vv) {
-					$data .= $vv['total_outlets_on_route'] . "<br>";
+					$rowData .= $vv['total_outlets_on_route'] . "<br>";
 					$totalold+=$vv['total_outlets_on_route'];
 				}
-				$data .= " </td>";
+				$rowData .= " </td>";
 
 				// 3. New Outlet Made
-				$data .= "<td>";
+				$rowData .= "<td>";
 				foreach ($visitDetails as $vv) {
-					$data .= $vv['new_outlet_made'] . "<br>";
+					$rowData .= $vv['new_outlet_made'] . "<br>";
 					$totalnew+=$vv['new_outlet_made'];
 				}
-				$data .= "  </td>";
+				$rowData .= "  </td>";
 
 				// 4. New Total Outlets
-				$data .= "<td>";
+				$rowData .= "<td>";
 				foreach ($visitDetails as $vv) {
-					$data .= $vv['new_total_oulets'] . "<br>";
+					$rowData .= $vv['new_total_oulets'] . "<br>";
 				}
-				$data .= "  </td>";
+				$rowData .= "  </td>";
 
 
 					// 4. New Total Outlets
-				$data .= "<td>";
+				$rowData .= "<td>";
 				foreach ($visitDetails as $vv) {
-					$data .= $vv['No_of_outlets_visited'] . "<br>";
+					$rowData .= $vv['No_of_outlets_visited'] . "<br>";
 					$totalothervisit+=$vv['No_of_outlets_visited'];
 				}
-				$data .= "  </td>";
+				$rowData .= "  </td>";
 
 
 
 				// 5. Productive Outlets
-				$data .= "<td>";
+				$rowData .= "<td>";
 				foreach ($visitDetails as $vv) {
-					$data .= $vv['productive_outlets'] . "<br>";
+					$rowData .= $vv['productive_outlets'] . "<br>";
 					$productivOutlets+=$vv['productive_outlets'];
 				}
-				$data .= " </td>";
+				$rowData .= " </td>";
 
 
 
 				
 				// 6. Outlets Not Visited
-				$data .= "<td>";
+				$rowData .= "<td>";
 				foreach ($visitDetails as $vv) {
-					$data .= $vv['outlets_not_visited'] . "<br>";
+					$rowData .= $vv['outlets_not_visited'] . "<br>";
 					$totaloutletsNotVisited+=$vv['outlets_not_visited'];
 				}
-				$data .= "  </td>";
+				$rowData .= "  </td>";
 
 				// 7. Productive Percentage
-				$data .= "<td>";
+				$rowData .= "<td>";
 				foreach ($visitDetails as $vv) {
-					$data .= $vv['productive_percentage'] . "%<br>";
+					$rowData .= $vv['productive_percentage'] . "%<br>";
 					$totalProductivePercentage+=$vv['productive_percentage'];
 				}
-				$data .= "</td>";
+				$rowData .= "</td>";
 
 				// 8. Total Order Value
-				$data .= "<td>";
+				$rowData .= "<td>";
 				foreach ($visitDetails as $vv) {
-					$data .= $vv['total_value_orders'] . "<br>";
+					$rowData .= $vv['total_value_orders'] . "<br>";
 					$totalProductivValueOrders+=$vv['total_value_orders'];
 				}
-				$data .= "</td>";
+				$rowData .= "</td>";
 
 			
-			$data .= "<td></td>";
-			$data .= "</tr>";
+			$rowData .= "<td></td>";
+			$rowData .= "</tr>";
 		}
 
 
@@ -378,6 +350,39 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 			  $avgstarttime= (count($starttimearray)>0 and  $totalstime>0) ? ($totalstime/count($starttimearray)):0;
 			  $avgendtime= (count($endtimearray)>0 and  $totaletime>0) ? ($totaletime/count($endtimearray)):0;
 			  
+
+       $data="<table id='userstable' border='1' cellpadding='10' cellspacing='0' class='table'  data-processing='true' data-filtering='true' data-sorting='true'>
+           
+              <tr>
+                <th colspan='6'>Employee Name : $name </th><th colspan='11'> Total Days Reported for Work : $workingday </th>
+              </tr>
+              <tr>
+			   <th colspan='6'> Selected Period : $Period  </th> <th colspan='11'>  </th>
+			  </tr>
+		
+			  <tr>
+			   <th colspan='6'>  </th><th colspan='4'></th> <th colspan='7'></th>
+			  </tr>                                          
+              <tr>
+			    <th>Date</th>
+			    <th>Day</th>
+			    <th>First Sales Call Time</th>
+			    <th>Last Sales Call Time</th>
+				<th>Working Time (Hrs.) </th>
+			    <th>Routes Visited</th>
+				<th>Total Outlets on Route</th>
+			    <th>New Outlet Made</th>
+			    <th>New Total Oulets</th>
+			    <th>No. of Outlets Visited</th>
+			    <th>Productive Outlets</th>
+				<th>Outlets Not Visited</th>
+				<th>Productive Call %</th>
+				<th>Total Value of Orders</th>
+				<th>Name of Distributors Visited</th>
+
+			  </tr>";
+
+$data.=$rowData;
 			  
 	    $data.="<tr>
 		         <th>Averages</th> <th> </th> 

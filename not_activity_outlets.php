@@ -77,6 +77,7 @@ $outlets=array();
 
                 <br>
                 <br>
+  
                  <div class="input-group input-group-sm" style="width: 150px;">
                        <label>State</label>
                    <select class="form-control"  name="state" id="state" required>
@@ -89,6 +90,13 @@ $outlets=array();
                       }
                     ?>
                   </select>
+                 </div>
+
+                 <div class="input-group input-group-sm" style="width: 150px;">
+                      <label>City</label>
+                  <select class="form-control"  name="city" id="city" required>
+                  <option value="">Select City</option>
+                </select>
                  </div>
                  <div class="input-group input-group-sm" style="width: 150px;">
                       <label>Region</label>
@@ -121,6 +129,8 @@ $outlets=array();
                   <div class="input-group input-group-sm" style="width: 80px;">
                  &nbsp;&nbsp;  <button type="button" id="btnsearch" class="form-control btn btn-default"><i class="fa fa-search"></i> Search</button>
                   </div>
+
+              
 
                 </form>
 
@@ -325,7 +335,7 @@ function searchdata()
    
 	}
 
-  function state()
+    function state()
 	  {
              //alert("Hello");
              $.ajax({
@@ -346,12 +356,35 @@ function searchdata()
                     });
 			 }});
 	  }
+
+    function city(state)
+	  {          
+      $.ajax({
+			 url:"api/outlets-web.php?getcity&state="+state,
+			 type:"GET",			 			 
+			 contentType:"application/json; charset=utf-8",
+			 success: function(data){
+			 //alert(data);
+			 data=JSON.parse(data);
+			   
+			   var state=$("#city");
+			   state.empty();
+			   var option=$("<option value='' />").html("Select City");
+			   state.append(option);
+			   $.each(data, function (i, user) {
+                        //Create new option
+                        option = $('<option value='+user.id+' />').html(user.city);
+                        //append city states drop down
+                        state.append(option);
+                    });
+			 }});
+	  }
+
 	  
-	  function region(state)
-	  {
-            
-             $.ajax({
-			 url:"api/outlets-web.php?getregion&state="+state,
+	  function region(city)
+	  {          
+      $.ajax({
+			 url:"api/outlets-web.php?getregion&city="+city,
 			 type:"GET",			 			 
 			 contentType:"application/json; charset=utf-8",
 			 success: function(data){
@@ -371,11 +404,11 @@ function searchdata()
 			 }});
 	  }
 	  
-	  function area(state,region)
+	  function area(region)
 	  {
 
       $.ajax({
-			 url:"api/outlets-web.php?getcity&region="+region+"&state="+state,
+			 url:"api/outlets-web.php?getrouter&region="+region,
 			 type:"GET",			 
 			 contentType:"application/json; charset=utf-8",
 			 success: function(data){
@@ -422,15 +455,22 @@ function searchdata()
 
 
 
+
 	  $("#state").change(function(){
 		   var state=$("#state option:selected").val();
-		   region(state);
+		   city(state);
 		  });
 		  
+      $("#city").change(function(){
+		   var city=$("#city option:selected").val();
+    
+		   region(city);
+		  });
+
+
 		  $("#region").change(function(){
-		   var state=$("#state option:selected").val();
 		   var region=$("#region option:selected").val();
-		   area(state,region);
+		   area(region);
 		  });
 		  
       $("#area").change(function(){

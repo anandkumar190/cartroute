@@ -194,6 +194,7 @@
 												<thead>
 												<tr>
                           <th>Select</th>
+                          <th>Edit</th>
 													<th>State</th>
                           <th>City</th>
 													<th>Region</th>
@@ -462,7 +463,7 @@
 				  columns:[
                             {
                       data:'id',render:function(value){ 
-                        return "<input type='hidden' id='select' value='"+value+"' />";
+                        return "<input type='hidden' id='select' value='"+value+"' /> ";
                         }},
                         {
                         data:'state'
@@ -588,7 +589,6 @@ function loaddataduplicate()
     function searchdata()
 	{
 		var state=$("#state").val();
-		
 		var city=$("#city").val();
 		var region=$("#region").val();
 		var area=$("#area").val();
@@ -649,7 +649,10 @@ function loaddataduplicate()
                             {
                       data:'id',render:function(value){ 
                         return "<input type='hidden' id='select' value='"+value+"' />";
-                        }},
+                        }},{
+                          data:'id',render:function(value){
+                          return "<a href='editoutlet?editid="+value+"'><span class='fa fa-edit'></span></a>";
+                          }},
                         {
                         data:'state'
                       }, {

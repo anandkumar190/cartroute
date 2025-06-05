@@ -23,7 +23,7 @@
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs pull-left">
               <li class="active"><a href="#today-activity" data-toggle="tab">Team Activities</a></li>
-              <li><a href="#tear-tree-view" data-toggle="tab">Today Activity</a></li>
+              <!-- <li><a href="#tear-tree-view" data-toggle="tab">Today Activity</a></li> -->
               
             </ul>
             

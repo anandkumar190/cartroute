@@ -108,22 +108,7 @@
         </div>
         <!-- ./col -->
         
-        
-        <!-- ./col -->
-        <div class="col-lg-2 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-blue-gradient">
-            <div class="inner">
-              <h3><?php echo $stockists;?></h3>
 
-              <p>Super Stockist</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="stockist" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
 
         <!-- ./col -->
         <div class="col-lg-2 col-xs-6">

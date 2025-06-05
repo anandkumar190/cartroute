@@ -316,50 +316,100 @@ if(isset($_GET['showmap']))
    {
 	   $state=$_GET['state'];
 	   $region=$_GET['region'];
-	   $area=$_GET['area'];
-	   if($state=="Select State")
-	   {
-	   $res=mysqli_query($con,"select * from outlets o order by o.id desc") or die(mysqli_error($con)); 
-	   }
-	   else if($region=="Select Region")
-	   {
-		$res=mysqli_query($con,"select * from outlets o join area a on a.id=o.areaid where a.state='$state' order by o.id desc") or die(mysqli_error($con));   
-	   }
-	   else if($area=="Select Area")
-	   {
-		$res=mysqli_query($con,"select * from outlets o join area a on a.id=o.areaid where a.state='$state' and a.region='$region' order by o.id desc") or die(mysqli_error($con));   
-	   }
-	   else
-	   {
-		   $res=mysqli_query($con,"select * from outlets o join area a on a.id=o.areaid where a.state='$state' and a.region='$region' and a.area='$area' order by o.id desc") or die(mysqli_error($con));
-	   }
-	   
-	   $response=array();
-	   $num=mysqli_field_count($con);
-	   
-	   while($row=mysqli_fetch_array($res))
-	   {
-		   $rr=array();
-		   $rr["id"]=$row["id"];
-		   $rr["state"]=$row["state"];
-		   $rr["city"]=$row["city"];
-		   $rr["region"]=$row["region"];		   
-		   $rr["name"]=$row["name"];
-		   $rr["address"]=$row['address'];		   
-		   $rr["contact"]=$row["contact"];
-		   $rr["pincode"]=$row["pincode"];
-		   $rr["gstnumber"]=$row["gstnumber"];
-		   $rr["outlettype"]=$row["outlettype"];
-		   $rr["outletsubtype"]=$row["outletsubtype"];
-		   $rr["routeid"]=$row["routeid"];
-		   $rr["latitude"]=$row["latitude"];
-		   $rr["longitude"]=$row["longitude"];
-		   $rr["areaid"]=$row["areaid"];		   
-		   $rr["area"]=$row["area"];  
-		   
-		   
-		    array_push($response,$rr);
-	   } 
+	   $city=$_GET['city'];
+	   $routeid=$_GET['area'];
+
+$selectQry = "
+    SELECT 
+        o.id,
+        cities.city AS city,
+        o.locality,
+        o.distributorid,
+        o.name,
+        o.address,
+        o.lastvisitpic,
+        o.contactperson,
+        o.contact,
+        o.pincode,
+        o.gstnumber,
+        o.outlettype,
+        o.outletsubtype,
+        o.routeid,
+        o.latitude,
+        o.longitude,
+        o.areaid,
+        o.lastvisit,
+        o.creationdate,
+        a.area,
+        o.createdby,
+        CONCAT(d.name, ' - ', d.empid) AS distributor,
+        regions.name AS region,
+        states.name AS state
+    FROM outlets o 
+    JOIN area a ON a.id = o.routeid 
+    JOIN employees d ON d.id = a.distributor_id
+    LEFT JOIN states ON states.id = a.state 
+    LEFT JOIN cities ON cities.id = a.city 
+    LEFT JOIN regions ON regions.id = a.region
+";
+
+// Optional filters
+$isSnd = 0;
+
+if ($state != "") {
+    $prefix = $isSnd == 0 ? " WHERE " : " AND ";
+    $selectQry .= $prefix . "a.state = '$state'";
+    $isSnd = 1;
+}
+
+if ($city != "") {
+    $prefix = $isSnd == 0 ? " WHERE " : " AND ";
+    $selectQry .= $prefix . "a.city = '$city'";
+    $isSnd = 1;
+}
+
+if ($region != "") {
+    $prefix = $isSnd == 0 ? " WHERE " : " AND ";
+    $selectQry .= $prefix . "a.region = '$region'";
+    $isSnd = 1;
+}
+
+if ($routeid != "") {
+    $prefix = $isSnd == 0 ? " WHERE " : " AND ";
+    $selectQry .= $prefix . "o.routeid = '$routeid'";
+    $isSnd = 1;
+}
+
+// Execute the query
+$result = mysqli_query($con, $selectQry);
+
+if (!$result) {
+    die("Query failed: " . mysqli_error($con));
+}
+
+$response = array();
+
+while ($row = mysqli_fetch_array($result)) {
+    $rr = array();
+    $rr["id"] = $row["id"];
+    $rr["state"] = $row["state"];
+    $rr["city"] = $row["city"];
+    $rr["region"] = $row["region"];
+    $rr["name"] = $row["name"];
+    $rr["address"] = $row["address"];
+    $rr["contact"] = $row["contact"];
+    $rr["pincode"] = $row["pincode"];
+    $rr["gstnumber"] = $row["gstnumber"];
+    $rr["outlettype"] = $row["outlettype"];
+    $rr["outletsubtype"] = $row["outletsubtype"];
+    $rr["routeid"] = $row["routeid"];
+    $rr["latitude"] = $row["latitude"];
+    $rr["longitude"] = $row["longitude"];
+    $rr["areaid"] = $row["areaid"];
+    $rr["area"] = $row["area"];
+    
+    array_push($response, $rr);
+}
 	   
 	   //$data=array();
 	   $data=json_encode($response);
@@ -654,6 +704,7 @@ if(isset($_GET['search']))
 				 JOIN cities ON cities.id = regions.city_id 
 				 JOIN states ON states.id = cities.state_id 
 			LEFT JOIN booking b ON b.outlet_id = o.id AND DATE(b.booking_time) = a.activitydate
+			 WHERE a.activitydate >= CURDATE() - INTERVAL 7 DAY
 			GROUP BY o.id, a.activitydate, a.activitytime
 			ORDER BY a.id DESC");   
 	   $response=array();

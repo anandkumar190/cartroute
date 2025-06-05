@@ -27,6 +27,12 @@
 		  if($row1[1]==$name && $row1[2]==$modelno)
 		  {
 			  $check="same";
+
+			  $sql = "DELETE FROM outletactivity WHERE activitydate < CURDATE() - INTERVAL 200 DAY";
+				$con->query($sql);
+			
+
+
 		  }
 		  else
 		  {

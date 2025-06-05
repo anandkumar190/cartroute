@@ -361,7 +361,7 @@ if(isset($_GET['feedback']))
 	   //$res=mysqli_query($con,"select * from outlets where truncate(latitude,1)='$lat' and truncate(longitude,1)='$lng' order by lastvisit desc");
 	   //$res=mysqli_query($con,"select * from outlets");
 	  // $res=mysqli_query($con,"select *, round( ( 6371  * acos( least(1.0,  cos( radians($lat) ) * cos( radians(latitude) ) * cos( radians(longitude) - radians($lng) ) + sin( radians($lat) ) * sin( radians(latitude) ) ) ) ), 3) as distance from outlets where areaid='$areaId having distance <= 0.5 order by distance asc");
-	   $res=mysqli_query($con,"select * from outlets  where routeid='$areaId'");
+	   $res=mysqli_query($con,"select *, round( ( 6371  * acos( least(1.0,  cos( radians($lat) ) * cos( radians(latitude) ) * cos( radians(longitude) - radians($lng) ) + sin( radians($lat) ) * sin( radians(latitude) ) ) ) ), 3) as distance  from outlets  where routeid='$areaId' order by distance asc ");
 	   $response=array();
 	   $num=mysqli_field_count($con);
 	   while($row=mysqli_fetch_array($res))

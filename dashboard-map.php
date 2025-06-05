@@ -1,4 +1,4 @@
-m<html>
+<html>
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
@@ -35,7 +35,7 @@ m<html>
   <body>
    <div class="container">
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-2">
          <div class="form-group">
            <label>Select State</label>
            <select class="form-control select2" id="state">
@@ -44,7 +44,18 @@ m<html>
            </select>
          </div>
       </div>
-      <div class="col-md-3">
+
+       <div class="col-md-2">
+         <div class="form-group">
+           <label>Select City</label>
+           <select class="form-control select2" id="city">
+             <option value="">Select City</option>
+             
+           </select>
+         </div>
+      </div>
+
+      <div class="col-md-2">
          <div class="form-group">
            <label>Select Region</label>
            <select class="form-control select2" id="region">
@@ -53,7 +64,7 @@ m<html>
            </select>
          </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-2">
         <div class="form-group">
            <label>Select Area</label>
            <select class="form-control select2" id="area">
@@ -86,11 +97,12 @@ m<html>
 	  function initMap() {
 		  $("#loader").show();
         //var myLatLng = {lat:28.96368627576849, lng: 77.73731481415368};
-		var state=$("#state option:selected").text();
-		var region=$("#region option:selected").text();
-		var area=$("#area option:selected").text();
+    var state=$("#state").val();
+		var city=$("#city").val();
+		var region=$("#region").val();
+		var area=$("#area").val();
 		$.ajax({
-			 url:'api/outlets-web.php?showmap&state='+state+'&region='+region+'&area='+area,
+			 url:'api/outlets-web.php?showmap&state='+state+'&city='+city+'&region='+region+'&area='+area,
 			 type:"GET",
 			 contentType:"application/json; charset=utf-8",
 			 success: function(data){
@@ -186,7 +198,7 @@ m<html>
 	  
     </script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD84GbCm3s_24FlRO1GwuG-vxGsJObga3U&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrxsk0fDpJlEqqLXqrdrg833McDrv5apc&callback=initMap">
     </script>
     <script>
     function state()
@@ -211,11 +223,34 @@ m<html>
 			 }});
 	  }
 	  
-	  function region(state)
+    function city(state)
+	  {          
+      $.ajax({
+			 url:"api/outlets-web.php?getcity&state="+state,
+			 type:"GET",			 			 
+			 contentType:"application/json; charset=utf-8",
+			 success: function(data){
+			 //alert(data);
+			 data=JSON.parse(data);
+			   
+			   var state=$("#city");
+			   state.empty();
+			   var option=$("<option value='' />").html("Select City");
+			   state.append(option);
+			   $.each(data, function (i, user) {
+                        //Create new option
+                        option = $('<option value='+user.id+' />').html(user.city);
+                        //append city states drop down
+                        state.append(option);
+                    });
+			 }});
+	  }
+
+	  function region(city)
 	  {
             
              $.ajax({
-			 url:"api/outlets-web.php?getregion&state="+state,
+		 url:"api/outlets-web.php?getregion&city="+city,
 			 type:"GET",			 			 
 			 contentType:"application/json; charset=utf-8",
 			 success: function(data){
@@ -235,11 +270,11 @@ m<html>
 			 }});
 	  }
 	  
-	  function area(state,region)
+	  function area(region)
 	  {
 
              $.ajax({
-			 url:"api/outlets-web.php?getcity&region="+region+"&state="+state,
+			 url:"api/outlets-web.php?getrouter&region="+region,
 			 type:"GET",			 
 			 contentType:"application/json; charset=utf-8",
 			 success: function(data){
@@ -262,14 +297,37 @@ m<html>
 	  state();
 	  $("#state").change(function(){
 		   var state=$("#state option:selected").val();
-		   region(state);
+		   city(state);
+		  });
+
+    	//   $("#region").change(function(){
+		  //  var state=$("#state option:selected").val();
+		  //  var region=$("#region option:selected").val();
+		  //  area(state,region);
+		  // });
+      
+        $("#city").change(function(){
+		   var city=$("#city option:selected").val();
+		   region(city);
+		  });
+
+
+		  $("#region").change(function(){
+		   var region=$("#region option:selected").val();
+		   area(region);
 		  });
 		  
-		  $("#region").change(function(){
-		   var state=$("#state option:selected").val();
-		   var region=$("#region option:selected").val();
-		   area(state,region);
+      $("#area").change(function(){
+		   var areaId=$("#area option:selected").val();
+		  
 		  });
+
+
+		  // $("#region").change(function(){
+		  //  var state=$("#state option:selected").val();
+		  //  var region=$("#region option:selected").val();
+		  //  area(state,region);
+		  // });
 		  
 		  $("#search").click(function(){			  
 			  initMap();
