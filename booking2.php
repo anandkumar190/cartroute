@@ -36,16 +36,12 @@ $outlets=array();
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs pull-left">
               <li class="active"><a href="#today-activity" data-toggle="tab">Booking Report</a></li>
-              
-              
+               
             </ul>
-            
             <div class="tab-content no-padding">
-              
-              
-              <!--Today Activity tab Start-->
-              
-              
+     
+             <!--Today Activity tab Start-->     
+    
               <div class="chart tab-pane active" id="today-activity" style="position: relative; min-height: 300px;">
                <!--table start-->  
                     <!-- /.row -->
@@ -164,7 +160,18 @@ $outlets=array();
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="panel panel-default card-view">
-								
+									<div class="panel-heading">
+                    
+               <div class="pull-left" style="white-space: nowrap;">
+                <span class="panel-title txt-dark" style="font-weight: bold; font-size: 18px;">Booking</span> 
+                <span class="panel-title txt-dark"  style="padding-left:60px;" >Sales Officer: <span id="officerName" style="font-weight: bold; font-size:20px;" ></span></span> 
+                <span class="panel-title txt-dark"  style="padding-left:60px;" >Date Range: <span id="DateRange"  ></span></span></div>
+
+                  
+                          <div class="clearfix"></div>
+                  
+                  </div>
+
 								<div class="panel-wrapper collapse in">
 									<div class="panel-body">
 										<div class="table-wrap">
@@ -174,9 +181,11 @@ $outlets=array();
 												<tr>
                                             
 													<th>Date</th>
+													<th>Route</th>
+													<th>Distributor</th>
 													<th>Outlet Name</th>
-													<th>Distibutor</th>
-													<th>Sales Officer</th>
+													<th>Outlet Address </th>
+													<th>Outlet Address </th>
 													   <?php
                                $cat=mysqli_query($con,"select id,name from product_cat"); 
                    
@@ -291,11 +300,18 @@ $(document).ready(function(){
 $(document).ready(function() {
     $("#btnsearch").click(function(){
         	var employee = $('#employee').val();
+          var employee_name = $('#employee option:selected').text();
         	var reservation = $('#reservation').val();
         	var outlet = $('#outlet').val();
         	var distibuter = $('#distibuter').val();
+
+          
         	
-    	//alert(employee+'  '+reservation);
+    	// alert(employee+'  '+reservation);
+    	// alert(employee_name);
+
+      $("#officerName").html(employee_name);
+      $("#DateRange").html(reservation);
         //+"&area="+area+"&so="+so+"&distributor="+distributor+"&stockist="+stockist
 		
 		var progress=$("#progress");
@@ -321,8 +337,7 @@ $(document).ready(function() {
 
 			    $("#userstable").dataTable(
 				{
-				    
-				    
+				       
 				  dom: 'Bfrtip',
 				  sort:false,
 				  data:data,
@@ -339,12 +354,19 @@ $(document).ready(function() {
 				           {
 							data:'booking_time'
 						},
+               {
+							data:'outlet_route_name'
+						},
+               {
+							data:'distibuter'
+						}, 
 						    {
 							data:'outlet_id'
 						}, 	    {
-							data:'distibuter'
-						},    {
-							data:'user_id'
+							data:'outlet_address'
+						},
+             {
+							data:'outlet_contact'
 						},
 						
 						<?php   

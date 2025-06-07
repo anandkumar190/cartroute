@@ -148,6 +148,23 @@ $outlets=array();
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="panel panel-default card-view">
+                	<div class="panel-heading">
+                    <div class="pull-left">
+                      <h6 class="panel-title txt-dark">Outlets</h6>
+                                              
+                                          <span id="total" class="panel-title txt-dark"></span>
+                                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                          <span id="mt" class="panel-title txt-dark"></span>
+                                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                          <span id="gt" class="panel-title txt-dark"></span>
+                                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                          <span id="mtl" class="panel-title txt-dark"></span>
+                                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                          <span id="milkbooth" class="panel-title txt-dark"></span>
+                                          
+                    </div>
+                    		<div class="clearfix"></div>
+									</div>
 								
 								<div class="panel-wrapper collapse in">
 									<div class="panel-body">

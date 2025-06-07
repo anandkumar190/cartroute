@@ -290,17 +290,36 @@ if(isset($_GET['search'])){
         $salesmans[$row['id']]= $row['name'];  
     }
  
-    $res1=mysqli_query($con,"select * from outlets");
-    while($row1=mysqli_fetch_array($res1)){
-        $outlets[$row1['id']]= $row1['name'];   
-    }
+        $query = "SELECT 
+            outlets.id AS outlet_id,
+            employees.name AS distributor_name,
+            outlets.name AS name,
+            outlets.address AS address,
+            outlets.contact AS contact,
+            area.area AS route_name
+        FROM outlets
+        JOIN area ON outlets.areaid = area.id
+        JOIN employees ON area.distributor_id = employees.id";
+
+        $res1 = mysqli_query($con, $query);
+
+        $outlets = [];
+
+        while ($row1 = mysqli_fetch_array($res1)) {
+            $id = $row1['outlet_id'];
+            $outlets[$id] = $row1['name'];
+            $outlets[$id . "_address"] = $row1['address'];
+            $outlets[$id . "_contact"] = $row1['contact'];
+            $outlets[$id . "_distributor_name"] = $row1['distributor_name'];
+            $outlets[$id . "_route_name"] = $row1['route_name'];
+        }
  
     $res5=mysqli_query($con,"select id,name from employees where usertype='3'");
     while($row5=mysqli_fetch_array($res5)){
         $distibuters[$row5['id']]= $row5['name'];    
     }
 
-   $booking=mysqli_query($con,"SELECT bk.id,bk.outlet_id,bk.user_id,bk.offer_qty,bk.offer_qty,bk.total_amount,bk.total_qty,bk.booking_time,outlet.distributorid FROM booking bk join outlets outlet on bk.outlet_id=outlet.id ".$sqlqry);
+   $booking=mysqli_query($con,"SELECT bk.id,bk.outlet_id,bk.user_id,bk.offer_qty,bk.offer_qty,bk.total_amount,bk.total_qty,bk.booking_time FROM booking bk join outlets outlet on bk.outlet_id=outlet.id ".$sqlqry);
 
         $total=0; 
         $bookinglist=array();
@@ -319,13 +338,25 @@ if(isset($_GET['search'])){
             if (!empty($row2) ) {
                 $tt['booking_time'] = @$row2['booking_time'];
                 $tt['outlet_id']= @$outlets[$row2['outlet_id']];
+
+                $tt['outlet_id']= @$outlets[$row2['outlet_id']];
+                $tt['outlet_address']= @$outlets[$row2['outlet_id'].'_address'];
+                $tt['outlet_contact']= @$outlets[$row2['outlet_id'].'_contact'];
+                $tt['distibuter']= @$outlets[$row2['outlet_id'].'_distributor_name'];
+                $tt['outlet_route_name']= @$outlets[$row2['outlet_id'].'_route_name'];
+           
+            
                 $tt['user_id']=@$salesmans[$row2['user_id']];
-                $tt['distibuter']=@$distibuters[$row2['distributorid']];
             }else {
                 $tt['booking_time'] = '';
                 $tt['outlet_id']= '';
                 $tt['user_id']='';
                 $tt['distibuter']='';
+                $tt['outlet_address']='';
+                $tt['outlet_contact']= '';
+                $tt['outlet_route_name']='';
+           
+            
             }
 
             $cat=mysqli_query($con,"select id,name from product_cat"); 
