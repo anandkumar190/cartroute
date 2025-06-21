@@ -1,6 +1,9 @@
 <?php 
 include("../connect.php");
 
+
+
+
 if(isset($_GET['productcategory']))
 {  
     $query = "Select id AS CategoryID, name As CategoryName from product_cat";
@@ -395,7 +398,7 @@ if(isset($_GET['search'])){
 }
 
 
-if(isset($_GET['routevistsummary'])){
+if(isset($_GET['routevistsummary']) or isset($_GET['sendreport']) ){ 
     
     $employee=trim($_GET['salesman']);
     $area_id=trim($_GET['route_id']);
@@ -437,13 +440,8 @@ if(isset($_GET['routevistsummary'])){
 
 
     $totalProdectiveOutletQry=mysqli_query($con,"SELECT outlet.id,SUM(bk.total_amount) totalSum FROM booking bk join outlets outlet on bk.outlet_id=outlet.id ".$sqlqry." Group BY outlet.id HAVING totalSum > 0 ");
-    $totalProdectiveOutletArr=mysqli_fetch_array($totalProdectiveOutletQry);
+    $totalProdectiveOutlet=mysqli_num_rows($totalProdectiveOutletQry);
     
-    $totalProdectiveOutlet=0;
-    if(!empty($totalProdectiveOutletArr)){
-        $totalProdectiveOutlet= count($totalProdectiveOutletArr);  
-    }
-   
 
    $booking=mysqli_query($con,"SELECT bki.subcategory_id ,SUM(bki.qty_no) AS total_qty  FROM booking_item bki join booking bk on bki.booking_id_fk=bk.id  join outlets outlet on bk.outlet_id=outlet.id ".$sqlqry." GROUP BY bki.subcategory_id ");
      
@@ -468,7 +466,8 @@ if(isset($_GET['routevistsummary'])){
             array_push($bookinglist,$tt);
         }
            
-      $prodectiveCell=($totalProdectiveOutlet>0 and $totalOutlet >0)? (($totalProdectiveOutlet/$totalOutlet)*100) :0;
+        $prodectiveCell = ($totalProdectiveOutlet > 0 && $totalOutlet > 0) ? (($totalProdectiveOutlet / $totalOutlet) * 100) : 0;
+
         $data=json_encode([
             'bookinglist'=>$bookinglist,
             'total_outlet'=>($totalOutlet-$totalNewOutlet),
@@ -482,6 +481,76 @@ if(isset($_GET['routevistsummary'])){
 
           ]);
 
+      if(isset($_GET['sendreport']) ){ 
+
+          $resRouteQuery = mysqli_query($con, "SELECT area as name FROM area WHERE id = $area_id");
+            $route = '';
+            if ($resRouteQuery && mysqli_num_rows($resRouteQuery) > 0) {
+                $resRoute = mysqli_fetch_array($resRouteQuery);
+                $route = $resRoute['name'];
+            } 
+
+
+                $subject = "Route Vist Summary Detail( $employee - $route)";
+            	  $to_email = "sales@fricbergen.com";
+	              $from_email = "sales@fricbergen.com";
+
+                    $headers  = "MIME-Version: 1.0\r\n";
+                    $headers .= "Content-type: text/html; charset=utf-8\r\n";
+                    $headers .= "To: <$to_email>\r\n";
+                    $headers .= "From: <$from_email>\r\n";
+                    // Start HTML message
+                    $message = "<html><body>";
+
+                    // Booking List Table
+                    $message .= "<h3>Booking Summary</h3>";
+                    $message .= "<table border='1' cellpadding='8' cellspacing='0' style='border-collapse: collapse;'>
+                    <thead>
+                        <tr>
+                            <th>Subcategory</th>
+                            <th>Total Quantity</th>
+                            <th>Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody>";
+
+                    foreach ($bookinglist as $item) {
+                        $message .= "<tr>
+                            <td>" . htmlspecialchars($item['subcategory']) . "</td>
+                            <td>" . htmlspecialchars($item['total_qty']) . "</td>      
+                            <td>" . htmlspecialchars($item['unit']) . "</td>
+                        </tr>";
+                    }
+
+                    $message .= "</tbody></table><br>";
+
+                    // Summary Table
+                    $message .= "<h3>Outlet Summary</h3>";
+                    $message .= "<table border='1' cellpadding='8' cellspacing='0' style='border-collapse: collapse;'>";
+                    $message .= "<tr><th>Total Outlet</th><td>" . ($totalOutlet - $totalNewOutlet) . "</td></tr>";
+                    $message .= "<tr><th>New Outlet</th><td>" . $totalNewOutlet . "</td></tr>";
+                    $message .= "<tr><th>Outlets After New</th><td>" . $totalOutlet . "</td></tr>";
+                    $message .= "<tr><th>Visited Outlet</th><td>" . $totalVistedOutlet . "</td></tr>";
+                    $message .= "<tr><th>Productive Outlet</th><td>" . $totalProdectiveOutlet . "</td></tr>";
+                    $message .= "<tr><th>Not Visited Outlet</th><td>" . ($totalOutlet - $totalVistedOutlet) . "</td></tr>";
+                    $message .= "<tr><th>Productive Cell</th><td>" . $prodectiveCell . "</td></tr>";
+                    $message .= "<tr><th>Total Amount</th><td>" . $totalSumAmount . "</td></tr>";
+                    $message .= "</table>";
+
+                    // End HTML message
+                    $message .= "</body></html>";
+                    // echo $message ; 
+                    //  return;
+
+                    // Send the email
+              if (mail($to_email, $subject, $message, $headers)) {
+                    echo "✅ Email sent (PHP mail() returned true)";
+                } else {
+                    echo "❌ Email failed (PHP mail() returned false)";
+                }
+
+                     return;
+       }
 	   echo $data;
 	   return; 
 }

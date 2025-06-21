@@ -1,6 +1,10 @@
 <?php
   
    include("../connect.php");
+
+
+
+
    $time=date("H:i:s"); 
    $datetime = date("Y-m-d H:i:s");
    $date=date("Y-m-d");
@@ -363,6 +367,29 @@ if(isset($_GET['feedback']))
 	  // $res=mysqli_query($con,"select *, round( ( 6371  * acos( least(1.0,  cos( radians($lat) ) * cos( radians(latitude) ) * cos( radians(longitude) - radians($lng) ) + sin( radians($lat) ) * sin( radians(latitude) ) ) ) ), 3) as distance from outlets where areaid='$areaId having distance <= 0.5 order by distance asc");
 	   $res=mysqli_query($con,"select *, round( ( 6371  * acos( least(1.0,  cos( radians($lat) ) * cos( radians(latitude) ) * cos( radians(longitude) - radians($lng) ) + sin( radians($lat) ) * sin( radians(latitude) ) ) ) ), 3) as distance  from outlets  where routeid='$areaId' order by distance asc ");
 	   $response=array();
+
+  $distributorid = $distributorName = '';
+
+// Escape $areaId to prevent issues if it's from user input
+		
+
+		$distributorid = $distributorName = '';
+
+		$res2 = mysqli_query($con, "
+			SELECT employees.name AS distributor_name, employees.id AS id 
+			FROM area 
+			JOIN employees ON area.distributor_id = employees.id  
+			WHERE area.id = '$areaId'
+		");
+
+		if ($res2 && mysqli_num_rows($res2) > 0) {
+			$resRoute = mysqli_fetch_assoc($res2);
+			if ($resRoute) {
+				$distributorName = $resRoute['distributor_name'];
+				$distributorid = $resRoute['id'];
+			}
+		}
+
 	   $num=mysqli_field_count($con);
 	   while($row=mysqli_fetch_array($res))
 	   {
@@ -377,7 +404,7 @@ if(isset($_GET['feedback']))
 		   $rr["gstnumber"]=$row["gstnumber"];
 		   $rr["outlettype"]=$row["outlettype"];
 		   $rr["competitor_presense"]=$row["competitor_presense"];
-		   $rr["distributorid"]=$row["distributorid"];
+		   $rr["distributorid"]=$distributorid;
 		   $rr["salesmanagerid"]=$row["salesmanagerid"];
 		   $rr["rsmid"]=$row["rsmid"];
 		   $rr["routeid"]=$row["routeid"];
@@ -391,6 +418,8 @@ if(isset($_GET['feedback']))
 		   $rr["lastvisit"]=$row["lastvisit"];
 		   $rr["creationdate"]=$row["creationdate"];
 		   $rr["createdby"]=$row["createdby"]; 
+		   $rr["distributor_name"]=$distributorName; 
+
 		   array_push($response,$rr);
 	   } 
 	   

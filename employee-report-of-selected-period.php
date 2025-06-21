@@ -186,7 +186,7 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 				// Calculations
 				$newTotalOulets = $totalOutelate['total_outelate'] + $newTotalOutelate['new_total_outelate'];
 				$visitedOutlets = $totalVistingOutlate['total_visting_outlate'];
-				$outletsNotVisited = $newTotalOulets - $visitedOutlets;
+				$outletsNotVisited = (($newTotalOulets - $visitedOutlets)-$newTotalOutelate['new_total_outelate']);
 
 				$productivePercentage = ($newTotalOulets > 0)
 					? round(($booking['productive_outlets'] / $newTotalOulets) * 100)
