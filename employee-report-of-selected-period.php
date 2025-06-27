@@ -102,6 +102,9 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 			$starttime = 0;
 			$endtime = 0;
 			$totalWorkingdays=$workingdays=$workinghours = 0;
+			$workingTime = '0 Hrs 0 Mins';
+            $workingHoursDecimal  = 0.0;
+
 			$visitDetails = [];
 			$outletActivities = [];
 			$distance = 0;
@@ -121,7 +124,15 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 			$endtimeStamp = strtotime($endtime);
 
 			if ($starttimeStamp && $endtimeStamp) {
-				$workinghours = round(abs($starttimeStamp - $endtimeStamp) / 3600, 2);
+				$diffSeconds = abs($endtimeStamp - $starttimeStamp);
+				$hours       = floor($diffSeconds / 3600);
+				$minutes     = floor(($diffSeconds % 3600) / 60);
+
+				// Human–readable
+				$workingTime = sprintf('%d Hrs %d Mins', $hours, $minutes);
+
+				// Decimal for summing
+				$workingHoursDecimal = $hours + ($minutes / 60);
 			}
 
 			// Fetch area details
@@ -173,7 +184,7 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 					SELECT COUNT(DISTINCT o.id) as total_visting_outlate 
 					FROM outletactivity a 
 					JOIN outlets o ON a.outletid = o.id 
-					WHERE a.userid = '$employee' AND a.activitydate = '$selectdate' AND a.activitytype = 'Outlet Visit' AND o.areaid = '$area'
+					WHERE a.userid = '$employee' AND a.activitydate = '$selectdate' AND a.activitytype  IN ('Outlet Visit', 'New Outlet Create')  AND o.areaid = '$area'
 				")) ?: ['total_visting_outlate' => 0];
 
 				// Booking
@@ -186,7 +197,7 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 				// Calculations
 				$newTotalOulets = $totalOutelate['total_outelate'] + $newTotalOutelate['new_total_outelate'];
 				$visitedOutlets = $totalVistingOutlate['total_visting_outlate'];
-				$outletsNotVisited = (($newTotalOulets - $visitedOutlets)-$newTotalOutelate['new_total_outelate']);
+				$outletsNotVisited = ($newTotalOulets - $visitedOutlets);
 
 				$productivePercentage = ($newTotalOulets > 0)
 					? round(($booking['productive_outlets'] / $newTotalOulets) * 100)
@@ -241,10 +252,10 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 			}
 			$rowData .= "</td>";
 
-			$rowData .= "<td>" . $workinghours . " Hrs</td>";
-	        
-			 $totalhours+=$workinghours>0?$workinghours:0;
+			$rowData .= "<td>{$workingTime}</td>";
 
+			// Sum using the decimal value
+            $totalhours += $workingHoursDecimal;
 			// Visit details table inside a cell
 
 				// 1. Area Name(s)
