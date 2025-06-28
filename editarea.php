@@ -130,7 +130,7 @@
                   <label for="area">Distributor : </label>
                   <select  class="form-control"  name="distributor" id="distributor" required>
                       <option value="">Select distributor</option>
-                        <?php $res=mysqli_query($con,"select e.id, e.name from  employees where usertype=3 "); while($row=mysqli_fetch_array($res)){  $sdistributor=$row['id']==$distributor ? 'selected' :''; ?>
+                        <?php $res=mysqli_query($con,"select e.id, e.name from employees e where usertype=3 "); while($row=mysqli_fetch_array($res)){  $sdistributor=$row['id']==$distributor ? 'selected' :''; ?>
                         <option value="<?php echo $row['id'];?>"  <?php echo $sdistributor; ?> ><?php echo $row['name'];?></option>
                         <?php } ?>
                     </select>

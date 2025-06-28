@@ -70,7 +70,7 @@ require("../connect.php");
 
   if(isset($_GET['show']))
   { 
-    $res=mysqli_query($con,"SELECT a.id,a.country,a.area,a.latitude,a.longitude,a.km,a.registrationdate,s.name AS sname,reg.name AS rname ,c.city AS cityname ,emp.name As distributor  FROM area a LEFT JOIN regions reg ON reg.id=a.region LEFT JOIN states s ON s.id=a.state LEFT JOIN cities c ON c.id=a.city LEFT JOIN employees emp on emp.id=a.distributor_id "); 
+    $res=mysqli_query($con,"SELECT a.id,a.country,a.area,a.latitude,a.longitude,a.km,a.registrationdate,s.name AS sname,reg.name AS rname ,c.city AS cityname ,emp.name As distributor  FROM area a LEFT JOIN regions reg ON reg.id=a.region LEFT JOIN states s ON s.id=a.state LEFT JOIN cities c ON c.id=a.city LEFT JOIN employees emp on emp.id=a.distributor_id  order By a.area "); 
 		    $response=array();
       
       
@@ -110,7 +110,7 @@ require("../connect.php");
   {
  
      extract($_POST);
-     mysqli_query($con,"update area set latitude='$lat',longitude='$lng', registrationdate='$datetime',distributor_id='$distributor','area'=$area where id='$id'") or die(mysqli_error($con));
+     mysqli_query($con,"update area set latitude='$lat',longitude='$lng', registrationdate='$datetime',distributor_id='$distributor',area='$area' where id='$id'") or die(mysqli_error($con));
       if(mysqli_affected_rows($con)>0)
       {
 	     echo "success";

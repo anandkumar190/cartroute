@@ -60,7 +60,10 @@
                               WHERE 
                                   a.distributor_id = $editid 
                               GROUP BY 
-                                  a.id;");
+                              a.id, 
+                              a.area
+                            ORDER BY 
+                              a.area ;");
    
 
 
