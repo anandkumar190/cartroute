@@ -14,7 +14,7 @@
 		
 	?>
     
-    <?php $res=mysqli_query($con,"select count(distinct id) from states")or die(mysqli_error($con));
+    <?php $res=mysqli_query($con,"select count(distinct state) from outlets")or die(mysqli_error($con));
 	    $states=0;
 		if($row=mysqli_fetch_array($res))
 		{

@@ -276,7 +276,7 @@
 						   data:'states'
 						},
             {
-						   data:'outlet_count'
+						   data:'region_count'
 						},
             {
 						   data:'route_count'
