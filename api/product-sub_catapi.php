@@ -39,7 +39,7 @@ if(!isset($_SESSION['tittu']))
 
      if(isset($_GET['sub_cats'])){
          $id=$_GET['c_id'];
-           $query="SELECT id,name FROM parduct_sub_cat Where cat_id='$id'";
+           $query="SELECT id,name FROM parduct_sub_cat Where cat_id='$id' order by name ";
               $res=mysqli_query($con,$query);
    	 $response=array();
    	 

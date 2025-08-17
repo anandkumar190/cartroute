@@ -83,7 +83,7 @@
                   <label for="empdesignation">Select Category</label>
                   <select  class="form-control" name="cat_id" id="cat_id" required>
                    <option value="">Select Category</option>
-                    <?php $res=mysqli_query($con,"select id,name from product_cat"); while($row=mysqli_fetch_array($res)){?>
+                    <?php $res=mysqli_query($con,"select id,name from product_cat order by name "); while($row=mysqli_fetch_array($res)){?>
                     <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
                     <?php }?>
                   </select>
@@ -92,7 +92,7 @@
                            <label for="punit"> Select Retailer Unit</label>
                            <select  class="form-control" name="retailer_unit" id="punit" required>
                                <option value="">Select Unit</option>
-                          <?php $res=mysqli_query($con,"select id,name from sku_unit"); while($row=mysqli_fetch_array($res)){?>
+                          <?php $res=mysqli_query($con,"select id,name from sku_unit order by name "); while($row=mysqli_fetch_array($res)){?>
                           <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
                           <?php }?>                 
                            </select>
@@ -104,7 +104,7 @@
                            <label for="punit"> Select Customer unit</label>
                            <select  class="form-control" name="cunit" id="cunit" required>
                                <option value="">Select Unit</option>
-                         <?php $res=mysqli_query($con,"select id,name from sku_unit"); while($row=mysqli_fetch_array($res)){?>
+                         <?php $res=mysqli_query($con,"select id,name from sku_unit order by name "); while($row=mysqli_fetch_array($res)){?>
                          <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
                          <?php }?>   
                            </select>

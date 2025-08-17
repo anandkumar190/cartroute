@@ -793,7 +793,7 @@ if(isset($_GET['search']))
        
    if(isset($_GET['getstate']))
    {
-	   $res=mysqli_query($con,"select distinct a.state,st.name from area a join states st on a.state=st.id  ");
+	   $res=mysqli_query($con,"select distinct a.state,st.name from area a join states st on a.state=st.id  order by st.name");
 	   $states=array();
 	   while($row=mysqli_fetch_array($res))
 	   {
@@ -810,7 +810,7 @@ if(isset($_GET['search']))
    {
 	   $city=$_GET["city"];
 	   
-	   $res=mysqli_query($con,"select distinct id,name from regions where city_id='$city'");
+	   $res=mysqli_query($con,"select distinct id,name from regions where city_id='$city' order by name");
 	   $regions=array();
 	   while($row=mysqli_fetch_array($res))
 	   {
@@ -828,7 +828,7 @@ if(isset($_GET['search']))
    if(isset($_GET['getcity']))
    {
 	   $state=$_GET['state'];
-	   $res=mysqli_query($con,"select distinct city , id from cities where state_id='$state'");
+	   $res=mysqli_query($con,"select distinct city , id from cities where state_id='$state' order by city ");
 	   $cities=array();
 	   while($row=mysqli_fetch_array($res))
 	   {
@@ -844,7 +844,7 @@ if(isset($_GET['search']))
 if(isset($_GET['getdistributor']))
 {
 
-	$res=mysqli_query($con,"select name ,id  from employees where usertype=3");
+	$res=mysqli_query($con,"select name ,id  from employees where usertype=3 order by  name ");
 	$regions=array();
 	while($row=mysqli_fetch_array($res))
 	{
@@ -867,7 +867,7 @@ if(isset($_GET['getrouter']))
 {
 	$region=$_GET["region"];
 	
-	$res=mysqli_query($con,"select id,area from area where region='$region'");
+	$res=mysqli_query($con,"select id,area from area where region='$region' order by area ");
 	$regions=array();
 	while($row=mysqli_fetch_array($res))
 	{

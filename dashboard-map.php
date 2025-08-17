@@ -99,7 +99,6 @@
     <div id="map"></div>
     
 <script src="bower_components/jquery/dist/jquery.min.js"></script> 
-    
     <script>
       var map;
 	  var marker;
@@ -214,6 +213,7 @@
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrxsk0fDpJlEqqLXqrdrg833McDrv5apc">
     </script>
+
     <script>
     function state()
 	  {

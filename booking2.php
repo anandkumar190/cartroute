@@ -79,7 +79,7 @@ $outlets=array();
                       <i class="fa fa-user"></i>
                     </div>
                     <?php 
-					   $res=mysqli_query($con,"select * from employees where usertype='1'");
+					   $res=mysqli_query($con,"select * from employees where usertype='1' order by name ");
 					?>
                     <select  class="form-control pull-right " id="employee" name="employee">
                       <option value="">Select Salesman</option>
@@ -101,7 +101,7 @@ $outlets=array();
                       <i class="fa fa-user"></i>
                     </div>
                     <?php 
-					   $res=mysqli_query($con,"select * from outlets");
+					   $res=mysqli_query($con,"select * from outlets order by name");
 					?>
                     <select  class="form-control pull-right " id="outlet" name="outlet">
                       <option value="">Select outlet</option>
@@ -120,7 +120,7 @@ $outlets=array();
                       <i class="fa fa-user"></i>
                     </div>
                     <?php 
-					   $res=mysqli_query($con,"select id,name from employees where usertype='3'");
+					   $res=mysqli_query($con,"select id,name from employees where usertype='3' order by name ");
 					?>
                     <select  class="form-control pull-right " id="distibuter" name="distibuter">
                       <option value="">Select Distibuter</option>

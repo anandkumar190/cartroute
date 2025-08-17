@@ -76,7 +76,7 @@
                   <label for="empdesignation">Select State</label>
                   <select  class="form-control" name="state_id" id="state_id" required>
                    <option value="">Select State</option>
-                    <?php $res=mysqli_query($con,"select id,name from states"); while($row=mysqli_fetch_array($res)){?>
+                    <?php $res=mysqli_query($con,"select id,name from states order by name "); while($row=mysqli_fetch_array($res)){?>
                     <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
                     <?php }?>
                   </select>

@@ -110,7 +110,7 @@ require("../connect.php");
   {
  
      extract($_POST);
-     mysqli_query($con,"update area set latitude='$lat',longitude='$lng', registrationdate='$datetime',distributor_id='$distributor',area='$area' where id='$id'") or die(mysqli_error($con));
+     mysqli_query($con,"update area set latitude='$lat',longitude='$lng', registrationdate='$datetime',distributor_id='$distributor',area='$area',state='$state', city='$city' ,region='$region' where id='$id'") or die(mysqli_error($con));
       if(mysqli_affected_rows($con)>0)
       {
 	     echo "success";

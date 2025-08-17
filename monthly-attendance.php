@@ -68,7 +68,7 @@
                       <i class="fa fa-user"></i>
                     </div>
                     <?php 
-					   $res=mysqli_query($con,"select * from employees where usertype='1'");
+					   $res=mysqli_query($con,"select * from employees where usertype='1' order by name ");
 					?>
                     <select  class="form-control pull-right " id="employee" name="employee">
                       <option value="">Select Employee</option>

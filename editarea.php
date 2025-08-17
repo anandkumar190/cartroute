@@ -84,9 +84,9 @@
                     <div class="form-group">
                       <input type="hidden" name="id" id="id" value="<?php echo $id;?>" />
                       <label for="state">State</label>
-                      <select  class="form-control"  name="state" id="state"   disabled >
+                      <select  class="form-control"  name="state" id="state"  >
                         <option value="">Select State</option>
-                        <?php $res=mysqli_query($con,"select id,name from states"); while($row=mysqli_fetch_array($res)){$sselect=$row['id']==$state ? 'selected' :'';?>
+                        <?php $res=mysqli_query($con,"select id,name from states order by name"); while($row=mysqli_fetch_array($res)){$sselect=$row['id']==$state ? 'selected' :'';?>
                         <option value="<?php echo $row['id'];?>" <?php echo $sselect;?> ><?php echo $row['name'];?> </option>
                         <?php }?>
                       </select>     
@@ -95,9 +95,9 @@
                   <div class="col-md-4"> 
                       <div class="form-group">
                                 <label for="city">City</label>  
-                              <select class="form-control"name="city" id="city"    disabled>
+                              <select class="form-control"name="city" id="city"  >
                               <option value="">Select city </option>
-                              <?php $res=mysqli_query($con,"select id,city from cities where state_id='$state'"); while($row=mysqli_fetch_array($res)){ $cselect=$row['id']==$city ? 'selected' :'';?>
+                              <?php $res=mysqli_query($con,"select id,city from cities where state_id='$state' order by city "); while($row=mysqli_fetch_array($res)){ $cselect=$row['id']==$city ? 'selected' :'';?>
                               <option value="<?php echo $row['id'];?>" <?php echo $cselect;?> ><?php echo $row['city'];?></option>
                               <?php }?>
                           
@@ -108,9 +108,9 @@
                     <div class="col-md-4"> 
                           <div class="form-group">
                             <label for="region">Region </label>
-                                <select class="form-control" name="region" id="region"  disabled >
+                                <select class="form-control" name="region" id="region"  >
                                   <option value="">Select Region </option>
-                                  <?php $res=mysqli_query($con,"select id,name from regions where city_id='$city'"); while($row=mysqli_fetch_array($res)){$rselect=$row['id']==$region ? 'selected':'';?>
+                                  <?php $res=mysqli_query($con,"select id,name from regions where city_id='$city' order by name"); while($row=mysqli_fetch_array($res)){$rselect=$row['id']==$region ? 'selected':'';?>
                                   <option value="<?php echo $row['id'];?>" <?php echo $rselect; ?>><?php echo $row['name'];?></option>
                                   <?php }?>
                                 </select>
@@ -130,7 +130,7 @@
                   <label for="area">Distributor : </label>
                   <select  class="form-control"  name="distributor" id="distributor" required>
                       <option value="">Select distributor</option>
-                        <?php $res=mysqli_query($con,"select e.id, e.name from employees e where usertype=3 "); while($row=mysqli_fetch_array($res)){  $sdistributor=$row['id']==$distributor ? 'selected' :''; ?>
+                        <?php $res=mysqli_query($con,"select e.id, e.name from employees e where usertype=3 order by  e.name  "); while($row=mysqli_fetch_array($res)){  $sdistributor=$row['id']==$distributor ? 'selected' :''; ?>
                         <option value="<?php echo $row['id'];?>"  <?php echo $sdistributor; ?> ><?php echo $row['name'];?></option>
                         <?php } ?>
                     </select>

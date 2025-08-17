@@ -48,10 +48,10 @@
                 <form>
                  <div class="input-group input-group-sm" style="width: 150px;">
                        <label>State</label>
-                   <select class="form-control"  name="state" id="state" required>
+                   <select class="form-control select2 "  name="state" id="state" required>
                    <option value="">Select State</option>
                    <?php 
-                        $res=mysqli_query($con,"select  distinct area.state,s.name from area left join states s on s.id=area.state ");
+                        $res=mysqli_query($con,"select  distinct area.state,s.name from area left join states s on s.id=area.state  order by s.name ");
                         while($row=mysqli_fetch_array($res))
                       {
                         echo"<option value=".$row[0]." >$row[1]</option>";
@@ -62,13 +62,13 @@
 
                  <div class="input-group input-group-sm" style="width: 150px;">
                       <label>City</label>
-                  <select class="form-control"  name="city" id="city" required>
+                  <select class="form-control select2 "  name="city" id="city" required>
                   <option value="">Select City</option>
                 </select>
                  </div>
                  <div class="input-group input-group-sm" style="width: 150px;">
                       <label>Region</label>
-                  <select class="form-control"  name="region" id="region" required>
+                  <select class="form-control select2 "  name="region" id="region" required>
                   <option value="">Select Region</option>
                 </select>
                  </div>

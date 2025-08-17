@@ -49,7 +49,7 @@ if(!isset($_SESSION['tittu']))
   
   if(isset($_GET['cities'])){
       $id=$_GET['s_id'];
-        $query="SELECT id,city FROM cities Where state_id='$id'";
+        $query="SELECT id,city FROM cities Where state_id='$id' order by city ";
            $res=mysqli_query($con,$query);
 	 $response=array();
 	 
@@ -66,7 +66,7 @@ if(!isset($_SESSION['tittu']))
 
   if(isset($_GET['regions'])){
       $id=$_GET['s_id'];
-        $query="SELECT id,name FROM regions Where city_id='$id'";
+        $query="SELECT id,name FROM regions Where city_id='$id' order by name ";
            $res=mysqli_query($con,$query);
 	 $response=array();
 	 

@@ -83,7 +83,7 @@ $outlets=array();
                    <select class="form-control"  name="state" id="state" required>
                    <option value="">Select State</option>
                    <?php 
-                        $res=mysqli_query($con,"select  distinct area.state,s.name from area left join states s on s.id=area.state ");
+                        $res=mysqli_query($con,"select  distinct area.state,s.name from area left join states s on s.id=area.state order by s.name ");
                         while($row=mysqli_fetch_array($res))
                       {
                         echo"<option value=".$row[0]." >$row[1]</option>";

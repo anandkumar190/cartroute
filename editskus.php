@@ -99,7 +99,7 @@
                   <label for="punit">Select Category</label>
                   <select  class="form-control" name="catid" id="catid" required>
                      <option value="">Select Product Category</option>
-               <?php $res=mysqli_query($con,"select id,name from product_cat"); while($row=mysqli_fetch_array($res)){$ctselect=$row['id']==$catid ? 'selected' :'';?>
+               <?php $res=mysqli_query($con,"select id,name from product_cat order by name "); while($row=mysqli_fetch_array($res)){$ctselect=$row['id']==$catid ? 'selected' :'';?>
                <option value="<?php echo $row['id'];?>"  <?php echo $ctselect;?> > <?php echo $row['name'];?></option>
                <?php }?>
              </select>
@@ -111,7 +111,7 @@
                   <select  class="form-control" name="scatid" id="scatid" required>
                  
                    <option value="">Select Product Sub Category</option>
-                    <?php $res=mysqli_query($con,"SELECT id,name FROM parduct_sub_cat Where cat_id='$catid'"); while($row=mysqli_fetch_array($res)){$sctselect=$row['id']==$scatid ? 'selected' :'';?>
+                    <?php $res=mysqli_query($con,"SELECT id,name FROM parduct_sub_cat Where cat_id='$catid' order by name "); while($row=mysqli_fetch_array($res)){$sctselect=$row['id']==$scatid ? 'selected' :'';?>
                    <option value="<?php echo $row['id'];?>" <?php echo $sctselect; ?> ><?php echo $row['name'];?></option>
                    <?php }?>    
 

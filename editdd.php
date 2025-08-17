@@ -167,7 +167,7 @@
                   <label for="empstate">State</label>
                   <select  class="form-control" name="empstate" id="empstate" required>
                         <option value="">Select State</option>
-                        <?php $res=mysqli_query($con,"select id,name from states"); while($row=mysqli_fetch_array($res)){$sselect=$row['id']==$empstate ? 'selected' :'';?>
+                        <?php $res=mysqli_query($con,"select id,name from states order by name "); while($row=mysqli_fetch_array($res)){$sselect=$row['id']==$empstate ? 'selected' :'';?>
                         <option value="<?php echo $row['id'];?>" <?php echo $sselect;?> ><?php echo $row['name'];?> </option>
                         <?php }?>
                       </select> 
@@ -178,7 +178,7 @@
                   <label for="empcity">City</label>
                   <select class="form-control" name="empcity" id="empcity" required>
                               <option value="">Select city </option>
-                              <?php $res=mysqli_query($con,"select id,city from cities where state_id='$empstate'"); while($row=mysqli_fetch_array($res)){ $cselect=$row['id']==$empcity ? 'selected' :'';?>
+                              <?php $res=mysqli_query($con,"select id,city from cities where state_id='$empstate' order by city"); while($row=mysqli_fetch_array($res)){ $cselect=$row['id']==$empcity ? 'selected' :'';?>
                               <option value="<?php echo $row['id'];?>" <?php echo $cselect;?> ><?php echo $row['city'];?></option>
                               <?php }?>
                           

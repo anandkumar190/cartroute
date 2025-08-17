@@ -77,7 +77,7 @@
                   <label for="empdesignation">Select State</label>
                   <select  class="form-control" name="state_id" id="state_id" required>
                    <option value="">Select State</option>
-                    <?php $res=mysqli_query($con,"select id,name from states"); while($row=mysqli_fetch_array($res)){?>
+                    <?php $res=mysqli_query($con,"select id,name from states order by name"); while($row=mysqli_fetch_array($res)){?>
                     <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
                     <?php }?>
                   </select>
@@ -97,7 +97,7 @@
                <label for="empmanager">Select City</label>
                <select class="form-control" name="city_id" id="citylist" required>
                 <option value="">Select city </option>
-             <?php $res=mysqli_query($con,"select id,city from cities where state_id='$stateid'"); while($row=mysqli_fetch_array($res)) { 
+             <?php $res=mysqli_query($con,"select id,city from cities where state_id='$stateid'  order by city"); while($row=mysqli_fetch_array($res)) { 
              
              if($cityid==$row['id']){$sel='selected';}else $sel=''; 
           
