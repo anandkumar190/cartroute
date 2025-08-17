@@ -318,6 +318,7 @@ if(isset($_GET['showmap']))
 	   $region=$_GET['region'];
 	   $city=$_GET['city'];
 	   $routeid=$_GET['area'];
+       $distributor=trim($_GET['distributor']);
 
 $selectQry = "
     SELECT 
@@ -356,28 +357,35 @@ $selectQry = "
 // Optional filters
 $isSnd = 0;
 
-if ($state != "") {
-    $prefix = $isSnd == 0 ? " WHERE " : " AND ";
-    $selectQry .= $prefix . "a.state = '$state'";
-    $isSnd = 1;
-}
+ if ($distributor!="") {
+			$prefix="where";
+			$selectQry=$selectQry.$prefix." d.id ='$distributor'";
+			$isSnd=1;
+	 }else {
 
-if ($city != "") {
-    $prefix = $isSnd == 0 ? " WHERE " : " AND ";
-    $selectQry .= $prefix . "a.city = '$city'";
-    $isSnd = 1;
-}
+		if ($state != "") {
+			$prefix = $isSnd == 0 ? " WHERE " : " AND ";
+			$selectQry .= $prefix . "a.state = '$state'";
+			$isSnd = 1;
+		}
 
-if ($region != "") {
-    $prefix = $isSnd == 0 ? " WHERE " : " AND ";
-    $selectQry .= $prefix . "a.region = '$region'";
-    $isSnd = 1;
-}
+		if ($city != "") {
+			$prefix = $isSnd == 0 ? " WHERE " : " AND ";
+			$selectQry .= $prefix . "a.city = '$city'";
+			$isSnd = 1;
+		}
 
-if ($routeid != "") {
-    $prefix = $isSnd == 0 ? " WHERE " : " AND ";
-    $selectQry .= $prefix . "o.routeid = '$routeid'";
-    $isSnd = 1;
+		if ($region != "") {
+			$prefix = $isSnd == 0 ? " WHERE " : " AND ";
+			$selectQry .= $prefix . "a.region = '$region'";
+			$isSnd = 1;
+		}
+
+		if ($routeid != "") {
+			$prefix = $isSnd == 0 ? " WHERE " : " AND ";
+			$selectQry .= $prefix . "o.routeid = '$routeid'";
+			$isSnd = 1;
+		}
 }
 
 // Execute the query

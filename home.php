@@ -158,7 +158,7 @@
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs pull-left">
               <li class="active"><a href="#today-activity" data-toggle="tab">Map View</a></li>
-              <li><a href="#tear-tree-view" data-toggle="tab">TreeView</a></li>
+         
               
             </ul>
             
@@ -171,10 +171,7 @@
               </div>
               
               <!--TreeView tab Start-->
-              <div class="chart tab-pane" id="tear-tree-view" style="position: relative; height: 300px;">
-                 <h1>Tree View</h1>
-                     Tree View
-              </div>
+       
             </div>
           </div>
           <!-- /.nav-tabs-custom -->

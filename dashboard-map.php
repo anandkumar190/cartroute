@@ -74,7 +74,18 @@
          </div>
       </div>
        
-       <div class="col-md-3">
+          <div class="col-md-2 ;">
+             <div class="form-group">
+             
+                      <label>Select distributor</label>
+                          <select class="form-control select2" id="distributor">
+                            <option value=""> Select distributor</option>
+                          </select>
+             </div>
+          </div>
+
+
+       <div class="col-md-2">
         <div class="form-group">
            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><br/>
            <button type="button" class="" id="search"><i class="fa fa-search"></i> Search</button>
@@ -100,15 +111,18 @@
     var state=$("#state").val();
 		var city=$("#city").val();
 		var region=$("#region").val();
-		var area=$("#area").val();
+    var distributor=$("#distributor").val();
+    var area=$("#area").val();
+
 		$.ajax({
-			 url:'api/outlets-web.php?showmap&state='+state+'&city='+city+'&region='+region+'&area='+area,
+        url:'api/outlets-web.php?showmap&state='+state+'&city='+city+'&region='+region+'&area='+area+"&distributor="+distributor,
 			 type:"GET",
+			
 			 contentType:"application/json; charset=utf-8",
 			 success: function(data){
 			 //alert(data);
 			 $("#loader").hide();
-			 data=JSON.parse(data);
+      data=JSON.parse(data);
 			 var latLng=[];
 			 var Titles=[];
 			 for(var i=0;i<data.length;i++)
@@ -198,7 +212,7 @@
 	  
     </script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrxsk0fDpJlEqqLXqrdrg833McDrv5apc&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrxsk0fDpJlEqqLXqrdrg833McDrv5apc">
     </script>
     <script>
     function state()
@@ -295,6 +309,7 @@
 	  }
 	  
 	  state();
+    distributor();
 	  $("#state").change(function(){
 		   var state=$("#state option:selected").val();
 		   city(state);
@@ -332,6 +347,32 @@
 		  $("#search").click(function(){			  
 			  initMap();
 			  });
+
+    function distributor()
+	  {
+
+      $.ajax({
+			 url:"api/outlets-web.php?getdistributor",
+			 type:"GET",			 
+			 contentType:"application/json; charset=utf-8",
+			 success: function(data){
+				 //alert(data);
+			 data=JSON.parse(data);
+			   
+			   var distributor=$("#distributor");
+			   distributor.empty();
+			   var option=$("<option value='' />").html("Select distributor");
+			   distributor.append(option);
+			   $.each(data, function (i, res) {
+                        //Create new option
+                        option = $('<option value='+res.id+'>').html(res.name);
+                        //append city distributors drop down
+                        distributor.append(option);
+                    });
+			 }});
+	  }
+
+
     </script>
      
   </body>
