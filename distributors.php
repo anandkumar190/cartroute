@@ -1,4 +1,3 @@
-
 <?php require("connect.php");?>
 <?php $title="Distributors"?>
 <?php require("header.php");?>
