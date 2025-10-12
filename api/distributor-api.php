@@ -77,7 +77,7 @@ $time=date("H:i:s");
 
 	
 	$filename="image";
-	mysqli_query($con,"insert into employees(image,name,contactperson,sortname,empid,email,contact,address,designationid,roleid,managerid,usertype,salary,commission,city,state,reportsto,latitude,longitude,battery,region,doj,creationdate,createdby,lastlogin) values('$filename','$empname','$empcontactname','$empsortname','$empcode','$empemail','$empcontact','$empaddress','0','0','0','3','0','0','$empcity','$empstate','0','$emplat','$emplng','','','$datetime','$datetime','$userid','$datetime')") or die(mysqli_error($con));
+	mysqli_query($con,"insert into employees(image,name,contactperson,sortname,empid,email,contact,password,address,designationid,roleid,managerid,usertype,salary,commission,city,state,reportsto,latitude,longitude,battery,region,doj,creationdate,createdby,lastlogin) values('$filename','$empname','$empcontactname','$empsortname','$empcode','$empemail','$empcontact',PASSWORD('$empcontact'),'$empaddress','0','0','0','3','0','0','$empcity','$empstate','0','$emplat','$emplng','','','$datetime','$datetime','$userid','$datetime')") or die(mysqli_error($con));
 	
 	if(mysqli_affected_rows($con)>0)
 	{
@@ -204,6 +204,7 @@ $time=date("H:i:s");
 	      	      mysqli_query($con,"update  employees set name='$empname',
 				  email='$empemail',
 				  contact='$empcontact',
+				  password=PASSWORD('$empcontact'),
 				  address='$empaddress',
 				  latitude='$emplat',
 				  longitude='$emplng',
@@ -242,6 +243,7 @@ $time=date("H:i:s");
 	      	mysqli_query($con,"update  employees set name='$empname',
 			email='$empemail',
 			contact='$empcontact',
+			password=PASSWORD('$empcontact'),
 			address='$empaddress',
 			city='$empcity',
 			state='$empstate',
