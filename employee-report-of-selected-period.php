@@ -189,7 +189,7 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 
 				// Booking
 				$booking = mysqli_fetch_assoc(mysqli_query($con, "
-					SELECT COUNT(outlet_id) as productive_outlets, SUM(total_amount) as total_value_orders 
+					SELECT COUNT( DISTINCT outlet_id) as productive_outlets, SUM(total_amount) as total_value_orders 
 					FROM booking 
 					WHERE user_id = '$employee' AND DATE(booking_time) = '$selectdate'
 				")) ?: ['productive_outlets' => 0, 'total_value_orders' => 0];

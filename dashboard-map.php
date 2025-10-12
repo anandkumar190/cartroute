@@ -95,7 +95,26 @@
       </div>
        
     </div>
-  </div>    
+
+    			<div class="row">
+						<div class="col-sm-12">
+					
+										<span class="panel-title txt-dark">Outlets</span>
+                                             
+                                        <span id="total" class="panel-title txt-dark"></span>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span id="mt" class="panel-title txt-dark"></span>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span id="gt" class="panel-title txt-dark"></span>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span id="mtl" class="panel-title txt-dark"></span>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span id="milkbooth" class="panel-title txt-dark"></span>
+                                         
+									</div>
+									</div>
+                  
+    </div>    
     <div id="map"></div>
     
 <script src="bower_components/jquery/dist/jquery.min.js"></script> 
@@ -107,21 +126,34 @@
 	  function initMap() {
 		  $("#loader").show();
         //var myLatLng = {lat:28.96368627576849, lng: 77.73731481415368};
+         
     var state=$("#state").val();
 		var city=$("#city").val();
 		var region=$("#region").val();
     var distributor=$("#distributor").val();
     var area=$("#area").val();
 
+
+      let $mt=$("#mt"); let $gt=$("#gt"); let $mtl=$("#mtl");
+		   let  $milkbooth=$("#milkbooth"); let $total=$("#total");
+
 		$.ajax({
         url:'api/outlets-web.php?showmap&state='+state+'&city='+city+'&region='+region+'&area='+area+"&distributor="+distributor,
 			 type:"GET",
 			
-			 contentType:"application/json; charset=utf-8",
-			 success: function(data){
-			 //alert(data);
-			 $("#loader").hide();
-      data=JSON.parse(data);
+        contentType:"application/json; charset=utf-8",
+        success: function(data){
+        //alert(data);
+        $("#loader").hide();
+        data=JSON.parse(data);
+         console.log(data);
+
+         $mt.html("MTS - "+data[data.length-1].mt);
+			   $gt.html("G.T. - "+data[data.length-1].gt);
+			   $mtl.html("MTL - "+data[data.length-1].mtl);
+			   $milkbooth.html("Milk Booth - "+data[data.length-1].milkbooth);
+			   $total.html("Total Outlets - "+data[data.length-1].total);
+
 			 var latLng=[];
 			 var Titles=[];
 			 for(var i=0;i<data.length;i++)
@@ -358,7 +390,6 @@
 			 success: function(data){
 				 //alert(data);
 			 data=JSON.parse(data);
-			   
 			   var distributor=$("#distributor");
 			   distributor.empty();
 			   var option=$("<option value='' />").html("Select distributor");

@@ -90,6 +90,91 @@
 	  }
    }
 
+if(isset($_GET['new_login']))
+   {
+	  extract($_POST);
+	  $check =false;
+	  
+	  $query1="select * from employees where email='$user' and password=password('$pass')";
+	  
+
+	  $res=mysqli_query($con,$query1) or die(mysqli_error($con));
+	  if($row=mysqli_fetch_array($res))
+	  {
+	  
+	   $query1="select * from devices where userid='$row[0]' and status='1'";
+	   $res1=mysqli_query($con,$query1) or die(mysqli_error($con));
+	    if($row1=mysqli_fetch_array($res1))
+		{
+		  if($row1[1]==$name && $row1[2]==$modelno)
+		  {
+			  $check="same";
+
+			  $sql = "DELETE FROM outletactivity WHERE activitydate < CURDATE() - INTERVAL 200 DAY";
+				$con->query($sql);
+			
+
+
+		  }
+		  else
+		  {
+			  $check="notsame";
+		  }
+		}
+		else
+		{
+			$check="new";
+		}
+		
+	  }
+
+
+
+	   
+	    if($check=="notsame")
+		{
+		  echo "already"; 	
+		  return;
+		}
+		
+		
+	  $query1="select * from employees where email='$user' and password=password('$pass') and status='1'";
+
+	  $res=mysqli_query($con,$query1) or die(mysqli_error($con));
+	  
+	  //$response=array();
+	  if($row=mysqli_fetch_array($res))
+	  {
+		
+		if($check=="new")
+		{
+			mysqli_query($con,"insert into devices(name,modelno,appversion,osversion,logindate,userid,status,track,usertoken) values('$name','$modelno','$appversion','$osversion','$datetime','$row[0]','1','0','$token')");
+				
+		}
+		else
+		{
+		 mysqli_query($con,"update devices  set name='$name',modelno='$modelno',appversion='$appversion',osversion='$osversion',logindate='$datetime',usertoken='$token' where userid='$row[0]'");
+		}
+		  
+		  //$rr=array("id"=>$row["id"],"name"=>$row["name"],"empid"=>$row["empid"],"email"=>$row["email"],"contact"=>$row["contact"],"address"=>$row["address"],"designation"=>$row["designation"],"role"=>$row["role"],"managerid"=>$row["managerid"],"salary"=>$row["salary"],"usertype"=>$row["usertype"],"commission"=>$row["commission"],"city"=>$row["city"],"latitude"=>$row["latitude"],"longitude"=>$row["longitude"],"region"=>$row["region"],"doj"=>$row["doj"],"dol"=>$row["dol"],"reportsto"=>$row["reportsto"],"image"=>$row["image"]);
+		//$response[]=$rr;
+		// echo json_encode($response);
+		 
+		$data=json_encode($row);
+		echo $data;
+		return;
+		 
+	  }
+	  else
+	  {
+		 echo "error";
+		 return;
+	  }
+   }
+
+
+
+
 
       if(isset($_GET['loginchk']))
       {

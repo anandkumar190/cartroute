@@ -396,7 +396,7 @@ if (!$result) {
 }
 
 $response = array();
-
+ $total=0;$gt=0;$mt=0;$mtl=0;$milkbooth=0;
 while ($row = mysqli_fetch_array($result)) {
     $rr = array();
     $rr["id"] = $row["id"];
@@ -415,6 +415,32 @@ while ($row = mysqli_fetch_array($result)) {
     $rr["longitude"] = $row["longitude"];
     $rr["areaid"] = $row["areaid"];
     $rr["area"] = $row["area"];
+
+   if($row["outlettype"]=="MTS")
+		   {
+			   $mt++;
+		   }
+		   if($row["outlettype"]=="G.T.")
+		   {
+			   $gt++;
+		   }
+		   if($row["outlettype"]=="Milk Booth")
+		   {
+			   $milkbooth++;
+		   }
+		   if($row["outlettype"]=="MTL")
+		   {
+			   $mtl++;
+		   }
+		   
+		   $total++;
+		   
+		   $rr["mt"]=$mt;
+	       $rr["gt"]=$gt;
+	       $rr["mtl"]=$mtl;
+	       $rr["milkbooth"]=$milkbooth;
+	       $rr["total"]=$total;
+	
     
     array_push($response, $rr);
 }
