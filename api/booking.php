@@ -470,14 +470,14 @@ if(isset($_GET['routevistsummary']) or isset($_GET['sendreport']) ){
 
         $data=json_encode([
             'bookinglist'=>$bookinglist,
-            'total_outlet'=>($totalOutlet-$totalNewOutlet),
+            'total_outlet'=>round($totalOutlet-$totalNewOutlet,2),
             'total_visted_outlet'=>$totalVistedOutlet,
             'total_new_outlet'=>$totalNewOutlet,
             'total_sum_amount'=>$totalSumAmount,
             'total_prodective_outlet'=>$totalProdectiveOutlet,
-            'prodective_cell'=>$prodectiveCell."%",
+            'prodective_cell'=>round($prodectiveCell,2)."%",
             'no_outlet_after_new_'=>($totalOutlet),
-            'outlet_not_visted'=>$totalOutlet-$totalVistedOutlet
+            'outlet_not_visted'=>round($totalOutlet-$totalVistedOutlet)
 
           ]);
 
