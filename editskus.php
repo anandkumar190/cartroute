@@ -2,7 +2,7 @@
 <?php $title="Products"?>
 <?php require("header.php");?>
 
-<?php 
+<?php
   $pid="";
   $pname="";
   $pshort="";
@@ -10,6 +10,7 @@
   $pmrp="";
   $prate="";
   $pimage="";
+  $prodective_cell="";
 
   if(isset($_GET['editid']))
   {
@@ -18,14 +19,14 @@
 	if($row=mysqli_fetch_array($res))
 	{
 
-		
+
     $pid=$row[0];
 		$pname=$row[1];
 		$pshort=$row[2];
 		$punit=$row[3];
 		$pmrp=$row[4];
 		$prate=$row[5];
-    
+
     $catid=$row[8];
     $scatid=$row[9];
     $cunit=$row[10];
@@ -34,6 +35,7 @@
     $discount=$row[13];
 
     $pimage=$row[14];
+    $prodective_cell=$row[15];
 	}
   }
 ?>
@@ -109,16 +111,20 @@
                 <div class="form-group">
                   <label for="scatid">Select Sub Category</label>
                   <select  class="form-control" name="scatid" id="scatid" required>
-                 
+
                    <option value="">Select Product Sub Category</option>
                     <?php $res=mysqli_query($con,"SELECT id,name FROM parduct_sub_cat Where cat_id='$catid' order by name "); while($row=mysqli_fetch_array($res)){$sctselect=$row['id']==$scatid ? 'selected' :'';?>
                    <option value="<?php echo $row['id'];?>" <?php echo $sctselect; ?> ><?php echo $row['name'];?></option>
-                   <?php }?>    
+                   <?php }?>
 
                   </select>
                 </div>
-                
-              
+
+                <div class="form-group">
+                  <label for="prodective_cell">Order/Position</label>
+                  <input type="number" class="form-control" name="prodective_cell" id="prodective_cell" value="<?php echo $prodective_cell;?>" placeholder="Enter Order/Position" min="0"/>
+                </div>
+
 
 
 
@@ -201,16 +207,18 @@
 		var pshort = $('#pshort').val();
     var catid = $('#catid').val();
     var scatid = $('#scatid').val();
+    var prodective_cell = $('#prodective_cell').val();
 		if(files!=null)
 		{
         fd.append('pimage',files);
 		}
-		
+
 		fd.append('pid',pid);
 		fd.append('pname',pname);
 		fd.append('pshort',pshort);
     fd.append('catid',catid);
     fd.append('scatid',scatid);
+    fd.append('prodective_cell',prodective_cell);
 		
            progress.fadeIn("slow");
         $.ajax({

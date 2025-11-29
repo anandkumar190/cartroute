@@ -74,6 +74,7 @@
                    
                     
                           <th>Category</th>
+                          <th>Position</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -129,10 +130,14 @@
                   <input type="text" class="form-control" name="name" id="name" placeholder="Enter Name"  required="required"/>
                 </div>
                
+                  <div class="form-group controls">
+                  <label for="empname">Position</label>
+                  <input type="text" class="form-control" name="position" id="position" placeholder="Enter Position"  required="required"/>
+                </div>
       
              </div> <!-- col 4 close--> 
-             
-            
+    
+          
           </div>
          </div>
               <!-- /.box-body -->
@@ -224,7 +229,8 @@
 
 
                 {
-              data:'name'
+              data:'name',
+              data:'name',
             }
 
           
@@ -385,12 +391,14 @@ function sendData(){
     
     var name = $('#name').val();
     var state_id = $('#state_id').val();
-
+   var position=$("#position").val();
 
     
 
     fd.append('name',name);
     fd.append('state_id',state_id);
+    fd.append('position',position);
+
     
         progress.fadeIn("slow");
         $.ajax({
@@ -410,6 +418,7 @@ function sendData(){
     
                 $('#name').val('');
                 $('#state_id').val('');
+                $('#position').val('');
     
           
                 }else{

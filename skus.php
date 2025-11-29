@@ -74,7 +74,7 @@
 													<th>Short Name</th>
 													<th>UNIT</th>
 													<th>MRP</th>
-								
+													<th>Order</th>
                           <th>Image</th>
 												</tr>
 												</thead>
@@ -147,13 +147,17 @@
                   <label for="scatid">Select Sub Category</label>
                   <select  class="form-control" name="scatid" id="scatid" required>
                    <option value="">Select Product Sub Category</option>
-                               
+
                   </select>
                 </div>
 
+                <div class="form-group">
+                  <label for="prodective_cell">Order/Position</label>
+                  <input type="number" class="form-control" name="prodective_cell" id="prodective_cell" value="0" placeholder="Enter Order/Position" min="0"/>
+                </div>
 
-                
-         
+
+
 
 
 
@@ -253,7 +257,7 @@
 						  {
 							data:'productname'
 						},
-						{data:'productid'},{data:'unit'},{data:'mrp'},{data:'image',render:function(value){
+						{data:'productid'},{data:'unit'},{data:'mrp'},{data:'prodective_cell'},{data:'image',render:function(value){
 							return "<img src='imgproduct/"+value+"' class='img img-thumbnail' style='width:100px; height:100px;'/>";
 							}}
 					  ]
@@ -288,6 +292,7 @@ function sendData(){
 		var pshort = $('#pshort').val();;
     var catid = $('#catid').val();
     var scatid = $('#scatid').val();
+    var prodective_cell = $('#prodective_cell').val();
 
 
 
@@ -296,6 +301,7 @@ function sendData(){
 		fd.append('pshort',pshort);
     fd.append('catid',catid);
     fd.append('scatid',scatid);
+    fd.append('prodective_cell',prodective_cell);
 
            progress.fadeIn("slow");
         $.ajax({

@@ -36,7 +36,9 @@
 	$filename = preg_replace("/[^a-zA-Z0-9_-]/", "", $pname.$pshort) . ".jpg"; // Clean file name
 	$destination = "../imgproduct/" . $filename;
 	
-	mysqli_query($con,"insert into skus(productname,productid,catid,scatid, brandname,quantity,image,creationdate,createdby) values('$pname','$pshort','$catid','$scatid','FRIC BERGEN','0','$filename','$datetime','0')") or die(mysqli_error($con));
+	$prodective_cell = isset($prodective_cell) ? $prodective_cell : 0;
+	
+	mysqli_query($con,"insert into skus(productname,productid,catid,scatid, brandname,quantity,image,creationdate,createdby,prodective_cell) values('$pname','$pshort','$catid','$scatid','FRIC BERGEN','0','$filename','$datetime','0','$prodective_cell')") or die(mysqli_error($con));
 	if(mysqli_affected_rows($con)>0)
 	{  
 		if (move_uploaded_file($tmpname, $destination)) {
@@ -50,7 +52,27 @@
 
   else if(isset($_GET['show']))
   {
-     $res=mysqli_query($con,"SELECT skus.id,skus.productname,skus.productid,sku_unit.name AS unit ,skus.rate,skus.brandname,parduct_sub_cat.cmrp As mrp,product_cat.name AS catname,parduct_sub_cat.name AS sub_catname,skus.image FROM skus LEFT JOIN product_cat on product_cat.id=skus.catid LEFT JOIN parduct_sub_cat on parduct_sub_cat.id= skus.scatid  LEFT JOIN sku_unit on sku_unit.id=parduct_sub_cat.cunit");
+   //  $res=mysqli_query($con,"SELECT skus.id,skus.productname,skus.productid,sku_unit.name AS unit ,skus.rate,skus.brandname,parduct_sub_cat.cmrp As mrp,product_cat.name AS catname,parduct_sub_cat.name AS sub_catname,skus.image,skus.prodective_cell FROM skus LEFT JOIN product_cat on product_cat.id=skus.catid LEFT JOIN parduct_sub_cat on parduct_sub_cat.id= skus.scatid  LEFT JOIN sku_unit on sku_unit.id=parduct_sub_cat.cunit ORDER BY skus.prodective_cell ASC");
+
+	 $res = mysqli_query($con, "
+SELECT 
+    skus.id, 
+    skus.productname, 
+    skus.productid, 
+    sku_unit.name AS unit,
+    skus.rate, 
+    skus.brandname, 
+    parduct_sub_cat.cmrp AS mrp,
+    product_cat.name AS catname, 
+    parduct_sub_cat.name AS sub_catname,
+    skus.image, 
+    skus.prodective_cell
+FROM skus
+LEFT JOIN product_cat ON product_cat.id = skus.catid
+LEFT JOIN parduct_sub_cat ON parduct_sub_cat.id = skus.scatid
+LEFT JOIN sku_unit ON sku_unit.id = parduct_sub_cat.cunit
+ORDER BY skus.prodective_cell ASC
+") or die("SQL Error: " . mysqli_error($con));
 
 	 $response=array();
 	 while($row=mysqli_fetch_array($res))
@@ -62,9 +84,10 @@
 		 "mrp"=>$row["mrp"],
 		 "rate"=>$row["rate"],
 		 "brandname"=>$row["brandname"],
-		 "image"=>$row["image"]);
+		 "image"=>$row["image"],
+		 "prodective_cell"=>$row["prodective_cell"]);
 		 $response[]=$rr;
-     }	 
+     }
 	 $data=json_encode($response);
 	 echo $data;
   }
@@ -121,9 +144,10 @@
 		  $destination = "../imgproduct/" . $filename;
 	  
 		  // Update query
-		  $query = "UPDATE skus SET productname=?, productid=?, catid=?, scatid=?, image=? WHERE id=?";
+		  $prodective_cell = isset($prodective_cell) ? $prodective_cell : 0;
+		  $query = "UPDATE skus SET productname=?, productid=?, catid=?, scatid=?, image=?, prodective_cell=? WHERE id=?";
 		  $stmt = mysqli_prepare($con, $query);
-		  mysqli_stmt_bind_param($stmt, "ssissi", $pname, $pshort, $catid, $scatid, $filename, $pid);
+		  mysqli_stmt_bind_param($stmt, "ssissii", $pname, $pshort, $catid, $scatid, $filename, $prodective_cell, $pid);
 		  mysqli_stmt_execute($stmt);
 	  
 		  if (mysqli_stmt_affected_rows($stmt) > 0 || !file_exists($destination)) {
@@ -147,8 +171,8 @@
 	   {
 		   
 	      //$filename=$pname.$pshort.".jpg";
-		  
-	      mysqli_query($con,"update skus set productname='$pname',productid='$pshort',catid='$catid',scatid='$scatid' where id='$pid'") or die(mysqli_error($con));
+		  $prodective_cell = isset($prodective_cell) ? $prodective_cell : 0;
+	      mysqli_query($con,"update skus set productname='$pname',productid='$pshort',catid='$catid',scatid='$scatid',prodective_cell='$prodective_cell' where id='$pid'") or die(mysqli_error($con));
 	      if(mysqli_affected_rows($con)>0)
        	  {
 	          echo"success";  
