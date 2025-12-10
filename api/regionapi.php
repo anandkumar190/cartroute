@@ -97,10 +97,10 @@ if(!isset($_SESSION['tittu']))
 
   else if(isset($_GET['show']))
   {
-	  $query="SELECT regions.name,regions.status,regions.id,cities.city,states.name as staename  FROM `regions` JOIN states on regions.state_id= states.id join cities on regions.city_id=cities.id";
+	  $query="SELECT regions.name,regions.status,regions.id,cities.city,states.name as staename  FROM `regions` JOIN states on regions.state_id= states.id join cities on regions.city_id=cities.id  order by regions.name ";
 	  if($useremail=="admin@vivans.co.in"||$useremail=="rohit@fricbergen.com"||$useremail=="vivek@vivans.co.in")
 	  {
-         $query="SELECT regions.name,regions.status,regions.id,cities.city,states.name as staename  FROM `regions` JOIN states on regions.state_id= states.id join cities on regions.city_id=cities.id";
+         $query="SELECT regions.name,regions.status,regions.id,cities.city,states.name as staename  FROM `regions` JOIN states on regions.state_id= states.id join cities on regions.city_id=cities.id order by  regions.name";
 	  }
 
      $res=mysqli_query($con,$query);

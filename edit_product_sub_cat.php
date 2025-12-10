@@ -24,6 +24,7 @@
     $cmrp=$row['cmrp'];
     $unit_no=$row['unit_no'];
     $discount=$row['discount'];
+    $prodective_cell=$row['prodective_cell'];
    
 	
 
@@ -111,20 +112,29 @@
                          </div>
 
 
-               <div class="form-group">
-                   <div style="width:25%; float:left;" >
-                   <span> Retailer Unit</span>   
-                   </div>   
-                   <div>
-                     
-                   <input type="text"  value="<?php echo $unit_no;?>" name="unit_no" id="unit_no" class="form-control" style="width:30%; float:left;" required/>
-                   </div>
-                   
-                   <div style="width:30%; float:left;text-align: center; ">
-                     <span> End Customer Unit</span>
-                   </div>
+                      <div class="form-group">
+                          <div style="width:25%; float:left;" >
+                          <span> Retailer Unit</span>   
+                          </div>   
+                            <div>   
+                            <input type="text"  value="<?php echo $unit_no;?>" name="unit_no" id="unit_no" class="form-control" style="width:30%; float:left;" required/>
+                            </div>
+                          
+                          <div style="width:30%; float:left;text-align: center; ">
+                            <span> End Customer Unit</span>
+                          </div>
 
-               </div>
+                      </div>
+<br>
+                         <div class="form-group">
+                         </div>
+
+
+                <div class="form-group">
+                  <label for="Order">Order : </label>
+                  <input type="number" class="form-control" value="<?php echo $prodective_cell;?>" name="prodective_cell" id="prodective_cell" placeholder="Order"  required="required"/>
+                </div>
+            
 
 
 
@@ -252,6 +262,7 @@ function sendData(){
         var cmrp = $('#cmrp').val();
         var unit_no = $('#unit_no').val();
         var discount = $('#discount').val();
+        var prodective_cell =$('#prodective_cell').val();
 
 
         
@@ -266,6 +277,8 @@ function sendData(){
             fd.append('cmrp',cmrp);
             fd.append('unit_no',unit_no);
             fd.append('discount',discount);
+            fd.append('prodective_cell',prodective_cell);
+
         
              progress.fadeIn("slow");
              $.ajax({

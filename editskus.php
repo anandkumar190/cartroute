@@ -121,8 +121,8 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="prodective_cell">Order/Position</label>
-                  <input type="number" class="form-control" name="prodective_cell" id="prodective_cell" value="<?php echo $prodective_cell;?>" placeholder="Enter Order/Position" min="0"/>
+                  <label for="prodective_cell">Order</label>
+                  <input type="number" class="form-control" name="prodective_cell" id="prodective_cell" value="<?php echo $prodective_cell;?>" placeholder="Enter Order" min="0"/>
                 </div>
 
 

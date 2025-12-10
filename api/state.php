@@ -17,7 +17,7 @@ if(!isset($_SESSION['tittu']))
   $date=date("Y-m-d");
   if (isset($_GET["show"])) {
 
-	$query="select * From states "; 
+	$query="select * From states order by name "; 
      $res=mysqli_query($con,$query);
 	 $response=array();  
 	 $result=mysqli_query($con,"select c.state_id,

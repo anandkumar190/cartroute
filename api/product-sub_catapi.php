@@ -71,7 +71,7 @@ if(!isset($_SESSION['tittu']))
 	  }
 
 	 	  $name=ucwords($name);
-	mysqli_query($con,"insert into `parduct_sub_cat`(name,cat_id ,pmrp,punit ,prate, cunit, cmrp, unit_no, discount) values('$name','$cat_id','$pmrp','$punit','$prate','$cunit','$cmrp','$unit_no','$discount')") or die(mysqli_error($con));
+	mysqli_query($con,"insert into `parduct_sub_cat`(name,cat_id ,pmrp,punit ,prate, cunit, cmrp, unit_no, discount ,prodective_cell) values('$name','$cat_id','$pmrp','$punit','$prate','$cunit','$cmrp','$unit_no','$discount','$prodective_cell')") or die(mysqli_error($con));
 	
 	if(mysqli_affected_rows($con)>0)
 	{
@@ -112,7 +112,7 @@ if(!isset($_SESSION['tittu']))
 	      //$filename=$pname.$pshort.".jpg";
 	      
 	      	  $name=ucwords($name);
-	     $mysqli= mysqli_query($con,"update parduct_sub_cat set name='$name',cat_id='$cat_id',pmrp='$pmrp',prate='$prate',cunit='$cunit',cmrp='$cmrp',unit_no='$unit_no',punit='$punit',discount='$discount' where id='$id'") or die(mysqli_error($con));
+	     $mysqli= mysqli_query($con,"update parduct_sub_cat set name='$name',cat_id='$cat_id',pmrp='$pmrp',prate='$prate',cunit='$cunit',cmrp='$cmrp',unit_no='$unit_no',punit='$punit',discount='$discount',prodective_cell='$prodective_cell' where id='$id'") or die(mysqli_error($con));
 	      if(mysqli_affected_rows($con)>0)
        	  {
 	          echo"success";  
@@ -123,7 +123,7 @@ if(!isset($_SESSION['tittu']))
 		  }
 	   
   }else{
-       $query="SELECT parduct_sub_cat.name AS subcat,parduct_sub_cat.id,parduct_sub_cat.status,product_cat.name AS cat ,parduct_sub_cat.pmrp,parduct_sub_cat.punit,parduct_sub_cat.prate,parduct_sub_cat.cunit,parduct_sub_cat.cmrp,parduct_sub_cat.unit_no,parduct_sub_cat.discount FROM parduct_sub_cat JOIN product_cat on parduct_sub_cat.cat_id=product_cat.id"  ;
+       $query="SELECT parduct_sub_cat.name AS subcat,parduct_sub_cat.id,parduct_sub_cat.status,product_cat.name AS cat ,parduct_sub_cat.pmrp,parduct_sub_cat.punit,parduct_sub_cat.prate,parduct_sub_cat.cunit,parduct_sub_cat.cmrp,parduct_sub_cat.unit_no,parduct_sub_cat.discount ,parduct_sub_cat.prodective_cell FROM parduct_sub_cat JOIN product_cat on parduct_sub_cat.cat_id=product_cat.id ORDER BY parduct_sub_cat.prodective_cell ASC "  ;
 	  
           $res=mysqli_query($con,$query);
 	      $response=array();
@@ -153,7 +153,7 @@ discount*/
 	 while($row=mysqli_fetch_array($res))
 	 {
 	 	
-		 		 $rr=array("id"=>$row["id"],"name"=>$row["subcat"],"cat"=>$row["cat"],"status"=>$row["status"],"pmrp"=>$row["pmrp"],"punit"=>$unit[$row["punit"]],"prate"=>$row["prate"],"cunit"=>$unit[$row["cunit"]],"cmrp"=>$row["cmrp"],"unit_no"=>$row["unit_no"],"discount"=>$row["discount"]);
+		 $rr=array("id"=>$row["id"],"name"=>$row["subcat"],"cat"=>$row["cat"],"status"=>$row["status"],"pmrp"=>$row["pmrp"],"punit"=>$unit[$row["punit"]],"prate"=>$row["prate"],"prodective_cell"=>$row["prodective_cell"], "cunit"=>$unit[$row["cunit"]],"cmrp"=>$row["cmrp"],"unit_no"=>$row["unit_no"],"discount"=>$row["discount"]);
 		 $response[]=$rr;
      }
      

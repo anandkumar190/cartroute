@@ -144,7 +144,7 @@
                   <label for="empdesignation">Select State</label>
                   <select  class="form-control" name="state_id" id="state_id" required>
                    <option value="">Select State</option>
-                    <?php $res=mysqli_query($con,"select id,name from states"); while($row=mysqli_fetch_array($res)){?>
+                    <?php $res=mysqli_query($con,"select id,name from states order by name"); while($row=mysqli_fetch_array($res)){?>
                     <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
                     <?php }?>
                   </select>
@@ -267,7 +267,7 @@
 				
 					      {
 							 data:'id',render:function(value){
-						     return "<a href='edit_city?editid="+value+"'><span class='fa fa-edit'></span></a> |<a href='api/cities?deletecityid&id="+value+"' onclick=\"return confirm('Are you sure you want to delete this City?');\"><span class='fa fa-trash'></span></a>";
+						     return "<a href='edit_city?editid="+value+"'><span class='fa fa-edit'></span></a>    &nbsp;  &nbsp; <a href='api/cities?deletecityid&id="+value+"' onclick=\"return confirm('Are you sure you want to delete this City?');\"><span class='fa fa-trash'></span></a>";
 						  }},
 						 	  {
 						 	data:'name'

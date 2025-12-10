@@ -180,7 +180,7 @@
             <li><a href="state"><i class="fa fa-circle-o"></i> State</a></li>
             <li><a href="city"><i class="fa fa-circle-o"></i> City</a></li>
             <li><a href="region"><i class="fa fa-circle-o"></i> Region</a></li>
-            <li><a href="showarea"><i class="fa fa-circle-o"></i> Route Mgmt</a></li>
+            <li><a href="showarea"><i class="fa fa-circle-o"></i> Route</a></li>
             <!-- <li><a href="showroute"><i class="fa fa-circle-o"></i> old Route Mgmt</a></li> -->
           </ul>
         </li>
@@ -211,6 +211,7 @@
             <!--<li><a href="orders"><i class="fa fa-circle-o"></i> Orders</a></li>-->
             <li><a href="booking2"><i class="fa fa-circle-o"></i> Booking</a></li>
             <li><a href="not_activity_outlets"><i class="fa fa-circle-o"></i> No Activity Outlets </a></li>
+            
             <!--<li><a href="cancelorders"><i class="fa fa-circle-o"></i> Cancel Orders</a></li>-->
                   
           </ul>
@@ -231,6 +232,8 @@
             <!-- <li><a href="daily-report"><i class="fa fa-circle-o"></i>Team's Daily Report</a></li> -->
             
             <li><a href="monthly-attendance"><i class="fa fa-circle-o"></i>Team's Monthly Report</a></li>
+            <li><a href="monthly-attendance-ds"><i class="fa fa-circle-o"></i>Team's Monthly Report  DS </a></li>
+
             
           </ul>
         </li>

@@ -166,10 +166,12 @@
                                           <select name="selectarea" id="selectarea" class="form-control select2">
                                              <option value="">Select Route</option>
                                              <?php
-                                               $res=mysqli_query($con,"select id,area,region,state from area")or die(mysqli_error($con));                 
+                                               $res=mysqli_query($con,"select area.id,area.area,regions.name from area join regions on regions.id=area.region  ")or die(mysqli_error($con));                 
                                               while($row=mysqli_fetch_array($res))
                                               {
-                                              echo "<option value='$row[0]'>$row[1] $row[2] </option>"; 
+                                                print_r($row);
+
+                                              echo "<option value='$row[0]'>$row[1] ,$row[2]  </option>"; 
                                               }
                                             ?>
                                            </select>

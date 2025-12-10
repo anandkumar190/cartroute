@@ -168,7 +168,7 @@
                       <label for="state">State</label>
                       <select  class="form-control"  name="state" id="state" required>
                       <option value="">Select State</option>
-                        <?php $res=mysqli_query($con,"select id,name from states"); while($row=mysqli_fetch_array($res)){?>
+                        <?php $res=mysqli_query($con,"select id,name from states order by name "); while($row=mysqli_fetch_array($res)){?>
                         <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
                         <?php }?>
                       </select> 
@@ -207,7 +207,7 @@
                     
                     <select  class="form-control"  name="distributor" id="distributor" required>
                       <option value="">Select distributor</option>
-                        <?php $res=mysqli_query($con,"select e.id, e.name from  employees e join employees emp on emp.id=e.stockistid where e.usertype=3 AND e.name IS NOT NULL "); while($row=mysqli_fetch_array($res)){?>
+                        <?php $res=mysqli_query($con,"select e.id, e.name from  employees e where e.usertype=3 AND e.name IS NOT NULL "); while($row=mysqli_fetch_array($res)){?>
                         <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
                         <?php } ?>
                     </select>

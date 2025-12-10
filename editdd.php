@@ -50,7 +50,7 @@
   }
 
 
-  $result=mysqli_query($con,"SELECT a.area AS areaName, COUNT(DISTINCT o.id) AS total_outlet_count 
+  $result=mysqli_query($con,"SELECT a.area AS areaName, COUNT(DISTINCT o.id) AS total_outlet_count , MAX(lastvisit) as lastvisit
                               FROM 
                                   outlets o 
                               LEFT JOIN 
@@ -74,6 +74,8 @@
     {
     $arrayRoute[$i]['name']=$outlets['areaName'];
     $arrayRoute[$i]['total_outlet_count']=$outlets['total_outlet_count'];
+    $arrayRoute[$i]['lastvisit']= !empty($outlets['lastvisit'])  ? date("d/m/Y", strtotime($outlets['lastvisit'])) : 'No Visit';
+    
 
     $totalOutlets+=$outlets['total_outlet_count'];
     $i++;
@@ -219,6 +221,7 @@
                         <th> <h4><b>Route </b></h4></th>
 													<th> <h4><b>No. of 
                         <br> Outlets </b></h4></th>
+                        <th> <h4><b>Lastvisit </b></h4></th>
 												</tr>
 												</thead>
 												<tbody>
@@ -228,7 +231,8 @@
                         foreach ($arrayRoute as $arrayRouteValue) {
                             
                             echo "<tr> <td> - ".$arrayRouteValue['name'] ."</td>";
-                            echo  "<td>" .$arrayRouteValue['total_outlet_count'] ."</td> </tr>";
+                            echo  "<td>" .$arrayRouteValue['total_outlet_count'] ."</td>";
+                             echo  "<td>" .$arrayRouteValue['lastvisit'] ." </td></tr>";
                         }
                         ?>
 

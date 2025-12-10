@@ -77,6 +77,7 @@
                           <th>Retailer price</th>
                           <th>Customer Price</th>
                           <th>Price</th>
+                          <th>Order</th>
                           <th>Retailer Unit</th>
                           <th>Costomer Unit</th>
                           <th>Number of Unit </th>
@@ -173,10 +174,21 @@
           </div>
 
       </div>
+    <br>
+
+           <div class="form-group">
+        </div>
 
 
-            
+            <div class="form-group">
+                  <label for="Order">Order : </label>
+                  <input type="number" class="form-control" name="prodective_cell" id="prodective_cell" placeholder="Order"  required="required"/>
+                </div>
+
+
             </div>
+
+
             <!-- col 4 Mid -->
             
             
@@ -297,7 +309,7 @@
 				
 					      {
 							 data:'id',render:function(value){
-						     return "<a href='edit_product_sub_cat?editid="+value+"'><span class='fa fa-edit'></span></a><a href='api/product-sub_catapi?deletescat&id="+value+"'><span class='fa fa-trash'></span></a> ";
+						     return "<a href='edit_product_sub_cat?editid="+value+"'><span class='fa fa-edit'></span></a>   &nbsp;  &nbsp; <a href='api/product-sub_catapi?deletescat&id="+value+"'  onclick=\"return confirm('Are you sure you want to Delete this Sub Category?');\"><span class='fa fa-trash'></span></a> ";
 						  }},
 						 	  {
 						 	data:'name'
@@ -313,6 +325,9 @@
             },
             {
                data:'prate'
+            },
+            {
+               data:'prodective_cell'
             },
             {
                data:'punit'
@@ -512,6 +527,8 @@ function sendData(){
     var cmrp = $('#cmrp').val();
     var unit_no = $('#unit_no').val();
     var discount = $('#discount').val();
+    var prodective_cell = $('#prodective_cell').val();
+   
 
 
 		
@@ -526,6 +543,8 @@ function sendData(){
     fd.append('cmrp',cmrp);
     fd.append('unit_no',unit_no);
     fd.append('discount',discount);
+    fd.append('prodective_cell',prodective_cell);
+    
 
         progress.fadeIn("slow");
         $.ajax({
@@ -552,6 +571,8 @@ function sendData(){
 		            $('#cmrp').val('');
 		            $('#unit_no').val('');
 		            $('#discount').val('');
+		            $('#discount').val('');
+                $('#prodective_cell').val('');
 		
 					
                 }else{

@@ -54,7 +54,7 @@ if(!isset($_SESSION['tittu']))
 	  }
 
 	 	  $name=ucwords($name);
-	mysqli_query($con,"insert into `product_cat`(name) values('$name')") or die(mysqli_error($con));
+	mysqli_query($con,"insert into `product_cat`(name,prodective_cell) values('$name',$prodective_cell)") or die(mysqli_error($con));
 	
 	if(mysqli_affected_rows($con)>0)
 	{
@@ -95,7 +95,7 @@ if(!isset($_SESSION['tittu']))
 	  
 	      //$filename=$pname.$pshort.".jpg";
 	      	  $name=ucwords($name);
-	      mysqli_query($con,"update product_cat set name='$name' where id='$id'") or die(mysqli_error($con));
+	      mysqli_query($con,"update product_cat set name='$name' , prodective_cell='$prodective_cell' where id='$id'") or die(mysqli_error($con));
 	      if(mysqli_affected_rows($con)>0)
        	  {
 	          echo"success";  
@@ -106,7 +106,7 @@ if(!isset($_SESSION['tittu']))
 		  }
 	   
   }else{
-       $query="SELECT id,name,status FROM product_cat ";
+       $query="SELECT id,name,status ,prodective_cell FROM product_cat order by prodective_cell ";
 	  
           $res=mysqli_query($con,$query);
 	      $response=array();
@@ -115,7 +115,7 @@ if(!isset($_SESSION['tittu']))
 	 
 	 while($row=mysqli_fetch_array($res))
 	 {
-		 $rr=array("id"=>$row["id"],"name"=>$row["name"],"status"=>$row["status"]);
+		 $rr=array("id"=>$row["id"],"name"=>$row["name"],"prodective_cell"=>$row['prodective_cell'],"status"=>$row["status"]);
          $response[]=$rr;
      }
      

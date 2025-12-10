@@ -6,7 +6,7 @@ include("../connect.php");
 
 if(isset($_GET['productcategory']))
 {  
-    $query = "Select id AS CategoryID, name As CategoryName from product_cat";
+    $query = "Select id AS CategoryID, name As CategoryName from product_cat order by prodective_cell ";
     $result = mysqli_query($con, $query);
 
     if(mysqli_num_rows($result) > 0){
@@ -71,11 +71,11 @@ if(isset($_GET['productbyid']))
 {
     extract($_GET);
 
-    $query = "SELECT product_cat.id AS ProductCategoryID, product_cat.name AS ProductCategoryName , parduct_sub_cat.name AS ProductSubCategoryName, parduct_sub_cat.id AS ProductSubCategoryID, parduct_sub_cat.pmrp, parduct_sub_cat.punit, parduct_sub_cat.prate, parduct_sub_cat.cunit, parduct_sub_cat.cmrp, parduct_sub_cat.unit_no, parduct_sub_cat.discount, skus.id AS ProductID, skus.productname AS ProductName , skus.productid AS ProductShortName, skus.image AS ProductImage
+    $query = "SELECT product_cat.id AS ProductCategoryID, product_cat.name AS ProductCategoryName , parduct_sub_cat.name AS ProductSubCategoryName, parduct_sub_cat.id AS ProductSubCategoryID, parduct_sub_cat.pmrp, parduct_sub_cat.punit, parduct_sub_cat.prate, parduct_sub_cat.cunit, parduct_sub_cat.cmrp, parduct_sub_cat.unit_no, parduct_sub_cat.discount, skus.id AS ProductID,skus.prodective_cell, skus.productname AS ProductName , skus.productid AS ProductShortName, skus.image AS ProductImage
     FROM skus
     INNER JOIN product_cat ON skus.catid = product_cat.id
     INNER JOIN parduct_sub_cat ON skus.scatid = parduct_sub_cat.id 
-    WHERE parduct_sub_cat.id = '$productbyid' " ;
+    WHERE parduct_sub_cat.id = '$productbyid' order by skus.prodective_cell" ;
     $result = mysqli_query($con, $query);
     $new_array = array();
 
@@ -145,10 +145,10 @@ if(isset($_GET['subcategorybyid'])){
 
     extract($_GET);
 
-    $query = "SELECT product_cat.id AS ProductCategoryID, product_cat.name AS ProductCategoryName , parduct_sub_cat.id AS ProductSubCategoryID, parduct_sub_cat.name, parduct_sub_cat.pmrp, parduct_sub_cat.punit, parduct_sub_cat.prate, parduct_sub_cat.cunit, parduct_sub_cat.cmrp, parduct_sub_cat.unit_no, parduct_sub_cat.discount
+    $query = "SELECT product_cat.id AS ProductCategoryID,parduct_sub_cat.prodective_cell, product_cat.name AS ProductCategoryName , parduct_sub_cat.id AS ProductSubCategoryID, parduct_sub_cat.name, parduct_sub_cat.pmrp, parduct_sub_cat.punit, parduct_sub_cat.prate, parduct_sub_cat.cunit, parduct_sub_cat.cmrp, parduct_sub_cat.unit_no, parduct_sub_cat.discount
     FROM parduct_sub_cat
     JOIN product_cat ON parduct_sub_cat.cat_id = product_cat.id 
-    WHERE product_cat.id = '$subcategorybyid'" ;
+    WHERE product_cat.id = '$subcategorybyid' order by parduct_sub_cat.prodective_cell" ;
 
     $result = mysqli_query($con, $query);
     $new_array = array();

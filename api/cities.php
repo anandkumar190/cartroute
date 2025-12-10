@@ -106,7 +106,7 @@ if(!isset($_SESSION['tittu']))
 		  }
 	   
   }else{
-       $query="SELECT cities.city,cities.id,cities.status,states.name FROM cities JOIN states on cities.state_id=states.id";
+       $query="SELECT cities.city,cities.id,cities.status,states.name FROM cities JOIN states on cities.state_id=states.id  order by cities.city ";
 	  
           $res=mysqli_query($con,$query);
 	      $response=array();

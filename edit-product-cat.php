@@ -18,6 +18,7 @@
 
     $id=$row['id'];
     $name=$row['name'];
+    $prodective_cell=$row['prodective_cell'];
 
 
 
@@ -80,6 +81,10 @@
                 <div class="form-group controls">
                   <label for="empname">Product Category : </label>
                   <input type="text" class="form-control" name="name"  value="<?php echo $name;?>" id="name" placeholder="Enter Name"  required="required"/>
+                </div>
+                <div class="form-group controls">
+                  <label for="empname">Order</label>
+                  <input type="text" class="form-control" name="prodective_cell" value="<?php echo $prodective_cell;?>"  id="prodective_cell" placeholder="Enter Order"  required="required"/>
                 </div>
                
       
@@ -154,11 +159,13 @@ function sendData(){
         
         var id = $('#id').val();
         var name = $('#name').val();
+        var prodective_cell = $('#prodective_cell').val();
 
 
         
       fd.append('id',id);
         fd.append('name',name);
+        fd.append('prodective_cell',prodective_cell);
     
 
         

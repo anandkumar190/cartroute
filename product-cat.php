@@ -74,7 +74,7 @@
                    
                     
                           <th>Category</th>
-                          <th>Position</th>
+                          <th>Order</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -131,8 +131,8 @@
                 </div>
                
                   <div class="form-group controls">
-                  <label for="empname">Position</label>
-                  <input type="text" class="form-control" name="position" id="position" placeholder="Enter Position"  required="required"/>
+                  <label for="empname">Order</label>
+                  <input type="text" class="form-control" name="prodective_cell" id="prodective_cell" placeholder="Enter Order"  required="required"/>
                 </div>
       
              </div> <!-- col 4 close--> 
@@ -223,15 +223,19 @@
         
                 {
                data:'id',render:function(value){
-                 return "<a href='edit-product-cat?editid="+value+"' onclick=\"return confirm('Are you sure you want to delete this Category?');\"><span class='fa fa-edit'></span></a><a href='api/product_catapi?deletecatid&id="+value+"'><span class='fa fa-trash'></span></a> ";
+                 return "<a href='edit-product-cat?editid="+value+"' onclick=\"return confirm('Are you sure you want to Edit this Category?');\">   <span class='fa fa-edit'></span></a>     &nbsp;  &nbsp; <a href='api/product_catapi?deletecatid&id="+value+"' onclick=\"return confirm('Are you sure you want to Delete this Category?');\"><span class='fa fa-trash'></span></a> ";
               }},
         
 
 
                 {
-              data:'name',
-              data:'name',
-            }
+              data:'name'
+            },
+
+                     {
+              data:'prodective_cell'
+            },
+            
 
           
             ]
@@ -391,13 +395,13 @@ function sendData(){
     
     var name = $('#name').val();
     var state_id = $('#state_id').val();
-   var position=$("#position").val();
+   var prodective_cell=$("#prodective_cell").val();
 
     
 
     fd.append('name',name);
     fd.append('state_id',state_id);
-    fd.append('position',position);
+    fd.append('prodective_cell',prodective_cell);
 
     
         progress.fadeIn("slow");
@@ -418,7 +422,7 @@ function sendData(){
     
                 $('#name').val('');
                 $('#state_id').val('');
-                $('#position').val('');
+                $('#prodective_cell').val('');
     
           
                 }else{
