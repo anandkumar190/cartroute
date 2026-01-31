@@ -71,6 +71,8 @@
 												<tr>
 													<th>Action</th>
 													<th>Product Name</th>
+													<th>Product Category </th>
+													<th>Sub Category</th>
 													<th>Short Name</th>
 													<th>UNIT</th>
 													<th>MRP</th>
@@ -238,7 +240,7 @@
 		  type:"POST",
 		  contentType:"application/json; charset=utf-8",
 		  success:function(data){
-			   //alert(data);
+			  // alert(data);
 			   data=JSON.parse(data);
 	            $("#skutable").dataTable(
 				{
@@ -257,7 +259,13 @@
 						  {
 							data:'productname'
 						},
-						{data:'productid'},{data:'unit'},{data:'mrp'},{data:'prodective_cell'},{data:'image',render:function(value){
+            {data:"catname"},
+            {data:"sub_catname"},
+						{data:'productid'},
+            {data:'unit'},
+            {data:'mrp'},
+            {data:'prodective_cell'},
+            {data:'image',render:function(value){
 							return "<img src='imgproduct/"+value+"' class='img img-thumbnail' style='width:100px; height:100px;'/>";
 							}}
 					  ]

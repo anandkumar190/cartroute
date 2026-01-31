@@ -63,15 +63,17 @@ SELECT
     skus.rate, 
     skus.brandname, 
     parduct_sub_cat.cmrp AS mrp,
+    product_cat.prodective_cell AS cat_order,
     product_cat.name AS catname, 
     parduct_sub_cat.name AS sub_catname,
+    parduct_sub_cat.prodective_cell AS sub_cat_order,
     skus.image, 
     skus.prodective_cell
 FROM skus
 LEFT JOIN product_cat ON product_cat.id = skus.catid
 LEFT JOIN parduct_sub_cat ON parduct_sub_cat.id = skus.scatid
 LEFT JOIN sku_unit ON sku_unit.id = parduct_sub_cat.cunit
-ORDER BY skus.prodective_cell ASC
+ORDER BY  cat_order ,sub_cat_order ,skus.prodective_cell ASC
 ") or die("SQL Error: " . mysqli_error($con));
 
 	 $response=array();
@@ -83,6 +85,8 @@ ORDER BY skus.prodective_cell ASC
 		 "unit"=>$row["unit"],
 		 "mrp"=>$row["mrp"],
 		 "rate"=>$row["rate"],
+		 "catname"=>$row["catname"],
+		 "sub_catname"=>$row["sub_catname"],
 		 "brandname"=>$row["brandname"],
 		 "image"=>$row["image"],
 		 "prodective_cell"=>$row["prodective_cell"]);

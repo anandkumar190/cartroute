@@ -105,6 +105,7 @@
                         <th>Select</th>
                         <th>Edit</th>
                         <th>Date</th>
+                        <th>Time</th>
                         <th>Sale Officer</th>
                         <th>Visit Type</th>
                         <th>Outlet Name</th>
@@ -302,6 +303,7 @@
 					   data:'id',render:function(value){
 						  return "<a href='editoutlet?editid="+value+"'><span class='fa fa-edit'></span></a>";
 						  }},{data:'activitydate'},
+                {data:"activitytime"},
               {data:'empname'},
               {data:'activitytype'},
               {data:'name'},

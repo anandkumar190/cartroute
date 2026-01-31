@@ -50,37 +50,73 @@
   }
 
 
-  $result=mysqli_query($con,"SELECT a.area AS areaName, COUNT(DISTINCT o.id) AS total_outlet_count , MAX(lastvisit) as lastvisit
-                              FROM 
-                                  outlets o 
-                              LEFT JOIN 
-                                  area a 
-                              ON 
-                                  o.routeid = a.id 
-                              WHERE 
-                                  a.distributor_id = $editid 
-                              GROUP BY 
-                              a.id, 
-                              a.area
+  $result=mysqli_query($con," SELECT  a.area AS areaName,
+                                COUNT(DISTINCT o.id) AS total_outlet_count,
+                                lv.lastvisit,
+                                COALESCE(SUM(b.total_amount), 0) AS total_amount_value
+                            FROM area a
+
+                            LEFT JOIN outlets o 
+                                ON o.routeid = a.id
+
+                            LEFT JOIN (
+                                SELECT 
+                                    routeid,
+                                    MAX(lastvisit) AS lastvisit
+                                FROM outlets
+                                GROUP BY routeid
+                            ) lv 
+                                ON lv.routeid = a.id
+
+                            LEFT JOIN (
+                                SELECT 
+                                    outlet_id,
+                                    DATE(booking_time) AS booking_date,
+                                    SUM(total_amount) AS total_amount
+                                FROM booking
+                                GROUP BY outlet_id, DATE(booking_time)
+                            ) b 
+                                ON b.outlet_id = o.id
+                              AND b.booking_date = DATE(lv.lastvisit)
+
+                            WHERE 
+                                a.distributor_id = $editid
+
+                            GROUP BY 
+                                a.id,
+                                a.area,
+                                lv.lastvisit
+
                             ORDER BY 
-                              a.area ;");
-   
+                                a.area;
+                            ");
+                                
 
 
   
-    $arrayRoute= array();
-      $totalOutlets=$i=0;
+    $arrayRoute=[];
+      $totalOutlets=0;
+      $i=0;
     while($outlets=mysqli_fetch_array($result))
     {
-    $arrayRoute[$i]['name']=$outlets['areaName'];
-    $arrayRoute[$i]['total_outlet_count']=$outlets['total_outlet_count'];
-    $arrayRoute[$i]['lastvisit']= !empty($outlets['lastvisit'])  ? date("d/m/Y", strtotime($outlets['lastvisit'])) : 'No Visit';
+
+    // print_r(['outlets'=>$outlets,'i'=>$i]);
+    // echo"<br><br><br><br>";
+    $arrayRoute[]=['name'=>$outlets['areaName'],
+    'total_amount_value'=>$outlets['total_amount_value'],   
+    'total_outlet_count'=>$outlets['total_outlet_count'],
+    'lastvisit'=> !empty($outlets['lastvisit'])  ? date("d/m/Y", strtotime($outlets['lastvisit'])) : 'No Visit'];
     
 
     $totalOutlets+=$outlets['total_outlet_count'];
+  
     $i++;
-    }
 
+    }
+//       echo"<br><br>arrayRoute<br><br>";
+//        print_r(['arrayRoute'=>$arrayRoute,]);
+//     echo"<br><br>arrayRoute<br><br>";
+// die;
 
 ?>
 
@@ -126,7 +162,7 @@
             <!-- /.box-header -->
           <div class="box-body">
            <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <!-- form start -->
             
               
@@ -163,7 +199,7 @@
                 </div>
              </div> <!-- col 4 close--> 
              
-             <div class="col-md-4">
+             <div class="col-md-3">
                
                 <div class="form-group">
                   <label for="empstate">State</label>
@@ -213,7 +249,7 @@
             </div>
             <!-- col 4 Mid -->
             
-            <div class="col-md-4">
+            <div class="col-md-6">
                  
             <table class="col-md-12 " >
 												<thead>
@@ -221,7 +257,8 @@
                         <th> <h4><b>Route </b></h4></th>
 													<th> <h4><b>No. of 
                         <br> Outlets </b></h4></th>
-                        <th> <h4><b>Lastvisit </b></h4></th>
+                        <th> <h4><b>  Lastvisit </b></h4></th>
+                        <th> <h4><b>  Total (₹) </b></h4></th>
 												</tr>
 												</thead>
 												<tbody>
@@ -232,7 +269,8 @@
                             
                             echo "<tr> <td> - ".$arrayRouteValue['name'] ."</td>";
                             echo  "<td>" .$arrayRouteValue['total_outlet_count'] ."</td>";
-                             echo  "<td>" .$arrayRouteValue['lastvisit'] ." </td></tr>";
+                             echo  "<td>" .$arrayRouteValue['lastvisit'] ." </td>";
+                             echo  "<td class='pull-right' > " .$arrayRouteValue['total_amount_value'] ." </td></tr>";
                         }
                         ?>
 

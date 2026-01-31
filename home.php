@@ -14,7 +14,7 @@
 		
 	?>
     
-    <?php $res=mysqli_query($con,"select count(distinct state) from outlets")or die(mysqli_error($con));
+    <?php $res=mysqli_query($con," select count(distinct st.name )from area a join states st on a.state=st.id  order by st.name  ")or die(mysqli_error($con));
 	    $states=0;
 		if($row=mysqli_fetch_array($res))
 		{

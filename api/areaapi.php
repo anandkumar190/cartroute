@@ -51,8 +51,12 @@ require("../connect.php");
   if(isset($_GET['routes']))
   {	
      extract($_REQUEST);
+      if(!empty($userType) and is_numeric($userType) and  !empty($userId) and is_numeric($userId) ){
+	       $res=mysqli_query($con,"select a.id,a.area, round( ( 6371 * acos( least(1.0,  cos( radians($lat) ) * cos( radians(a.latitude) ) * cos( radians(a.longitude) - radians($lng) ) + sin( radians($lat) ) * sin( radians(a.latitude) ) ) ) ), 3) as distance from area a where a.distributor_id='$userId'order by distance asc limit 6");
+      }else{
+	       $res=mysqli_query($con,"select a.id,a.area, round( ( 6371 * acos( least(1.0,  cos( radians($lat) ) * cos( radians(a.latitude) ) * cos( radians(a.longitude) - radians($lng) ) + sin( radians($lat) ) * sin( radians(a.latitude) ) ) ) ), 3) as distance from area a  order by distance asc limit 6");
+      }
 
-	   $res=mysqli_query($con,"select a.id,a.area, round( ( 6371 * acos( least(1.0,  cos( radians($lat) ) * cos( radians(a.latitude) ) * cos( radians(a.longitude) - radians($lng) ) + sin( radians($lat) ) * sin( radians(a.latitude) ) ) ) ), 3) as distance from area a  order by distance asc limit 6");
 	   $response=array();
 	  
     while($row=mysqli_fetch_array($res))
