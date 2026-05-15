@@ -132,7 +132,7 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 				$workingTime = sprintf('%d Hrs %d Mins', $hours, $minutes);
 
 				// Decimal for summing
-				$workingHoursDecimal = $hours + ($minutes / 60);
+				$workingHoursDecimal = ($hours*60) + $minutes;
 			}
 
 			// Fetch area details
@@ -357,7 +357,7 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 				  
 			  }
 			  
-			  $avgTotalhours=($totalhours>0 and $workingday >0)?($totalhours/$workingday):0;
+			  $avgTotalhours=($totalhours>0 and $workingday >0)?floor($totalhours/$workingday):0;
 			  $avgstarttime= (count($starttimearray)>0 and  $totalstime>0) ? ($totalstime/count($starttimearray)):0;
 			  $avgendtime= (count($endtimearray)>0 and  $totaletime>0) ? ($totaletime/count($endtimearray)):0;
 			  
@@ -393,13 +393,22 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 
 			  </tr>";
 
+			  
+
 $data.=$rowData;
+
+
+$avgHours = floor($averageMinutes / 60);
+$avgTotalProductivePercentage=floor($totalProductivePercentage/$workingday);
+$avgMins = $averageMinutes % 60;
+
+$resultAvgTotalHours=$avgHours . " Hrs " . $avgMins . " Mins";
 			  
 	    $data.="<tr>
 		         <th>Averages</th> <th> </th> 
 				 <th>".date('H:i:s',$avgstarttime)."</th>
 				 <th>".date('H:i:s',$avgendtime)."</th>
-				 <th>".round(($avgTotalhours),2)." Hrs</th>
+				 <th>".$resultAvgTotalHours." Hrs</th>
 				 <th>  </th> 
 				 <th>".$totalold."</th>
 				 <th>".$totalnew."</th>
@@ -407,7 +416,7 @@ $data.=$rowData;
 				 <th>".$totalothervisit."</th>
 				 <th>".$productivOutlets."</th>
 				 <th>".$totaloutletsNotVisited."</th>
-				 <th>".$totalProductivePercentage."%</th>
+				 <th>" .$avgTotalProductivePercentage."%</th>
 				 <th>".$totalProductivValueOrders."</th>
 				 <th></th>
 		       </tr>";		  
